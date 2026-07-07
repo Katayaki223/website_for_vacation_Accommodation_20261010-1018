@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>首爾住宿地圖 · 10/14–10/18</title>
+<title>韓國住宿 · 釜山 10/10–14 · 首爾 10/14–18</title>
 <style>
   :root{
     --ink:#17171c;
@@ -17,11 +17,16 @@
     --tight-bg:#fbf1de;
     --over:#c9463c;
     --over-bg:#fbe9e7;
+    /* Seoul areas */
     --hongdae:#e84a8a;
     --seongsu:#3f7e8c;
     --myeongdong:#e0453f;
     --dongdaemun:#7a50b0;
     --sinchon:#2e9e6b;
+    /* Busan areas (coastal palette) */
+    --haeundae:#1c6daa;
+    --songdo:#17998c;
+    --gwangalli:#e06a8b;
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI","PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
   }
@@ -33,49 +38,39 @@
   }
   a{color:inherit;}
 
+  /* ---------- City switcher ---------- */
+  .city-switch{display:flex;gap:8px;max-width:1080px;margin:0 auto;padding:18px 20px 0;}
+  .city-tab{
+    flex:1;border:1.5px solid var(--line);background:var(--card);border-radius:14px;
+    padding:12px 15px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:3px;
+    transition:.15s;font-family:var(--sans);color:var(--ink);
+  }
+  .city-tab[data-active="true"]{border-color:var(--ink);background:var(--ink);color:#fff;}
+  .city-tab .ct-name{font-size:17px;font-weight:800;letter-spacing:-.01em;}
+  .city-tab .ct-dates{font-size:12px;font-family:var(--mono);opacity:.82;}
+  .city-tab .ct-order{font-size:10.5px;opacity:.7;letter-spacing:.03em;text-transform:uppercase;}
+
   /* ---------- Hero ---------- */
-  header.hero{
-    padding:32px 20px 22px;max-width:1080px;margin:0 auto;
-  }
-  .route{display:flex;height:7px;border-radius:99px;overflow:hidden;margin-bottom:20px;box-shadow:0 1px 0 rgba(0,0,0,.04);}
+  header.hero{padding:20px 20px 20px;max-width:1080px;margin:0 auto;}
+  .route{display:flex;height:7px;border-radius:99px;overflow:hidden;margin-bottom:18px;box-shadow:0 1px 0 rgba(0,0,0,.04);}
   .route span{flex:1;}
-  h1{
-    font-size:clamp(28px,7vw,46px);line-height:1.02;margin:0 0 6px;font-weight:800;
-    letter-spacing:-.02em;
-  }
+  h1{font-size:clamp(26px,6.4vw,42px);line-height:1.03;margin:0 0 6px;font-weight:800;letter-spacing:-.02em;}
   h1 .sub{display:block;font-size:clamp(13px,3.4vw,17px);font-weight:600;color:var(--ink-soft);letter-spacing:0;margin-top:8px;}
-  .facts{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;}
-  .facts .chip{
-    font-family:var(--mono);font-size:12px;padding:5px 10px;border:1px solid var(--line);
-    border-radius:8px;background:var(--card);color:var(--ink);white-space:nowrap;
-  }
-  .facts .chip b{color:var(--ink);}
+  .facts{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px;}
+  .facts .chip{font-family:var(--mono);font-size:12px;padding:5px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);white-space:nowrap;}
 
   /* ---------- Notice ---------- */
-  .notice{
-    max-width:1080px;margin:4px auto 0;padding:0 20px;
-  }
-  .notice-inner{
-    border:1px solid #f0dcae;background:#fdf6e6;border-radius:12px;padding:13px 15px;
-    font-size:13.5px;color:#6b5322;display:flex;gap:10px;align-items:flex-start;
-  }
-  .notice-inner .ic{font-size:16px;line-height:1.3;}
+  .notice{max-width:1080px;margin:0 auto;padding:0 20px;}
+  .notice-inner{border:1px solid #f0dcae;background:#fdf6e6;border-radius:12px;padding:13px 15px;font-size:13.5px;color:#6b5322;display:flex;gap:10px;align-items:flex-start;}
+  .notice-inner .ic{font-size:16px;line-height:1.3;flex:none;}
   .notice-inner b{color:#553f12;}
 
   /* ---------- Controls ---------- */
-  .controls{
-    position:sticky;top:0;z-index:20;background:rgba(246,246,242,.92);
-    backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--line);
-    margin-top:20px;
-  }
+  .controls{position:sticky;top:0;z-index:20;background:rgba(246,246,242,.92);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--line);margin-top:18px;}
   .controls-inner{max-width:1080px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .pills{display:flex;gap:7px;overflow-x:auto;flex:1;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
   .pills::-webkit-scrollbar{display:none;}
-  .pill{
-    border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);
-    padding:7px 13px;border-radius:99px;font-size:13.5px;font-weight:600;cursor:pointer;
-    white-space:nowrap;transition:.15s;font-family:var(--sans);
-  }
+  .pill{border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);padding:7px 13px;border-radius:99px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.15s;font-family:var(--sans);}
   .pill[data-active="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
   .pill .dot{display:inline-block;width:8px;height:8px;border-radius:99px;margin-right:6px;vertical-align:middle;}
   .toggle{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-soft);white-space:nowrap;cursor:pointer;user-select:none;}
@@ -94,10 +89,7 @@
   .area-head .vibe{font-size:13px;color:var(--ink-soft);margin-left:auto;text-align:right;max-width:52%;}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
-  .card{
-    background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
-    display:flex;flex-direction:column;position:relative;
-  }
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;position:relative;}
   .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent);}
   .card-body{padding:15px 16px 14px 19px;flex:1;display:flex;flex-direction:column;}
   .name-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
@@ -121,19 +113,15 @@
   .hl{font-size:13px;color:#3a3a44;margin-top:8px;}
 
   .actions{display:flex;gap:8px;margin-top:14px;}
-  .btn{
-    flex:1;text-align:center;text-decoration:none;font-size:13px;font-weight:700;
-    padding:9px 8px;border-radius:9px;transition:.15s;border:1.5px solid transparent;
-  }
+  .btn{flex:1;text-align:center;text-decoration:none;font-size:13px;font-weight:700;padding:9px 8px;border-radius:9px;transition:.15s;border:1.5px solid transparent;}
   .btn-photo{background:#f2f2ee;color:var(--ink);border-color:var(--line);}
   .btn-photo:hover{background:#e9e9e3;}
   .btn-book{background:var(--accent);color:#fff;}
   .btn-book:hover{filter:brightness(.94);}
-  .btn:focus-visible,.pill:focus-visible,.toggle input:focus-visible{outline:3px solid #9db8ff;outline-offset:2px;}
+  .btn:focus-visible,.pill:focus-visible,.toggle input:focus-visible,.city-tab:focus-visible{outline:3px solid #9db8ff;outline-offset:2px;}
 
   .empty{text-align:center;color:var(--ink-soft);padding:50px 20px;font-size:14px;display:none;}
 
-  /* ---------- Footer ---------- */
   footer{max-width:1080px;margin:0 auto;padding:24px 20px 48px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:12.5px;}
   footer h3{font-size:13px;color:var(--ink);margin:0 0 8px;font-weight:700;}
   footer ul{margin:0 0 16px;padding-left:18px;}
@@ -145,38 +133,20 @@
     .area-head .vibe{max-width:100%;text-align:left;margin-left:0;flex-basis:100%;}
     .grid{grid-template-columns:1fr;}
     .facts .chip{font-size:11px;}
+    .city-tab .ct-name{font-size:15px;}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
 </style>
 </head>
 <body>
 
+<div class="city-switch" id="citySwitch"></div>
 <header class="hero">
-  <div class="route" aria-hidden="true">
-    <span style="background:var(--hongdae)"></span>
-    <span style="background:var(--seongsu)"></span>
-    <span style="background:var(--myeongdong)"></span>
-    <span style="background:var(--dongdaemun)"></span>
-    <span style="background:var(--sinchon)"></span>
-  </div>
-  <h1>首爾住宿地圖
-    <span class="sub">弘大 · 聖水洞 · 明洞 · 東大門 · 新村　5 區高 CP 精選</span>
-  </h1>
-  <div class="facts">
-    <span class="chip"><b>入住</b> 10/14 → 退房 10/18</span>
-    <span class="chip"><b>共</b> 4 晚</span>
-    <span class="chip"><b>2 人</b> · 雙人床</span>
-    <span class="chip"><b>預算</b> ≤ NT$2,500 / 晚</span>
-    <span class="chip">≈ 115,000 韓元 / 晚</span>
-  </div>
+  <div class="route" id="route" aria-hidden="true"></div>
+  <h1 id="heroTitle"></h1>
+  <div class="facts" id="heroFacts"></div>
 </header>
-
-<div class="notice">
-  <div class="notice-inner">
-    <span class="ic">⚠️</span>
-    <div><b>10 月是賞楓旺季,房價會偏高。</b> 這個預算在旺季能穩訂的主要是「民宿／青旅的獨立雙人房」＋少數平價商務飯店;弘大、明洞、聖水的正規飯店大多會超過。下方「參考房價」是部落客實住的<b>一般／淡季價,不是 10/14–10/18 即時價</b>,請點各卡片的「即時房價」確認,看到喜歡的建議儘早訂。</div>
-  </div>
-</div>
+<div class="notice"><div class="notice-inner"><span class="ic">⚠️</span><div id="noticeText"></div></div></div>
 
 <nav class="controls">
   <div class="controls-inner">
@@ -192,84 +162,130 @@
 <footer>
   <h3>圖例 / 說明</h3>
   <ul>
-    <li><b style="color:var(--ok)">✅ 符合預算</b>：一般情況雙人房 ≤ NT$2,500。<b style="color:var(--tight)">⚠️ 旺季可能略超</b>：10 月或週末可能超過一點。<b style="color:var(--over)">❌ 通常超過</b>：評價好但旺季多半破預算,列出供參考。</li>
-    <li>「<b>照片・地圖</b>」按鈕會開啟 Google 地圖,可看該旅店真實照片、街景與評論(需連網)。「<b>即時房價</b>」會開啟 Booking.com 並帶入 10/14–10/18、2 人。</li>
-    <li>評分與評論數來自 <b>Google</b>;標「部落客推薦」者為台灣旅遊部落客／訂房網實住推薦,Google 分數請自行以按鈕確認。</li>
-    <li>部分首爾民宿規定<b>連住 2–3 晚</b>才能訂(你 4 晚沒問題);想更便宜,明洞可往「忠武路／乙支路三街」、聖水可往「建大」一帶找。</li>
+    <li><b style="color:var(--ok)">✅ 符合預算</b>：一般情況雙人房 ≤ NT$2,500。<b style="color:var(--tight)">⚠️ 旺季可能略超</b>：影展/賞楓/週末可能超過一點。<b style="color:var(--over)">❌ 通常超過</b>：評價好但多半破預算,列出供參考。</li>
+    <li>「<b>照片・地圖</b>」按鈕會開啟 Google 地圖,可看該旅店真實照片、街景與評論(需連網)。「<b>即時房價</b>」會開啟 Booking.com 並帶入該城市的日期、2 人。</li>
+    <li>評分與評論數來自 <b>Google</b>;標「部落客推薦」者為台灣旅遊部落客／訂房網實住推薦,Google 分數請以按鈕確認。參考房價多為一般／淡季價,<b>非即時價</b>。</li>
+    <li><b>釜山</b>整體比首爾便宜。<b>10/6–10/15 為釜山影展 BIFF</b>(主場海雲台/Centum City),你的釜山日期在期間內,海雲台會較貴、較快滿房。<b>首爾 10 月為賞楓旺季</b>,弘大/明洞/聖水正規飯店多半超預算。看到喜歡的儘早訂。</li>
   </ul>
   <div class="gen">離線檔 · 資料整理於 2026-07-07 · 房價僅供參考,實際以訂房平台為準</div>
 </footer>
 
 <script>
+/* ---------------- Area config (color / name / vibe) ---------------- */
 const AREAS = {
+  // Seoul
   hongdae:   {cn:"弘大",   en:"Hongdae",    color:"var(--hongdae)",   vibe:"交通最強、好逛好吃，自由行首選"},
   seongsu:   {cn:"聖水洞", en:"Seongsu",    color:"var(--seongsu)",   vibe:"文青潮流區，平價選擇少、房價偏高"},
   myeongdong:{cn:"明洞",   en:"Myeongdong", color:"var(--myeongdong)",vibe:"購物天堂、中文最友善，飯店偏貴"},
   dongdaemun:{cn:"東大門", en:"Dongdaemun", color:"var(--dongdaemun)",vibe:"24 小時購物，平價商務飯店最多"},
-  sinchon:   {cn:"新村",   en:"Sinchon",    color:"var(--sinchon)",   vibe:"離弘大一站、更安靜、房價更低"}
+  sinchon:   {cn:"新村",   en:"Sinchon",    color:"var(--sinchon)",   vibe:"離弘大一站、更安靜、房價更低"},
+  // Busan
+  haeundae:  {cn:"海雲台", en:"Haeundae",   color:"var(--haeundae)",  vibe:"釜山第一海灘、機能最好，影展期間較貴"},
+  songdo:    {cn:"松島",   en:"Songdo",     color:"var(--songdo)",    vibe:"安靜海灘、纜車，平價好選擇較少"},
+  gwangalli: {cn:"廣安里", en:"Gwangalli",  color:"var(--gwangalli)", vibe:"廣安大橋夜景、情侶最愛，海景平價多"}
 };
 
-// budget: ok / tight / over.  rating:number|null (null => blog). src:"Google"|blog label.
+/* ---------------- City config ---------------- */
+const CITY = {
+  seoul: {
+    label:"首爾", en:"Seoul", order_no:"② 第 2 站", dates:"10/14 → 10/18",
+    facts:[["入住","10/14 → 退房 10/18"],["共","4 晚"],["2 人","雙人床"],["預算","≤ NT$2,500/晚"],["","≈ 115,000 韓元/晚"]],
+    title:"首爾住宿", subtitle:"弘大 · 聖水洞 · 明洞 · 東大門 · 新村　5 區高 CP 精選",
+    notice:'<b>10 月是首爾賞楓旺季，房價偏高。</b> 這個預算在旺季能穩訂的主要是「民宿／青旅的獨立雙人房」＋少數平價商務飯店；弘大、明洞、聖水的正規飯店大多會超過。下方「參考房價」是一般／淡季價，<b>不是 10/14–10/18 即時價</b>，請用各卡片「即時房價」確認。',
+    checkin:"2026-10-14", checkout:"2026-10-18",
+    order:["hongdae","seongsu","myeongdong","dongdaemun","sinchon"]
+  },
+  busan: {
+    label:"釜山", en:"Busan", order_no:"① 第 1 站", dates:"10/10 → 10/14",
+    facts:[["入住","10/10 → 退房 10/14"],["共","4 晚"],["2 人","雙人床"],["預算","≤ NT$2,500/晚"],["","釜山比首爾便宜"]],
+    title:"釜山住宿", subtitle:"海雲台 · 松島 · 廣安里　3 區海景高 CP 精選",
+    notice:'<b>10/6–10/15 是釜山影展（BIFF），你的 10/10–14 正好在影展期間。</b> 主場在海雲台/Centum City → 海雲台房價會更高、更快滿房，建議早訂，或考慮<b>廣安里／松島</b>。釜山整體比首爾便宜，下方參考房價為一般價，<b>非即時價</b>，請用「即時房價」確認。',
+    checkin:"2026-10-10", checkout:"2026-10-14",
+    order:["haeundae","songdo","gwangalli"]
+  }
+};
+
+/* ---------------- Hotels ---------------- */
+/* r: Google rating|null (null => blog).  b: ok/tight/over. */
 const HOTELS = [
-  // ---- 弘大 ----
-  {a:"hongdae",cn:"Nabi Hostel 那比青旅",en:"Nabi Hostel",r:4.5,src:"Google",n:236,price:"~NT$2,300",b:"ok",t:"弘大站步行 2 分",hl:"有中文櫃檯、台灣人激推，雙人房搶手要早訂",pid:"ChIJ0-71fsKYfDURUJIv4KShrjw"},
-  {a:"hongdae",cn:"Seoul Mansion 首爾大廈民宿",en:"Seoul Mansion GH",r:4.1,src:"Google",n:82,price:"~NT$1,800–2,400",b:"ok",t:"弘大站步行 5 分",hl:"高 CP、洗烘衣／廚房齊全，廁所小、無電梯",pid:"ChIJeXRHmOmYfDURJp4OXexhqHk"},
-  {a:"hongdae",cn:"Baroato 2nd 巴羅阿托 2 館",en:"Baroato 2nd",r:4.5,src:"Google",n:99,price:"~NT$2,000–2,600",b:"ok",t:"弘大站附近",hl:"有中文櫃檯、房小巧乾淨（閣樓床、隔音普通）",pid:"ChIJUyDJdkSZfDURIymN0r49260"},
-  {a:"hongdae",cn:"SH Seoul Guesthouse",en:"SH Seoul Guesthouse",r:4.3,src:"Google",n:46,price:"~NT$1,800–2,400",b:"ok",t:"弘大站步行",hl:"弘大廣場旁、房間大能攤行李、自助式",pid:"ChIJZwAyhsKYfDURAKOt5AAfWa0"},
-  {a:"hongdae",cn:"Daol Guesthouse",en:"Daol Guesthouse",r:4.2,src:"Google",n:51,price:"~NT$1,800–2,400",b:"ok",t:"弘大站 3 號出口（電梯）3 分",hl:"超乾淨、全自助 QR 入住",pid:"ChIJqVFrRwmZfDURYFz550k4u8k"},
-  {a:"hongdae",cn:"Holiday Inn Express 弘大",en:"Holiday Inn Express Hongdae",r:4.4,src:"Google",n:2049,price:"10 月常 NT$3,500+",b:"over",t:"弘大站 5 號出口共構",hl:"與 AK Plaza 共構、含免費早餐，正規飯店首選但旺季超預算",pid:"ChIJLw4y4-mYfDURxDEN4Ckb4wo"},
+  /* ===== SEOUL ===== */
+  {city:"seoul",a:"hongdae",cn:"Nabi Hostel 那比青旅",en:"Nabi Hostel",r:4.5,n:236,price:"~NT$2,300",b:"ok",t:"弘大站步行 2 分",hl:"有中文櫃檯、台灣人激推，雙人房搶手要早訂",pid:"ChIJ0-71fsKYfDURUJIv4KShrjw"},
+  {city:"seoul",a:"hongdae",cn:"Seoul Mansion 首爾大廈民宿",en:"Seoul Mansion GH",r:4.1,n:82,price:"~NT$1,800–2,400",b:"ok",t:"弘大站步行 5 分",hl:"高 CP、洗烘衣／廚房齊全，廁所小、無電梯",pid:"ChIJeXRHmOmYfDURJp4OXexhqHk"},
+  {city:"seoul",a:"hongdae",cn:"Baroato 2nd 巴羅阿托 2 館",en:"Baroato 2nd",r:4.5,n:99,price:"~NT$2,000–2,600",b:"ok",t:"弘大站附近",hl:"有中文櫃檯、房小巧乾淨（閣樓床、隔音普通）",pid:"ChIJUyDJdkSZfDURIymN0r49260"},
+  {city:"seoul",a:"hongdae",cn:"SH Seoul Guesthouse",en:"SH Seoul Guesthouse",r:4.3,n:46,price:"~NT$1,800–2,400",b:"ok",t:"弘大站步行",hl:"弘大廣場旁、房間大能攤行李、自助式",pid:"ChIJZwAyhsKYfDURAKOt5AAfWa0"},
+  {city:"seoul",a:"hongdae",cn:"Daol Guesthouse",en:"Daol Guesthouse",r:4.2,n:51,price:"~NT$1,800–2,400",b:"ok",t:"弘大站 3 號出口（電梯）3 分",hl:"超乾淨、全自助 QR 入住",pid:"ChIJqVFrRwmZfDURYFz550k4u8k"},
+  {city:"seoul",a:"hongdae",cn:"Holiday Inn Express 弘大",en:"Holiday Inn Express Hongdae",r:4.4,n:2049,price:"10 月常 NT$3,500+",b:"over",t:"弘大站 5 號出口共構",hl:"與 AK Plaza 共構、含免費早餐，正規飯店首選但旺季超預算",pid:"ChIJLw4y4-mYfDURxDEN4Ckb4wo"},
 
-  // ---- 聖水洞 ----
-  {a:"seongsu",cn:"Seoul Forest Stay 首爾林 Stay",en:"Seoul Forest Stay",r:4.3,src:"Google",n:89,price:"~NT$1,800–2,400",b:"ok",t:"纛島站附近",hl:"Blue Bottle／Olive Young 旁、備品超齊，無電梯",pid:"ChIJ77KVUTalfDURbl2xX_02Gqk"},
-  {a:"seongsu",cn:"H Avenue 建大聖水",en:"H Avenue Kondae Seongsu",r:4.0,src:"Google",n:271,price:"~NT$1,800–2,500",b:"ok",t:"近建大商圈",hl:"平價商務，注意 check-in 晚（11pm）、服務較陽春",pid:"ChIJ0dD5e8GkfDURLCqkhhLmT7c"},
-  {a:"seongsu",cn:"Hotel Boutique 9 陵洞",en:"Hotel Boutique 9 Neungdong",r:4.1,src:"Google",n:160,price:"~NT$1,800–2,500",b:"ok",t:"近地鐵站",hl:"房大乾淨、可看樂天塔夜景，清潔頻率較低",pid:"ChIJz7sM1dSkfDURBBSpQ-RtuU0"},
-  {a:"seongsu",cn:"건대 Lastay 建大",en:"Kondae Lastay",r:4.4,src:"Google",n:5,price:"~NT$1,800–2,300",b:"ok",t:"近建大",hl:"小而乾淨、CP 高（評論數少，建議看實照）",pid:"ChIJbRuTn6GlfDURXHwpI626sTc"},
-  {a:"seongsu",cn:"Anyak Hotel & Spa 聖水建大",en:"Anyak Hotel & Spa",r:4.2,src:"Google",n:6,price:"~NT$2,000–2,500",b:"tight",t:"近聖水／建大",hl:"有 Spa、房乾淨，隔音較弱（評論數少）",pid:"ChIJ1TarbgClfDURfqxHfnKO_4o"},
-  {a:"seongsu",cn:"HOTEL POCO 聖水",en:"Hotel Poco",r:4.4,src:"Google",n:407,price:"~NT$3,800",b:"over",t:"聖水站 3 號出口 2 分",hl:"潮流設計、聖水核心唯一話題飯店，超預算",pid:"ChIJrZUT5EalfDURXk9bliI6GAQ"},
+  {city:"seoul",a:"seongsu",cn:"Seoul Forest Stay 首爾林 Stay",en:"Seoul Forest Stay",r:4.3,n:89,price:"~NT$1,800–2,400",b:"ok",t:"纛島站附近",hl:"Blue Bottle／Olive Young 旁、備品超齊，無電梯",pid:"ChIJ77KVUTalfDURbl2xX_02Gqk"},
+  {city:"seoul",a:"seongsu",cn:"H Avenue 建大聖水",en:"H Avenue Kondae Seongsu",r:4.0,n:271,price:"~NT$1,800–2,500",b:"ok",t:"近建大商圈",hl:"平價商務，注意 check-in 晚（11pm）、服務較陽春",pid:"ChIJ0dD5e8GkfDURLCqkhhLmT7c"},
+  {city:"seoul",a:"seongsu",cn:"Hotel Boutique 9 陵洞",en:"Hotel Boutique 9 Neungdong",r:4.1,n:160,price:"~NT$1,800–2,500",b:"ok",t:"近地鐵站",hl:"房大乾淨、可看樂天塔夜景，清潔頻率較低",pid:"ChIJz7sM1dSkfDURBBSpQ-RtuU0"},
+  {city:"seoul",a:"seongsu",cn:"건대 Lastay 建大",en:"Kondae Lastay",r:4.4,n:5,price:"~NT$1,800–2,300",b:"ok",t:"近建大",hl:"小而乾淨、CP 高（評論數少，建議看實照）",pid:"ChIJbRuTn6GlfDURXHwpI626sTc"},
+  {city:"seoul",a:"seongsu",cn:"Anyak Hotel & Spa 聖水建大",en:"Anyak Hotel & Spa",r:4.2,n:6,price:"~NT$2,000–2,500",b:"tight",t:"近聖水／建大",hl:"有 Spa、房乾淨，隔音較弱（評論數少）",pid:"ChIJ1TarbgClfDURfqxHfnKO_4o"},
+  {city:"seoul",a:"seongsu",cn:"HOTEL POCO 聖水",en:"Hotel Poco",r:4.4,n:407,price:"~NT$3,800",b:"over",t:"聖水站 3 號出口 2 分",hl:"潮流設計、聖水核心唯一話題飯店，超預算",pid:"ChIJrZUT5EalfDURXk9bliI6GAQ"},
 
-  // ---- 明洞 ----
-  {a:"myeongdong",cn:"Ekonomy 明洞尊貴經濟",en:"Ekonomy Hotel Myeongdong Premier",r:4.0,src:"Google",n:225,price:"淡季 NT$1,800／旺季 NT$2,600 起",b:"tight",t:"明洞站步行 5 分",hl:"純睡覺型平價商務，旺季可能略超",pid:"ChIJfTY98PCifDURqs3Bxmc2Hpg"},
-  {a:"myeongdong",cn:"Step Inn Myeongdong 1",en:"Step Inn Myeongdong 1",r:4.1,src:"Google",n:470,price:"~NT$2,000–2,800",b:"tight",t:"明洞商圈核心",hl:"Olive Young 旗艦店樓下、有機場接送，青旅型房小",pid:"ChIJZxB04--ifDURE0tSqNBR49U"},
-  {a:"myeongdong",cn:"ARA125 阿拉 125",en:"ARA125",r:null,src:"部落客推薦",n:null,price:"~NT$1,500–2,200",b:"ok",t:"明洞商圈",hl:"下樓換錢所、附早餐＋免費洗烘衣、廚房泡麵可自取，CP 超高",pid:null},
-  {a:"myeongdong",cn:"Winwin Guesthouse",en:"Winwin Guesthouse",r:null,src:"部落客推薦",n:null,price:"雙人房最低一千多",b:"ok",t:"地鐵步行 1 分",hl:"對面機場巴士站、超搶手要早訂",pid:null},
-  {a:"myeongdong",cn:"Philstay Myeongdong Station",en:"Philstay Myeongdong Station",r:null,src:"部落客推薦",n:null,price:"~NT$1,500–2,200",b:"ok",t:"明洞站步行 1 分",hl:"樓下就是明洞商圈，房小但地點價格讚",pid:null},
-  {a:"myeongdong",cn:"Nine Tree by Parnas 明洞 I",en:"Nine Tree by Parnas Myeongdong I",r:4.3,src:"Google",n:1194,price:"10 月常 NT$3,500+",b:"over",t:"明洞站",hl:"評價好的正規飯店，旺季超預算",pid:"ChIJI3t3efCifDUR_Uu6nsEwcWY"},
+  {city:"seoul",a:"myeongdong",cn:"Ekonomy 明洞尊貴經濟",en:"Ekonomy Hotel Myeongdong Premier",r:4.0,n:225,price:"淡季 NT$1,800／旺季 NT$2,600 起",b:"tight",t:"明洞站步行 5 分",hl:"純睡覺型平價商務，旺季可能略超",pid:"ChIJfTY98PCifDURqs3Bxmc2Hpg"},
+  {city:"seoul",a:"myeongdong",cn:"Step Inn Myeongdong 1",en:"Step Inn Myeongdong 1",r:4.1,n:470,price:"~NT$2,000–2,800",b:"tight",t:"明洞商圈核心",hl:"Olive Young 旗艦店樓下、有機場接送，青旅型房小",pid:"ChIJZxB04--ifDURE0tSqNBR49U"},
+  {city:"seoul",a:"myeongdong",cn:"ARA125 阿拉 125",en:"ARA125",r:null,n:null,price:"~NT$1,500–2,200",b:"ok",t:"明洞商圈",hl:"下樓換錢所、附早餐＋免費洗烘衣、廚房泡麵可自取，CP 超高",pid:null},
+  {city:"seoul",a:"myeongdong",cn:"Winwin Guesthouse",en:"Winwin Guesthouse",r:null,n:null,price:"雙人房最低一千多",b:"ok",t:"地鐵步行 1 分",hl:"對面機場巴士站、超搶手要早訂",pid:null},
+  {city:"seoul",a:"myeongdong",cn:"Philstay Myeongdong Station",en:"Philstay Myeongdong Station",r:null,n:null,price:"~NT$1,500–2,200",b:"ok",t:"明洞站步行 1 分",hl:"樓下就是明洞商圈，房小但地點價格讚",pid:null},
+  {city:"seoul",a:"myeongdong",cn:"Nine Tree by Parnas 明洞 I",en:"Nine Tree by Parnas Myeongdong I",r:4.3,n:1194,price:"10 月常 NT$3,500+",b:"over",t:"明洞站",hl:"評價好的正規飯店，旺季超預算",pid:"ChIJI3t3efCifDUR_Uu6nsEwcWY"},
 
-  // ---- 東大門 ----
-  {a:"dongdaemun",cn:"Toyoko Inn 東大門 2 號店",en:"Toyoko Inn Dongdaemun No.2",r:4.3,src:"Google",n:754,price:"~NT$2,000–2,800",b:"tight",t:"東大門歷史文化公園站正上方",hl:"含早餐、日系連鎖乾淨，房間偏小",pid:"ChIJqcjrxwmjfDUR7Dh6ZbJfGbM"},
-  {a:"dongdaemun",cn:"HOTEL DM 東大門",en:"Hotel DM Dongdaemun",r:4.3,src:"Google",n:205,price:"~NT$1,800–2,500",b:"ok",t:"近東廟站",hl:"有中文／英文櫃檯、台灣部落客實住推薦",pid:"ChIJ-UXvKXujfDUR9PbxXzRNmSg"},
-  {a:"dongdaemun",cn:"Recenz Hotel",en:"Recenz Hotel",r:4.0,src:"Google",n:897,price:"~NT$1,800–2,500",b:"ok",t:"東大門區、近地鐵",hl:"樓下超市／星巴克／Olive Young、含早餐",pid:"ChIJGfx6nsqkfDURbe4kB1Agv7A"},
-  {a:"dongdaemun",cn:"Toyoko Inn 東大門 1 號店",en:"Toyoko Inn Dongdaemun No.1",r:4.1,src:"Google",n:923,price:"~NT$2,000–2,800",b:"tight",t:"近 DDP＋機場巴士",hl:"含早餐，適合獨旅／血拼",pid:"ChIJ88_BXj2jfDURknG3i83DroY"},
-  {a:"dongdaemun",cn:"Mangrove Dongdaemun",en:"Mangrove Dongdaemun",r:4.2,src:"Google",n:109,price:"~NT$2,000–2,600",b:"tight",t:"東大門站步行 2 分",hl:"設計型旅宿、頂樓景觀、免費洗衣",pid:"ChIJO_bLp72jfDURhWh1dVzEKUc"},
+  {city:"seoul",a:"dongdaemun",cn:"Toyoko Inn 東大門 2 號店",en:"Toyoko Inn Dongdaemun No.2",r:4.3,n:754,price:"~NT$2,000–2,800",b:"tight",t:"東大門歷史文化公園站正上方",hl:"含早餐、日系連鎖乾淨，房間偏小",pid:"ChIJqcjrxwmjfDUR7Dh6ZbJfGbM"},
+  {city:"seoul",a:"dongdaemun",cn:"HOTEL DM 東大門",en:"Hotel DM Dongdaemun",r:4.3,n:205,price:"~NT$1,800–2,500",b:"ok",t:"近東廟站",hl:"有中文／英文櫃檯、台灣部落客實住推薦",pid:"ChIJ-UXvKXujfDUR9PbxXzRNmSg"},
+  {city:"seoul",a:"dongdaemun",cn:"Recenz Hotel",en:"Recenz Hotel",r:4.0,n:897,price:"~NT$1,800–2,500",b:"ok",t:"東大門區、近地鐵",hl:"樓下超市／星巴克／Olive Young、含早餐",pid:"ChIJGfx6nsqkfDURbe4kB1Agv7A"},
+  {city:"seoul",a:"dongdaemun",cn:"Toyoko Inn 東大門 1 號店",en:"Toyoko Inn Dongdaemun No.1",r:4.1,n:923,price:"~NT$2,000–2,800",b:"tight",t:"近 DDP＋機場巴士",hl:"含早餐，適合獨旅／血拼",pid:"ChIJ88_BXj2jfDURknG3i83DroY"},
+  {city:"seoul",a:"dongdaemun",cn:"Mangrove Dongdaemun",en:"Mangrove Dongdaemun",r:4.2,n:109,price:"~NT$2,000–2,600",b:"tight",t:"東大門站步行 2 分",hl:"設計型旅宿、頂樓景觀、免費洗衣",pid:"ChIJO_bLp72jfDURhWh1dVzEKUc"},
 
-  // ---- 新村 ----
-  {a:"sinchon",cn:"Wegoinn Hostel",en:"Wegoinn Hostel",r:4.1,src:"Google",n:113,price:"~NT$1,600–2,200",b:"ok",t:"近新村站／梨大站",hl:"周邊餐飲多、6002 機場巴士、房＋浴室寬敞",pid:"ChIJxfc3zJCYfDURqFsC6pAVg2M"},
-  {a:"sinchon",cn:"Seoul Grand Hostel 梨大",en:"Seoul Grand Hostel Ewha",r:4.3,src:"Google",n:113,price:"~NT$1,600–2,200",b:"ok",t:"近梨大站",hl:"私人雙人房乾淨、大瓶洗沐備品，隔音較弱",pid:"ChIJwYk4p5CYfDURggT9QentbHI"},
-  {a:"sinchon",cn:"Sinchon Gaon Hostel",en:"Sinchon Gaon Hostel",r:4.2,src:"Google",n:19,price:"~NT$1,500–2,200",b:"ok",t:"近新村站",hl:"新整修、老闆熱情、GS25 在門口（評論少）",pid:"ChIJ-ReYQL6YfDURhCVD1hHoxCw"},
-  {a:"sinchon",cn:"Chocolate Tree Sinchon 巧克力樹青旅",en:"Chocolate Tree Sinchon",r:null,src:"部落客推薦",n:null,price:"~NT$2,000",b:"ok",t:"新村",hl:"網友評分高的新村平價青旅",pid:null},
-  {a:"sinchon",cn:"Ever8 新村公寓式酒店",en:"Ever8 Serviced Residence",r:null,src:"部落客推薦",n:null,price:"~NT$2,200–2,800",b:"tight",t:"近梨花女子大學",hl:"房內小廚房＋洗衣機、有中文服務，適合想要空間的兩人",pid:null}
+  {city:"seoul",a:"sinchon",cn:"Wegoinn Hostel",en:"Wegoinn Hostel",r:4.1,n:113,price:"~NT$1,600–2,200",b:"ok",t:"近新村站／梨大站",hl:"周邊餐飲多、6002 機場巴士、房＋浴室寬敞",pid:"ChIJxfc3zJCYfDURqFsC6pAVg2M"},
+  {city:"seoul",a:"sinchon",cn:"Seoul Grand Hostel 梨大",en:"Seoul Grand Hostel Ewha",r:4.3,n:113,price:"~NT$1,600–2,200",b:"ok",t:"近梨大站",hl:"私人雙人房乾淨、大瓶洗沐備品，隔音較弱",pid:"ChIJwYk4p5CYfDURggT9QentbHI"},
+  {city:"seoul",a:"sinchon",cn:"Sinchon Gaon Hostel",en:"Sinchon Gaon Hostel",r:4.2,n:19,price:"~NT$1,500–2,200",b:"ok",t:"近新村站",hl:"新整修、老闆熱情、GS25 在門口（評論少）",pid:"ChIJ-ReYQL6YfDURhCVD1hHoxCw"},
+  {city:"seoul",a:"sinchon",cn:"Chocolate Tree Sinchon 巧克力樹青旅",en:"Chocolate Tree Sinchon",r:null,n:null,price:"~NT$2,000",b:"ok",t:"新村",hl:"網友評分高的新村平價青旅",pid:null},
+  {city:"seoul",a:"sinchon",cn:"Ever8 新村公寓式酒店",en:"Ever8 Serviced Residence",r:null,n:null,price:"~NT$2,200–2,800",b:"tight",t:"近梨花女子大學",hl:"房內小廚房＋洗衣機、有中文服務，適合想要空間的兩人",pid:null},
+
+  /* ===== BUSAN ===== */
+  {city:"busan",a:"haeundae",cn:"海雲台 MS 飯店",en:"MS Hotel Haeundae",r:4.2,n:525,price:"海景 ~NT$2,000–2,600",b:"ok",t:"海雲台海邊第一排、門口公車站",hl:"8000+ 好評、走出門就是沙灘與夜市、海景房 CP 高",pid:"ChIJ17vASFyNaDURXXAc5t8QXiY"},
+  {city:"busan",a:"haeundae",cn:"Toyoko Inn 釜山海雲台 2",en:"Toyoko Inn Busan Haeundae 2",r:4.2,n:2174,price:"~NT$2,000–2,800",b:"ok",t:"近海雲台海邊、看日出方便",hl:"日系連鎖、含早餐、投幣洗衣，房間偏小",pid:"ChIJ_0E5KRKNaDURKSPthqrI1-I"},
+  {city:"busan",a:"haeundae",cn:"Sunset Business Hotel",en:"Sunset Business Hotel",r:4.1,n:758,price:"~NT$1,800–2,500",b:"ok",t:"近海雲台美食街＋公車站",hl:"房間寬敞乾淨、早餐好吃，部分插座老舊",pid:"ChIJEzYUTVyNaDURqSAK7TEUcWc"},
+  {city:"busan",a:"haeundae",cn:"Baymond Hotel",en:"Baymond Hotel",r:4.4,n:308,price:"~NT$2,000–2,800",b:"ok",t:"近海雲台海邊＋夜生活",hl:"頂樓泳池／三溫暖、房大、雙洗手台，超值",pid:"ChIJdfPs_5aNaDURwGTwqO0S7fY"},
+  {city:"busan",a:"haeundae",cn:"UH Suite The Haeundae",en:"UH Suite The Haeundae",r:4.2,n:273,price:"海景 ~NT$2,500–3,500",b:"tight",t:"過馬路到沙灘＋水族館、近夜市",hl:"大玻璃窗海景、部分房有情侶泡湯池、免費洗衣，單電梯要等",pid:"ChIJOXLPww6NaDURXziF7dhCuWs"},
+  {city:"busan",a:"haeundae",cn:"L7 海雲台 by Lotte",en:"L7 Haeundae by Lotte",r:null,n:null,price:"~NT$4,000+（訂房網 9.1）",b:"over",t:"近海雲台海邊",hl:"2024 新開、頂樓露天泳池、機能好，超預算的話當升級選項",pid:null},
+
+  {city:"busan",a:"songdo",cn:"Grab The Ocean 松島",en:"Grab The Ocean Songdo",r:4.3,n:975,price:"~NT$2,200–3,200",b:"tight",t:"松島海邊第一排、樓下星巴克＋CU",hl:"4 星、海景房、含早餐；尖峰等電梯久、團客多",pid:"ChIJfxahncfpaDURLRCQdXDDbxk"},
+  {city:"busan",a:"songdo",cn:"Hotel The May",en:"Hotel The May",r:4.4,n:12,price:"~NT$1,500–2,300",b:"ok",t:"近松島海邊",hl:"乾淨、地點好、平價（評論數少，建議看實照）；床偏硬",pid:"ChIJ5avFcEXoaDURYeA5IogEc1Q"},
+  {city:"busan",a:"songdo",cn:"Brown-Dot 松島海邊",en:"Brown-Dot Songdo Beach",r:3.8,n:135,price:"~NT$1,200–2,000",b:"ok",t:"松島海邊、離市區景點較遠",hl:"超平價、海景豪華房、每日打掃；部分房有菸味",pid:"ChIJUVZ2bUXoaDUR9KgFXJYpvCE"},
+  {city:"busan",a:"songdo",cn:"Songdo Beach Tourist Hotel",en:"Songdo Beach Tourist Hotel",r:3.6,n:54,price:"~NT$1,500–2,200",b:"ok",t:"松島海邊、近纜車／甘川／札嘎其",hl:"老但乾淨、位置中心、房大海景；設施較舊",pid:"ChIJ77sYXUToaDURmklYETIdDHc"},
+  {city:"busan",a:"songdo",cn:"Fairfield by Marriott 松島",en:"Fairfield by Marriott Songdo",r:4.4,n:876,price:"~NT$3,000–4,500",b:"over",t:"松島海邊第一排",hl:"Marriott 品牌、海景＋日出、含早餐／投幣洗衣／GS25，通常超預算",pid:"ChIJGRQ18nbpaDURQaqWuETakA4"},
+  {city:"busan",a:"songdo",cn:"Wyndham Grand Busan 梨珍",en:"Wyndham Grand Busan Ijin",r:4.6,n:325,price:"~NT$4,000+",b:"over",t:"近松島／梨珍、溫泉三溫暖",hl:"奢華、泡溫泉看海灣，超預算的話當升級選項",pid:"ChIJMzDY1XHpaDURMKD9x-ehPzk"},
+
+  {city:"busan",a:"gwangalli",cn:"廣安里 1 號飯店",en:"Gwanganli Hotel 1",r:4.7,n:2266,price:"from ~NT$1,000",b:"ok",t:"金蓮山站 1 號出口 8 分、海邊第一排",hl:"純白大理石設計、房內看廣安大橋＋週六無人機秀、附早餐與零食袋；房小、含膠囊房型（想要雙人床選「海景雙人房」）",pid:"ChIJ5S6_tyjtaDUR2A5jt3nQLCo"},
+  {city:"busan",a:"gwangalli",cn:"Gray 193 Hotel",en:"Gwangalli Gray 193 Hotel",r:4.3,n:112,price:"海景雙人房 ~NT$2,400–2,600",b:"tight",t:"海邊第一排（離地鐵較遠）",hl:"簡約乾淨、大橋海景、櫃檯親切、可早入住；部分房無窗",pid:"ChIJXaKLAWTtaDURC2SW6EZ5d4w"},
+  {city:"busan",a:"gwangalli",cn:"Homers Hotel",en:"Homers Hotel",r:4.1,n:783,price:"~NT$2,000–2,800",b:"ok",t:"廣安里海邊第一排",hl:"房大海景、正對廣安大橋、大廳可賞景；電梯少要等",pid:"ChIJq0wMNdTsaDURoW253EQKtbk"},
+  {city:"busan",a:"gwangalli",cn:"H Avenue 廣安里",en:"H Avenue Hotel Gwangalli",r:4.2,n:310,price:"~NT$1,800–2,500",b:"ok",t:"近海邊、看無人機秀方便",hl:"海景房、陽台大；房間偏小、榻榻米床",pid:"ChIJwxlIijHtaDURqfoUnJxFgyc"},
+  {city:"busan",a:"gwangalli",cn:"El Momento 廣安公寓",en:"El Momento Gwangan",r:3.8,n:41,price:"海景雙人房 ~NT$2,000+",b:"ok",t:"金蓮山站最近、步行到沙灘",hl:"公寓式：陽台＋小廚房＋洗衣機、正對大橋看煙火；浴室小",pid:"ChIJjec8W4rtaDURsGBj3XQoKHI"},
+  {city:"busan",a:"gwangalli",cn:"Kent Hotel 廣安里 by Kensington",en:"Kent Hotel Gwangalli",r:4.1,n:747,price:"~NT$2,700–4,000",b:"over",t:"海邊第一排、透明電梯",hl:"含早餐、機能好、過馬路到沙灘；旺季偏貴",pid:"ChIJh5B-vy7taDURaIjEejC5nD0"}
 ];
 
-const CHK="checkin=2026-10-14&checkout=2026-10-18&group_adults=2&no_rooms=1&group_children=0";
+/* ---------------- Render ---------------- */
 const mapUrl=h=> h.pid
   ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.en)}&query_place_id=${h.pid}`
-  : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.cn+" 首爾")}`;
-const bookUrl=h=> `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.en+" Seoul")}&${CHK}`;
+  : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.cn+" "+(h.city==="busan"?"釜山":"首爾"))}`;
+const bookUrl=h=>{
+  const c=CITY[h.city];
+  return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.en+" "+c.en)}&checkin=${c.checkin}&checkout=${c.checkout}&group_adults=2&no_rooms=1&group_children=0`;
+};
 const bMap={ok:"符合預算",tight:"旺季略超",over:"通常超過"};
 
-let curArea="all", onlyFit=false;
+let curCity="busan", curArea="all", onlyFit=false;
 
-// build pills
-const pillsEl=document.getElementById("pills");
-const mkPill=(key,label,color)=>{
+/* city switcher */
+const csEl=document.getElementById("citySwitch");
+Object.entries(CITY).forEach(([key,c])=>{
   const el=document.createElement("button");
-  el.className="pill";el.dataset.area=key;el.dataset.active=(key===curArea);
-  el.innerHTML=(color?`<span class="dot" style="background:${color}"></span>`:"")+label;
-  el.onclick=()=>{curArea=key;render();};
-  return el;
-};
-pillsEl.appendChild(mkPill("all","全部",null));
-Object.entries(AREAS).forEach(([k,v])=>pillsEl.appendChild(mkPill(k,v.cn,v.color)));
+  el.className="city-tab";el.dataset.city=key;
+  el.innerHTML=`<span class="ct-order">${c.order_no}</span><span class="ct-name">${c.label} <span style="font-weight:400;font-size:12px;opacity:.7">${c.en}</span></span><span class="ct-dates">${c.dates}</span>`;
+  el.onclick=()=>{curCity=key;curArea="all";render();window.scrollTo({top:0,behavior:"smooth"});};
+  csEl.appendChild(el);
+});
 
 document.getElementById("onlyFit").addEventListener("change",e=>{onlyFit=e.target.checked;render();});
 
@@ -298,13 +314,33 @@ function card(h){
 }
 
 function render(){
-  document.querySelectorAll(".pill").forEach(p=>p.dataset.active=(p.dataset.area===curArea));
+  const c=CITY[curCity];
+  // city tabs
+  document.querySelectorAll(".city-tab").forEach(t=>t.dataset.active=(t.dataset.city===curCity));
+  // hero
+  document.getElementById("route").innerHTML = c.order.map(k=>`<span style="background:${AREAS[k].color}"></span>`).join("");
+  document.getElementById("heroTitle").innerHTML = `${c.title}<span class="sub">${c.subtitle}</span>`;
+  document.getElementById("heroFacts").innerHTML = c.facts.map(f=>`<span class="chip">${f[0]?`<b>${f[0]}</b> `:""}${f[1]}</span>`).join("");
+  document.getElementById("noticeText").innerHTML = c.notice;
+  // pills
+  const pillsEl=document.getElementById("pills");
+  pillsEl.innerHTML="";
+  const mkPill=(key,label,color)=>{
+    const el=document.createElement("button");
+    el.className="pill";el.dataset.area=key;el.dataset.active=(key===curArea);
+    el.innerHTML=(color?`<span class="dot" style="background:${color}"></span>`:"")+label;
+    el.onclick=()=>{curArea=key;render();};
+    return el;
+  };
+  pillsEl.appendChild(mkPill("all","全部",null));
+  c.order.forEach(k=>pillsEl.appendChild(mkPill(k,AREAS[k].cn,AREAS[k].color)));
+  // main
   const main=document.getElementById("main");
   main.innerHTML="";
   let shown=0;
-  const order = curArea==="all" ? Object.keys(AREAS) : [curArea];
+  const order = curArea==="all" ? c.order : [curArea];
   order.forEach(ak=>{
-    let list=HOTELS.filter(h=>h.a===ak);
+    let list=HOTELS.filter(h=>h.city===curCity && h.a===ak);
     if(onlyFit) list=list.filter(h=>h.b==="ok");
     if(!list.length) return;
     shown+=list.length;
