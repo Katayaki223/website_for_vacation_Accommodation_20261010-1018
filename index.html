@@ -27,6 +27,7 @@
     --haeundae:#1c6daa;
     --songdo:#17998c;
     --gwangalli:#e06a8b;
+    --saved:#c0912e;
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI","PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
   }
@@ -166,6 +167,7 @@
     <li>「<b>照片・地圖</b>」按鈕會開啟 Google 地圖,可看該旅店真實照片、街景與評論(需連網)。「<b>即時房價</b>」會開啟 Booking.com 並帶入該城市的日期、2 人。</li>
     <li>評分與評論數來自 <b>Google</b>;標「部落客推薦」者為台灣旅遊部落客／訂房網實住推薦,Google 分數請以按鈕確認。參考房價多為一般／淡季價,<b>非即時價</b>。</li>
     <li><b>釜山</b>整體比首爾便宜。<b>10/6–10/15 為釜山影展 BIFF</b>(主場海雲台/Centum City),你的釜山日期在期間內,海雲台會較貴、較快滿房。<b>首爾 10 月為賞楓旺季</b>,弘大/明洞/聖水正規飯店多半超預算。看到喜歡的儘早訂。</li>
+    <li><b style="color:var(--saved)">⭐ 我的收藏</b>：你 Google 地圖收藏清單「釜山住宿名冊 · 溫亮」的住宿，已依城市放到各頁最上方（釜山／首爾）；以地址儲存的收藏標「📍 收藏地址」。</li>
   </ul>
   <div class="gen">離線檔 · 資料整理於 2026-07-07 · 房價僅供參考,實際以訂房平台為準</div>
 </footer>
@@ -182,7 +184,9 @@ const AREAS = {
   // Busan
   haeundae:  {cn:"海雲台", en:"Haeundae",   color:"var(--haeundae)",  vibe:"釜山第一海灘、機能最好，影展期間較貴"},
   songdo:    {cn:"松島",   en:"Songdo",     color:"var(--songdo)",    vibe:"安靜海灘、纜車，平價好選擇較少"},
-  gwangalli: {cn:"廣安里", en:"Gwangalli",  color:"var(--gwangalli)", vibe:"廣安大橋夜景、情侶最愛，海景平價多"}
+  gwangalli: {cn:"廣安里", en:"Gwangalli",  color:"var(--gwangalli)", vibe:"廣安大橋夜景、情侶最愛，海景平價多"},
+  busan_saved:{cn:"⭐ 我的收藏", en:"My List · 溫亮", color:"var(--saved)", vibe:"你 Google 地圖收藏的釜山住宿"},
+  seoul_saved:{cn:"⭐ 我的收藏", en:"My List · 溫亮", color:"var(--saved)", vibe:"你 Google 地圖收藏的首爾住宿"}
 };
 
 /* ---------------- City config ---------------- */
@@ -193,7 +197,7 @@ const CITY = {
     title:"首爾住宿", subtitle:"弘大 · 聖水洞 · 明洞 · 東大門 · 新村　5 區高 CP 精選",
     notice:'<b>10 月是首爾賞楓旺季，房價偏高。</b> 這個預算在旺季能穩訂的主要是「民宿／青旅的獨立雙人房」＋少數平價商務飯店；弘大、明洞、聖水的正規飯店大多會超過。下方「參考房價」是一般／淡季價，<b>不是 10/14–10/18 即時價</b>，請用各卡片「即時房價」確認。',
     checkin:"2026-10-14", checkout:"2026-10-18",
-    order:["hongdae","seongsu","myeongdong","dongdaemun","sinchon"]
+    order:["seoul_saved","hongdae","seongsu","myeongdong","dongdaemun","sinchon"]
   },
   busan: {
     label:"釜山", en:"Busan", order_no:"① 第 1 站", dates:"10/10 → 10/14",
@@ -201,7 +205,7 @@ const CITY = {
     title:"釜山住宿", subtitle:"海雲台 · 松島 · 廣安里　3 區海景高 CP 精選",
     notice:'<b>10/6–10/15 是釜山影展（BIFF），你的 10/10–14 正好在影展期間。</b> 主場在海雲台/Centum City → 海雲台房價會更高、更快滿房，建議早訂，或考慮<b>廣安里／松島</b>。釜山整體比首爾便宜，下方參考房價為一般價，<b>非即時價</b>，請用「即時房價」確認。',
     checkin:"2026-10-10", checkout:"2026-10-14",
-    order:["haeundae","songdo","gwangalli"]
+    order:["busan_saved","haeundae","songdo","gwangalli"]
   }
 };
 
@@ -262,7 +266,21 @@ const HOTELS = [
   {city:"busan",a:"gwangalli",cn:"Homers Hotel",en:"Homers Hotel",r:4.1,n:783,price:"~NT$2,000–2,800",b:"ok",t:"廣安里海邊第一排",hl:"房大海景、正對廣安大橋、大廳可賞景；電梯少要等",pid:"ChIJq0wMNdTsaDURoW253EQKtbk"},
   {city:"busan",a:"gwangalli",cn:"H Avenue 廣安里",en:"H Avenue Hotel Gwangalli",r:4.2,n:310,price:"~NT$1,800–2,500",b:"ok",t:"近海邊、看無人機秀方便",hl:"海景房、陽台大；房間偏小、榻榻米床",pid:"ChIJwxlIijHtaDURqfoUnJxFgyc"},
   {city:"busan",a:"gwangalli",cn:"El Momento 廣安公寓",en:"El Momento Gwangan",r:3.8,n:41,price:"海景雙人房 ~NT$2,000+",b:"ok",t:"金蓮山站最近、步行到沙灘",hl:"公寓式：陽台＋小廚房＋洗衣機、正對大橋看煙火；浴室小",pid:"ChIJjec8W4rtaDURsGBj3XQoKHI"},
-  {city:"busan",a:"gwangalli",cn:"Kent Hotel 廣安里 by Kensington",en:"Kent Hotel Gwangalli",r:4.1,n:747,price:"~NT$2,700–4,000",b:"over",t:"海邊第一排、透明電梯",hl:"含早餐、機能好、過馬路到沙灘；旺季偏貴",pid:"ChIJh5B-vy7taDURaIjEejC5nD0"}
+  {city:"busan",a:"gwangalli",cn:"Kent Hotel 廣安里 by Kensington",en:"Kent Hotel Gwangalli",r:4.1,n:747,price:"~NT$2,700–4,000",b:"over",t:"海邊第一排、透明電梯",hl:"含早餐、機能好、過馬路到沙灘；旺季偏貴",pid:"ChIJh5B-vy7taDURaIjEejC5nD0"},
+
+  /* ===== ⭐ SAVED · 來自你的 Google 地圖收藏「釜山住宿名冊 · 溫亮」 ===== */
+  {city:"busan",a:"busan_saved",saved:true,cn:"Haeundae Youngmu Parade 海雲台",en:"Haeundae Youngmu Parade",r:4.2,n:345,price:"~NT$2,200–2,600（曾 ₩92,000）",b:"ok",t:"海雲台 · 離沙灘 100m、海雲台站 6 號出口約 10 分",hl:"海景房大又乾淨、含早餐、有 LG Styler；入口在大樓內較難找",pid:"ChIJabOH6UuNaDURHzhjNt_OgN4"},
+  {city:"busan",a:"busan_saved",saved:true,cn:"Busan Business Hotel",en:"Busan Business Hotel",r:4.2,n:1367,price:"~NT$2,754（Google 估）",b:"tight",t:"西面 · Busanjin、可穿樂天百貨避雨",hl:"4 星、乾淨、櫃檯英文好、可購早餐券、有行李寄放；房間較樸素、部分時段限制冷氣",pid:"ChIJMQzXFHHraDURpSACiLg_S5Q"},
+  {city:"busan",a:"busan_saved",saved:true,cn:"Urbanstay 西面",en:"Urbanstay Seomyeon",r:4.1,n:340,price:"~NT$2,151（Google 估）",b:"ok",t:"西面站 12 號出口（有電梯）3 分",hl:"公寓式：廚房＋洗衣烘乾、自助入住、樓下 24 小時超商；臨路低樓層較吵（你清單存了兩筆 Urbanstay 西面，應為同一館）",pid:"ChIJZbOp8mjraDURI9RHwjwYNZw"},
+  {city:"busan",a:"busan_saved",saved:true,cn:"Fairfield by Marriott 松島",en:"Fairfield by Marriott Songdo",r:4.4,n:876,price:"~NT$4,860（Google 估）",b:"over",t:"松島海邊第一排",hl:"Marriott、海景＋日出、含早餐；通常超預算（也在下方「松島」推薦區）",pid:"ChIJGRQ18nbpaDURQaqWuETakA4"},
+
+  {city:"seoul",a:"seoul_saved",saved:true,cn:"HotelArrive Seoulful",en:"HotelArrive Seoulful",r:5.0,n:10,price:"查即時（設計旅店，約 NT$2,500–3,500）",b:"tight",t:"鐘路 · Jong-ro（近明洞、現代東大門）",hl:"2024 新開、乾淨有設計感、櫃檯英文好、近地鐵與咖啡；評論少但都好評",pid:"ChIJW0F3LSejfDURIs8slZ70eGs"},
+  {city:"seoul",a:"seoul_saved",saved:true,cn:"Ara Hotel",en:"Ara Hotel",r:4.2,n:52,price:"~NT$1,995（約 ₩80,000）",b:"ok",t:"鐘路 · Nangye-ro（近東大門／新堂）",hl:"房乾淨、每日打掃、近公車站；窗小採光差、隔音普通",pid:"ChIJ7VBdjUmjfDURpjjyv_98pkY"},
+  {city:"seoul",a:"seoul_saved",saved:true,cn:"乙支路 Co-op Residence",en:"Uljiro Co-Op Residence",r:4.1,n:915,price:"~NT$2,554（Google 估）",b:"tight",t:"乙支路 · 6001 機場巴士門口停、近多線地鐵",hl:"地點超好、周邊商場多、機場巴士就在門口；中央空調不可調溫、浴室小",pid:"ChIJpXLTCSKjfDURI6ReZQcN5Ic"},
+  {city:"seoul",a:"seoul_saved",saved:true,cn:"OYO Myeongdong 6 Hostel",en:"OYO Myeongdong 6 Hostel",r:4.4,n:36,price:"~NT$2,545（Google 估）",b:"tight",t:"明洞 · 明洞站 3 號出口 5 分、正對明洞夜市",hl:"2024 新開、含早餐、行李免費寄放；房小（約 10㎡）、廁所小",pid:"ChIJdzcVfZujfDUR9UZ8x-TlwjI"},
+  {city:"seoul",a:"seoul_saved",saved:true,cn:"Sollago 明洞 Hotel & Residence",en:"Sollago Myeongdong Hotel & Residence",r:4.2,n:448,price:"~NT$4,082（顯示較平常便宜 24%）",b:"over",t:"明洞 · 忠武路、機場巴士上下車點",hl:"房新且較大、地點佳、樓下 Pascucci 咖啡；通常超預算、被單約 3 天換一次",pid:"ChIJk9YKD-OifDURfz34LOCmH7Y"},
+  {city:"seoul",a:"seoul_saved",saved:true,addr:true,cn:"21 Myeongdong 9-gil（收藏地址）",en:"21 Myeongdong 9-gil",r:null,n:null,price:"",b:"ok",t:"明洞 · 即 ARA125 青旅所在（3 樓）",hl:"你以「地址」儲存的收藏，位置就是 ARA125（明洞推薦區也有列）",pid:null},
+  {city:"seoul",a:"seoul_saved",saved:true,addr:true,cn:"33 Toegye-ro 18-gil（收藏地址）",en:"33 Toegye-ro 18-gil",r:null,n:null,price:"",b:"ok",t:"明洞 · 即 OYO Myeongdong 6 所在",hl:"你以「地址」儲存的收藏，位置就是上方的 OYO Myeongdong 6",pid:"ChIJg2rctPCifDURX_ro7FzoSaw"}
 ];
 
 /* ---------------- Render ---------------- */
@@ -279,7 +297,8 @@ let curCity="busan", curArea="all", onlyFit=false;
 
 /* city switcher */
 const csEl=document.getElementById("citySwitch");
-Object.entries(CITY).forEach(([key,c])=>{
+["busan","seoul"].forEach(key=>{
+  const c=CITY[key];
   const el=document.createElement("button");
   el.className="city-tab";el.dataset.city=key;
   el.innerHTML=`<span class="ct-order">${c.order_no}</span><span class="ct-name">${c.label} <span style="font-weight:400;font-size:12px;opacity:.7">${c.en}</span></span><span class="ct-dates">${c.dates}</span>`;
@@ -290,24 +309,31 @@ Object.entries(CITY).forEach(([key,c])=>{
 document.getElementById("onlyFit").addEventListener("change",e=>{onlyFit=e.target.checked;render();});
 
 function card(h){
-  const rating = h.r!=null
-    ? `<span class="rating"><span class="star">★</span> ${h.r.toFixed(1)} <span class="cnt">· ${h.n} 則</span></span>`
-    : `<span class="blogtag">部落客推薦</span>`;
+  let rating;
+  if(h.addr){ rating = `<span class="blogtag" style="color:#8a6a1e;background:#f6edd6">📍 收藏地址</span>`; }
+  else if(h.r!=null){ rating = `<span class="rating"><span class="star">★</span> ${h.r.toFixed(1)} <span class="cnt">· ${h.n} 則</span></span>`; }
+  else { rating = `<span class="blogtag">部落客推薦</span>`; }
+  const badge = h.addr ? `<span class="badge" style="color:#8a6a1e;background:#f6edd6">收藏</span>` : `<span class="badge ${h.b}">${bMap[h.b]}</span>`;
+  const star = h.saved ? `<span title="你的收藏" style="color:var(--saved);margin-right:4px">⭐</span>` : "";
+  const priceHtml = h.addr ? "" : `<span class="price"><span class="lbl">參考房價 · 非即時</span>${h.price}</span>`;
+  const actions = h.addr
+    ? `<a class="btn btn-photo" href="${mapUrl(h)}" target="_blank" rel="noopener" style="flex:1">📷 在地圖查看此地址</a>`
+    : `<a class="btn btn-photo" href="${mapUrl(h)}" target="_blank" rel="noopener">📷 照片・地圖</a>
+        <a class="btn btn-book" href="${bookUrl(h)}" target="_blank" rel="noopener">🏨 即時房價</a>`;
   return `<article class="card" style="--accent:${AREAS[h.a].color}">
     <div class="card-body">
       <div class="name-row">
-        <div><div class="cn">${h.cn}</div><div class="en">${h.en}</div></div>
-        <span class="badge ${h.b}">${bMap[h.b]}</span>
+        <div><div class="cn">${star}${h.cn}</div><div class="en">${h.en}</div></div>
+        ${badge}
       </div>
       <div class="meta">
         ${rating}
-        <span class="price"><span class="lbl">參考房價 · 非即時</span>${h.price}</span>
+        ${priceHtml}
       </div>
       <div class="transit"><span class="m">◉</span><span>${h.t}</span></div>
       <div class="hl">${h.hl}</div>
       <div class="actions">
-        <a class="btn btn-photo" href="${mapUrl(h)}" target="_blank" rel="noopener">📷 照片・地圖</a>
-        <a class="btn btn-book" href="${bookUrl(h)}" target="_blank" rel="noopener">🏨 即時房價</a>
+        ${actions}
       </div>
     </div>
   </article>`;
