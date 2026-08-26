@@ -1,380 +1,1183 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>韓國住宿（雙人房・預算 NT$3,000）· 釜山 10/10–14 · 首爾 10/14–18</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>釜山 × 首爾 8日行程 · 2026/10/08–10/15</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-  :root{
-    --ink:#17171c;
-    --ink-soft:#5b5b66;
-    --line:#e6e5e0;
-    --paper:#f6f6f2;
-    --card:#ffffff;
-    --ok:#1f9d55;
-    --ok-bg:#e7f6ec;
-    --tight:#c77a15;
-    --tight-bg:#fbf1de;
-    --over:#c9463c;
-    --over-bg:#fbe9e7;
-    /* Seoul areas */
-    --hongdae:#e84a8a;
-    --seongsu:#3f7e8c;
-    --myeongdong:#e0453f;
-    --dongdaemun:#7a50b0;
-    --sinchon:#2e9e6b;
-    /* Busan areas (coastal palette) */
-    --haeundae:#1c6daa;
-    --songdo:#17998c;
-    --gwangalli:#e06a8b;
-    --saved:#c0912e;
-    --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI","PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
-  }
-  *{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%;}
-  body{
-    margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
-    line-height:1.55;letter-spacing:.01em;-webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;}
+:root{
+  --bg:#f6f4f0; --card:#ffffff; --ink:#1c1b19; --sub:#6b6862;
+  --line:#e2ded6; --accent:#c8503c; --accent2:#1f6f6b; --accent3:#8a6d3b;
+  --busan:#1f6f6b; --seoul:#c8503c; --shop:#7a4a8c; --warn:#b3462f; --ok:#2f6b3f;
+  --sky:#cfe3e6; --sea:#a8ccd0; --tile:#f0ece4;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#161513;--card:#211f1d;--ink:#eeebe5;--sub:#a8a29a;--line:#332f2b;
+  --sky:#2a3a3e;--sea:#1d3034;--tile:#2a2724;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Helvetica Neue",system-ui,sans-serif;
+  line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:0 18px 80px}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
 
-  /* ---------- City switcher ---------- */
-  .city-switch{display:flex;gap:8px;max-width:1080px;margin:0 auto;padding:18px 20px 0;}
-  .city-tab{
-    flex:1;border:1.5px solid var(--line);background:var(--card);border-radius:14px;
-    padding:12px 15px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:3px;
-    transition:.15s;font-family:var(--sans);color:var(--ink);
-  }
-  .city-tab[data-active="true"]{border-color:var(--ink);background:var(--ink);color:#fff;}
-  .city-tab .ct-name{font-size:17px;font-weight:800;letter-spacing:-.01em;}
-  .city-tab .ct-dates{font-size:12px;font-family:var(--mono);opacity:.82;}
-  .city-tab .ct-order{font-size:10.5px;opacity:.7;letter-spacing:.03em;text-transform:uppercase;}
+header.hero{padding:44px 0 26px}
+.kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--sub)}
+h1{font-size:clamp(28px,5vw,44px);margin:.25em 0 .1em;line-height:1.15;letter-spacing:-.01em}
+h1 span{color:var(--accent)}
+.lede{color:var(--sub);font-size:15px;margin:0}
+h2{font-size:22px;margin:48px 0 4px;letter-spacing:-.01em;scroll-margin-top:20px}
+h2 .num{color:var(--sub);font-weight:400;font-size:14px;margin-right:8px;font-variant-numeric:tabular-nums}
+.sec-sub{color:var(--sub);font-size:14px;margin:0 0 16px}
+h3{font-size:16px;margin:24px 0 8px}
+h4{font-size:14px;margin:16px 0 6px}
+a{color:var(--accent2);text-decoration-thickness:1px;text-underline-offset:2px}
 
-  /* ---------- Hero ---------- */
-  header.hero{padding:20px 20px 20px;max-width:1080px;margin:0 auto;}
-  .route{display:flex;height:7px;border-radius:99px;overflow:hidden;margin-bottom:18px;box-shadow:0 1px 0 rgba(0,0,0,.04);}
-  .route span{flex:1;}
-  h1{font-size:clamp(26px,6.4vw,42px);line-height:1.03;margin:0 0 6px;font-weight:800;letter-spacing:-.02em;}
-  h1 .sub{display:block;font-size:clamp(13px,3.4vw,17px);font-weight:600;color:var(--ink-soft);letter-spacing:0;margin-top:8px;}
-  .facts{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px;}
-  .facts .chip{font-family:var(--mono);font-size:12px;padding:5px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);white-space:nowrap;}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0}
+nav.toc a{font-size:13px;padding:6px 12px;border:1px solid var(--line);border-radius:99px;
+  background:var(--card);text-decoration:none;color:var(--ink)}
+nav.toc a:hover{border-color:var(--accent)}
 
-  /* ---------- Notice ---------- */
-  .notice{max-width:1080px;margin:0 auto;padding:0 20px;}
-  .notice-inner{border:1px solid #f0dcae;background:#fdf6e6;border-radius:12px;padding:13px 15px;font-size:13.5px;color:#6b5322;display:flex;gap:10px;align-items:flex-start;}
-  .notice-inner .ic{font-size:16px;line-height:1.3;flex:none;}
-  .notice-inner b{color:#553f12;}
+.heroart{margin:26px 0 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow);background:var(--card)}
+.heroart svg{display:block;width:100%;height:auto}
 
-  /* ---------- Controls ---------- */
-  .controls{position:sticky;top:0;z-index:20;background:rgba(246,246,242,.92);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--line);margin-top:18px;}
-  .controls-inner{max-width:1080px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-  .pills{display:flex;gap:7px;overflow-x:auto;flex:1;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
-  .pills::-webkit-scrollbar{display:none;}
-  .pill{border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);padding:7px 13px;border-radius:99px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.15s;font-family:var(--sans);}
-  .pill[data-active="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
-  .pill .dot{display:inline-block;width:8px;height:8px;border-radius:99px;margin-right:6px;vertical-align:middle;}
-  .toggle{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-soft);white-space:nowrap;cursor:pointer;user-select:none;}
-  .toggle input{appearance:none;width:38px;height:22px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;transition:.2s;flex:none;}
-  .toggle input:checked{background:var(--ok);}
-  .toggle input::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:99px;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.25);}
-  .toggle input:checked::after{transform:translateX(16px);}
-  .count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap;}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(285px,100%),1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.card .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub)}
+.card .big{font-size:19px;font-weight:600;margin:2px 0}
+.card .fine{font-size:13px;color:var(--sub)}
 
-  /* ---------- Main ---------- */
-  main{max-width:1080px;margin:0 auto;padding:6px 20px 40px;}
-  section.area{margin-top:30px;scroll-margin-top:80px;}
-  .area-head{display:flex;align-items:baseline;gap:12px;padding-bottom:12px;border-bottom:2px solid var(--accent);margin-bottom:16px;}
-  .area-head .kr{font-size:22px;font-weight:800;letter-spacing:-.01em;}
-  .area-head .en{font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;}
-  .area-head .vibe{font-size:13px;color:var(--ink-soft);margin-left:auto;text-align:right;max-width:52%;}
+svg.ic{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
+  vertical-align:middle;width:22px;height:22px}
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;position:relative;}
-  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent);}
-  .card-body{padding:15px 16px 14px 19px;flex:1;display:flex;flex-direction:column;}
-  .name-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
-  .cn{font-size:16.5px;font-weight:750;line-height:1.25;letter-spacing:-.01em;}
-  .en{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-top:3px;letter-spacing:.02em;}
-  .badge{font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;white-space:nowrap;flex:none;}
-  .badge.ok{color:var(--ok);background:var(--ok-bg);}
-  .badge.tight{color:var(--tight);background:var(--tight-bg);}
-  .badge.over{color:var(--over);background:var(--over-bg);}
+code{font-size:12.5px;background:var(--tile);border:1px solid var(--line);border-radius:5px;
+  padding:1px 5px;overflow-wrap:anywhere;word-break:break-all}
 
-  .meta{display:flex;gap:14px;align-items:center;margin:11px 0 2px;flex-wrap:wrap;}
-  .rating{font-family:var(--mono);font-size:13px;font-weight:600;}
-  .rating .star{color:#f0a92b;}
-  .rating .cnt{color:var(--ink-soft);font-weight:400;}
-  .blogtag{font-size:11.5px;font-weight:700;color:#8a5ec2;background:#f2ecfa;padding:3px 8px;border-radius:6px;}
-  .price{font-family:var(--mono);font-size:13px;font-weight:600;margin-left:auto;text-align:right;}
-  .price .lbl{display:block;font-size:9.5px;color:var(--ink-soft);font-weight:400;letter-spacing:.04em;}
+/* ===== 記錄列（取代 <table>，任何容器寬度都不會擠壓） ===== */
+.rows{border:1px solid var(--line);border-radius:14px;background:var(--card);
+  box-shadow:var(--shadow);overflow:hidden;margin:0}
+.row{display:flex;flex-wrap:wrap;gap:11px 20px;padding:14px 16px;
+  border-bottom:1px solid var(--line);align-items:flex-start}
+.row:last-child{border-bottom:0}
+.row.hi{background:rgba(200,80,60,.07)}
+.rows .f{flex:1 1 140px;min-width:0}
+.rows .f .k{display:block;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--sub);font-weight:700;margin-bottom:2px;line-height:1.5}
+.rows .f .v{display:block;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.rows .f.main .v{font-weight:700;font-size:15px;line-height:1.45}
+.rows .f.amt .v{font-variant-numeric:tabular-nums;font-weight:600}
+.rows .f.main{flex:1.15 1 160px}
+.rows .f.amt{flex:0 1 108px}
+.rows .f.wide{flex:2.4 1 250px}
 
-  .transit{font-size:12.5px;color:var(--ink-soft);margin-top:10px;display:flex;gap:6px;align-items:flex-start;}
-  .transit .m{color:var(--accent);font-weight:700;flex:none;}
-  .hl{font-size:13px;color:#3a3a44;margin-top:8px;}
+/* ---- overview chart ---- */
+.ovbox{border:1px solid var(--line);border-radius:16px;background:var(--card);
+  padding:10px 12px 12px;box-shadow:var(--shadow);overflow-x:auto;scrollbar-gutter:stable}
+.ovbox svg{display:block;min-width:880px;width:100%;height:auto}
 
-  .actions{display:flex;gap:8px;margin-top:14px;}
-  .btn{flex:1;text-align:center;text-decoration:none;font-size:13px;font-weight:700;padding:9px 8px;border-radius:9px;transition:.15s;border:1.5px solid transparent;}
-  .btn-photo{background:#f2f2ee;color:var(--ink);border-color:var(--line);}
-  .btn-photo:hover{background:#e9e9e3;}
-  .btn-book{background:var(--accent);color:#fff;}
-  .btn-book:hover{filter:brightness(.94);}
-  .btn:focus-visible,.pill:focus-visible,.toggle input:focus-visible,.city-tab:focus-visible{outline:3px solid #9db8ff;outline-offset:2px;}
+/* ---- day cards ---- */
+.day{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  margin:16px 0;overflow:hidden;box-shadow:var(--shadow)}
+.day > .dh{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;padding:14px 18px 13px;
+  border-bottom:1px solid var(--line)}
+.day.busan > .dh{background:linear-gradient(90deg,rgba(31,111,107,.14),transparent)}
+.day.seoul > .dh{background:linear-gradient(90deg,rgba(200,80,60,.14),transparent)}
+.day.shopd > .dh{background:linear-gradient(90deg,rgba(122,74,140,.16),transparent)}
+.dh .date{font-size:17px;font-weight:700}
+.dh .dow{font-size:13px;color:var(--sub)}
+.dh .stay{margin-left:auto;font-size:12px;color:var(--sub);border:1px solid var(--line);
+  padding:3px 10px;border-radius:99px;white-space:nowrap}
 
-  .empty{text-align:center;color:var(--ink-soft);padding:50px 20px;font-size:14px;display:none;}
+.hilite{display:flex;flex-wrap:wrap;gap:9px;padding:14px 18px 17px}
+.hchip{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;gap:6px;box-sizing:border-box;
+  width:96px;min-height:86px;padding:12px 7px 11px;border-radius:12px;
+  background:var(--tile);border:1px solid var(--line);text-align:center}
+.hchip svg{width:26px;height:26px;flex:0 0 auto}
+.hchip span{font-size:11px;line-height:1.4;color:var(--sub);font-weight:600}
+.day.busan .hchip svg{color:var(--busan)}
+.day.seoul .hchip svg{color:var(--seoul)}
+.day.shopd .hchip svg{color:var(--shop)}
 
-  footer{max-width:1080px;margin:0 auto;padding:24px 20px 48px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:12.5px;}
-  footer h3{font-size:13px;color:var(--ink);margin:0 0 8px;font-weight:700;}
-  footer ul{margin:0 0 16px;padding-left:18px;}
-  footer li{margin-bottom:5px;}
-  footer .gen{font-family:var(--mono);font-size:11px;opacity:.7;}
+.lmapwrap{position:relative;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.lmap{height:320px;width:100%;background:var(--tile)}
+@media(max-width:640px){.lmap{height:265px}}
+.lmap.err{display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--sub);padding:20px;text-align:center}
+.leaflet-container{font:inherit;background:var(--tile)}
+.pinmk{background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;
+  box-shadow:0 1px 5px rgba(0,0,0,.35);border:2px solid #fff}
+.pinmk.b{background:var(--busan)} .pinmk.s{background:var(--seoul)} .pinmk.p{background:var(--shop)}
+.leaflet-popup-content{margin:10px 12px;font-size:13px;line-height:1.5}
+.leaflet-popup-content .pl{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.leaflet-popup-content .pl a{font-size:11.5px;text-decoration:none;border:1px solid #ccc;
+  border-radius:99px;padding:2px 9px;color:#333;background:#fafafa}
 
-  @media (max-width:560px){
-    .area-head{flex-wrap:wrap;}
-    .area-head .vibe{max-width:100%;text-align:left;margin-left:0;flex-basis:100%;}
-    .grid{grid-template-columns:1fr;}
-    .facts .chip{font-size:11px;}
-    .city-tab .ct-name{font-size:15px;}
-  }
-  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+.maplinks{display:flex;flex-wrap:wrap;gap:8px;padding:14px 18px 0}
+.maplinks a{font-size:12.5px;text-decoration:none;color:var(--ink);
+  border:1px solid var(--line);border-radius:99px;padding:5px 12px;background:var(--bg);
+  display:inline-flex;align-items:center;gap:6px}
+.maplinks a:hover{border-color:var(--accent)}
+.maplinks svg{width:15px;height:15px}
+
+.tl{list-style:none;margin:0;padding:8px 18px 16px}
+.tl li{display:grid;grid-template-columns:62px 1fr;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.tl li:last-child{border-bottom:0}
+.tl .t{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub);padding-top:2px;white-space:nowrap}
+.tl .a{font-weight:600;font-size:15px}
+.tl .d{font-size:13.5px;color:var(--sub);margin-top:2px}
+.chip{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;
+  margin-left:6px;vertical-align:1px;font-weight:600}
+.c-pass{background:rgba(31,111,107,.15);color:var(--busan)}
+.c-book{background:rgba(200,80,60,.15);color:var(--seoul)}
+.c-food{background:rgba(138,109,59,.18);color:var(--accent3)}
+.c-shop{background:rgba(122,74,140,.16);color:var(--shop)}
+.c-move{background:rgba(120,120,120,.16);color:var(--sub)}
+@media (prefers-color-scheme:dark){
+  .c-pass{color:#6fc2bc}.c-book{color:#e8907c}.c-food{color:#cfa964}.c-shop{color:#c294d6}
+}
+
+.note{font-size:13.5px;background:rgba(179,70,47,.08);border-left:3px solid var(--warn);
+  padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.note.ok{background:rgba(47,107,63,.08);border-left-color:var(--ok)}
+.note.info{background:rgba(31,111,107,.08);border-left-color:var(--accent2)}
+.note.shop{background:rgba(122,74,140,.09);border-left-color:var(--shop)}
+ul.bul{padding-left:20px;font-size:14.5px}
+ul.bul li{margin:5px 0}
+.shoplist{list-style:none;padding:0;margin:6px 0 0;font-size:13.5px}
+.shoplist li{padding:7px 0;border-bottom:1px dashed var(--line);display:grid;
+  grid-template-columns:24px minmax(0,1fr);gap:9px}
+.shoplist li:last-child{border-bottom:0}
+.shoplist svg{width:20px;height:20px;color:var(--shop);margin-top:2px}
+.shoplist span{color:var(--sub);font-size:12.5px;line-height:1.55}
+.shoplist span b{display:block;color:var(--ink);font-size:14px;line-height:1.5;margin-bottom:1px}
+
+.ck{list-style:none;padding:0;margin:8px 0;columns:2;column-gap:26px;font-size:14px}
+.ck li{margin:5px 0;break-inside:avoid}
+.ck input{margin-right:8px}
+@media(max-width:640px){.ck{columns:1}.tl li{grid-template-columns:54px 1fr}}
+@media(max-width:430px){
+  .tl li{grid-template-columns:1fr;gap:2px}
+  .tl .t{font-weight:700;color:var(--accent);font-size:12.5px}
+  .wrap{padding:0 12px 60px}
+  .tl,.maplinks,.hilite{padding-left:13px;padding-right:13px}
+}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub)}
+.hl{background:linear-gradient(transparent 62%,rgba(200,80,60,.28) 62%);font-weight:600}
 </style>
 </head>
 <body>
 
-<div class="city-switch" id="citySwitch"></div>
+<!-- ============ ICON SPRITE ============ -->
+<svg class="sprite" aria-hidden="true"><defs>
+<symbol id="i-plane" viewBox="0 0 24 24"><path d="M2 13l20-8-6 17-4-7-10-2z"/></symbol>
+<symbol id="i-subway" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 10h14M8 20l2-3M16 20l-2-3"/><circle cx="9" cy="13.5" r=".9" fill="currentColor"/><circle cx="15" cy="13.5" r=".9" fill="currentColor"/></symbol>
+<symbol id="i-katsu" viewBox="0 0 24 24"><ellipse cx="12" cy="15" rx="9" ry="5"/><path d="M7 13l3-4h5l2 3M9.5 9.5l1.5 3M13 9.5l1.5 3"/></symbol>
+<symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 15c2.5 0 3-2 5-2s2.5 2 5 2 3-2 5-2 2.5 2 5 2M2 19c2.5 0 3-2 5-2s2.5 2 5 2 3-2 5-2 2.5 2 5 2"/><circle cx="17" cy="6" r="3"/></symbol>
+<symbol id="i-island" viewBox="0 0 24 24"><path d="M2 20h20"/><path d="M8 20c0-4 2-6 2-9M10 5c3 0 5 2 5 4s-2 3-5 3-4-1-4-3 1-4 4-4z"/><path d="M14 20c1-3 3-4 5-4"/></symbol>
+<symbol id="i-luge" viewBox="0 0 24 24"><path d="M2 19h14l4-5"/><circle cx="7" cy="19" r="2"/><circle cx="15" cy="19" r="2"/><path d="M6 17l2-5h6l1 5M11 12V8"/><circle cx="11" cy="5.5" r="2"/></symbol>
+<symbol id="i-train" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="12" rx="3"/><path d="M4 11h16M7 20l2-4M17 20l-2-4"/><circle cx="8.5" cy="8" r=".9" fill="currentColor"/><circle cx="15.5" cy="8" r=".9" fill="currentColor"/></symbol>
+<symbol id="i-capsule" viewBox="0 0 24 24"><path d="M3 5h18"/><path d="M12 5v3"/><rect x="6" y="8" width="12" height="9" rx="4.5"/><path d="M8.5 11.5h7"/><path d="M9 20l1.5-3M15 20l-1.5-3"/></symbol>
+<symbol id="i-art" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M6 15l3.5-5 3 4 2-2.5L18 15M12 21v-3"/></symbol>
+<symbol id="i-yacht" viewBox="0 0 24 24"><path d="M3 17h18l-2 4H5l-2-4z"/><path d="M11 15V3l7 12H11zM9 15L6 8v7"/></symbol>
+<symbol id="i-spa" viewBox="0 0 24 24"><path d="M4 14h16c0 4-3 6-8 6s-8-2-8-6z"/><path d="M9 10c0-2 2-2 2-4s-2-2-2-4M15 10c0-2 1.5-2 1.5-3.5"/></symbol>
+<symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></symbol>
+<symbol id="i-cable" viewBox="0 0 24 24"><path d="M2 4l20 6"/><path d="M9 7.3V11M9 11h7v6H9z"/><path d="M9 14h7"/></symbol>
+<symbol id="i-bridge" viewBox="0 0 24 24"><path d="M2 17h20M4 17V8M20 17V8"/><path d="M4 10c5-4 11-4 16 0"/><path d="M8 17v-4.6M12 17v-6M16 17v-4.6"/></symbol>
+<symbol id="i-village" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M4 21v-6l4-3 4 3v6M12 21v-9l4-3 4 3v9"/><path d="M6.5 17h1.5M15.5 15h1.5"/></symbol>
+<symbol id="i-ktx" viewBox="0 0 24 24"><path d="M4 17c0-6 3-11 8-11s8 5 8 11H4z"/><path d="M8 10h8M2 20h20"/><circle cx="9" cy="14" r="1" fill="currentColor"/><circle cx="15" cy="14" r="1" fill="currentColor"/></symbol>
+<symbol id="i-hanok" viewBox="0 0 24 24"><path d="M2 8c4-3 6-4 10-4s6 1 10 4"/><path d="M4 8v12M20 8v12M2 20h20"/><path d="M9 20v-7h6v7"/></symbol>
+<symbol id="i-market" viewBox="0 0 24 24"><path d="M3 9h18l-2-5H5L3 9z"/><path d="M5 9v11h14V9"/><path d="M3 9c1.5 2 3 2 4.5 0 1.5 2 3 2 4.5 0 1.5 2 3 2 4.5 0 1.5 2 3 2 4.5 0"/><path d="M10 20v-6h4v6"/></symbol>
+<symbol id="i-tower" viewBox="0 0 24 24"><path d="M12 2v6M9 21l3-13 3 13"/><ellipse cx="12" cy="9.5" rx="4" ry="2"/><path d="M7 21h10"/></symbol>
+<symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 21v-6"/><path d="M12 3l5 6h-3l4 6H6l4-6H7l5-6z"/></symbol>
+<symbol id="i-loft" viewBox="0 0 24 24"><path d="M3 21V9l5-4v16M8 21V9l5-4v16M13 21V9l8 4v8M2 21h20"/><path d="M16 17h2"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.5 5.5l1.5 1.5M17 17l1.5 1.5M18.5 5.5L17 7M7 17l-1.5 1.5"/></symbol>
+<symbol id="i-cup" viewBox="0 0 24 24"><path d="M4 8h13v6a5 5 0 01-5 5H9a5 5 0 01-5-5V8z"/><path d="M17 10h2a2.5 2.5 0 010 5h-2"/><path d="M3 21h15"/></symbol>
+<symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 20v-9h18v9M3 14h18M3 20h18"/><path d="M6 11V7h5v4"/></symbol>
+<symbol id="i-cam" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13.5" r="3.5"/><path d="M9 7l1.5-3h3L15 7"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-7.4 7-12A7 7 0 005 10c0 4.6 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="i-shirt" viewBox="0 0 24 24"><path d="M9 3l3 2 3-2 5 3-2 4-1.5-1V21H7.5V9L6 10 4 6l5-3z"/></symbol>
+<symbol id="i-shoe" viewBox="0 0 24 24"><path d="M2 17h17a3 3 0 003-3c0-2-2-2.5-4-3l-4-3-3 2-2-2H4l-2 4v5z"/><path d="M8 13l1 2M12 12l1 2"/></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 13h18M12 8v13"/><path d="M12 8S10 3 7.5 4.5 12 8 12 8s2-5 4.5-3.5S12 8 12 8z"/></symbol>
+<symbol id="i-lip" viewBox="0 0 24 24"><rect x="8" y="10" width="8" height="11" rx="2"/><path d="M10 10V5a2 2 0 014 0v5"/><path d="M8 14h8"/></symbol>
+<symbol id="i-fish" viewBox="0 0 24 24"><path d="M2 12c4-6 12-6 16 0-4 6-12 6-16 0z"/><path d="M18 12l4-4v8l-4-4z"/><circle cx="7" cy="11" r="1" fill="currentColor"/></symbol>
+<symbol id="i-rabbit" viewBox="0 0 24 24"><ellipse cx="12" cy="16" rx="6" ry="5.5"/><path d="M8.5 11C7.5 8 7 4 8.8 3.4S11 6.5 11 10.6M15.5 11c1-3 1.5-7-.3-7.6S13 6.5 13 10.6"/><circle cx="10" cy="15.5" r=".9" fill="currentColor"/><circle cx="14" cy="15.5" r=".9" fill="currentColor"/><path d="M11.2 18.3h1.6"/></symbol>
+<symbol id="i-draw" viewBox="0 0 24 24"><path d="M4 20l4-1 11-11a2.5 2.5 0 00-3.5-3.5L4.5 15.5 4 20z"/><path d="M14.5 6.5l3 3"/></symbol>
+</defs></svg>
+
+<div class="wrap">
+
 <header class="hero">
-  <div class="route" id="route" aria-hidden="true"></div>
-  <h1 id="heroTitle"></h1>
-  <div class="facts" id="heroFacts"></div>
-</header>
-<div class="notice"><div class="notice-inner"><span class="ic">⚠️</span><div id="noticeText"></div></div></div>
+  <div class="kicker">Korea · 8 Days 7 Nights</div>
+  <h1>釜山 <span>×</span> 首爾<br>2026/10/08 – 10/15</h1>
+  <p class="lede">釜山 3.5 天（西面 2 晚 · 松島 1 晚）＋ 首爾 4 天（明洞 4 晚）｜真實互動地圖 · 釜山PASS · 天空膠囊列車 · 購物專日</p>
+  <nav class="toc">
+    <a href="#ov">總覽</a>
+    <a href="#basic">基本資訊</a>
+    <a href="#pass">釜山PASS</a>
+    <a href="#shop">購物指南</a>
+    <a href="#booking">預約時程</a>
+    <a href="#itin">每日行程</a>
+    <a href="#notes">注意事項</a>
+    <a href="#cost">費用</a>
+    <a href="#pack">檢查表</a>
+  </nav>
 
-<nav class="controls">
-  <div class="controls-inner">
-    <div class="pills" id="pills"></div>
-    <label class="toggle"><input type="checkbox" id="onlyFit"> 只看符合預算 <span style="color:var(--ok)">✅</span></label>
-    <span class="count" id="count"></span>
+  <div class="heroart">
+  <svg viewBox="0 0 1060 250" role="img" aria-label="釜山與首爾插圖">
+    <defs>
+      <linearGradient id="gsky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--sky)"/><stop offset="1" stop-color="var(--card)"/>
+      </linearGradient>
+      <linearGradient id="gsea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--sea)"/><stop offset="1" stop-color="var(--sea)" stop-opacity=".45"/>
+      </linearGradient>
+    </defs>
+    <rect width="1060" height="250" fill="url(#gsky)"/>
+    <circle cx="150" cy="62" r="26" fill="var(--accent)" opacity=".55"/>
+    <path d="M0 178 C90 172 180 186 270 182 C360 178 430 190 500 186 L500 250 L0 250Z" fill="url(#gsea)"/>
+    <g stroke="var(--busan)" stroke-width="2.4" fill="none" opacity=".85">
+      <path d="M20 168 H300"/>
+      <path d="M60 168 V126 M180 168 V118 M300 168 V128"/>
+      <path d="M60 130 C110 150 140 152 180 122 C220 152 255 150 300 132"/>
+    </g>
+    <g stroke="var(--busan)" stroke-width="2" fill="none">
+      <path d="M330 120 L470 96"/>
+      <path d="M372 112 v10"/><rect x="362" y="122" width="20" height="15" rx="3" fill="var(--card)"/>
+      <path d="M428 105 v10"/><rect x="418" y="115" width="20" height="15" rx="3" fill="var(--card)"/>
+    </g>
+    <path d="M418 178 C450 150 486 142 520 140 L520 178Z" fill="var(--busan)" opacity=".22"/>
+    <g stroke="var(--busan)" stroke-width="2" fill="none">
+      <circle cx="470" cy="158" r="4"/><circle cx="484" cy="158" r="4"/>
+      <path d="M464 154 l4-8h12l2 8"/>
+    </g>
+    <g stroke="var(--busan)" stroke-width="2" fill="none">
+      <path d="M92 206 h44 l-6 10H98z"/><path d="M114 204 v-18 l14 18"/>
+    </g>
+    <path d="M528 30 V222" stroke="var(--line)" stroke-width="2" stroke-dasharray="5 6"/>
+    <text x="250" y="238" fill="var(--busan)" font-size="15" font-weight="700" font-family="inherit" text-anchor="middle" letter-spacing="6">BUSAN 釜山</text>
+    <path d="M560 196 C650 188 760 202 860 196 C940 191 1010 200 1060 196 L1060 250 L560 250Z" fill="url(#gsea)"/>
+    <g fill="var(--seoul)" opacity=".2">
+      <rect x="572" y="128" width="26" height="68"/><rect x="606" y="108" width="20" height="88"/>
+      <rect x="634" y="140" width="30" height="56"/><rect x="676" y="120" width="22" height="76"/>
+      <rect x="710" y="150" width="26" height="46"/>
+      <rect x="900" y="132" width="24" height="64"/><rect x="932" y="146" width="30" height="50"/>
+    </g>
+    <path d="M985 196 L992 74 L1000 74 L1007 196 Z" fill="var(--seoul)" opacity=".33"/>
+    <path d="M742 172 C775 140 815 138 850 170 L850 196 L742 196Z" fill="var(--seoul)" opacity=".2"/>
+    <g stroke="var(--seoul)" stroke-width="2.4" fill="none">
+      <path d="M796 138 V64"/><ellipse cx="796" cy="84" rx="15" ry="7" fill="var(--card)"/>
+      <path d="M784 138 h24"/>
+    </g>
+    <g stroke="var(--seoul)" stroke-width="2.2" fill="none">
+      <path d="M600 196 v-30 h58 v30"/>
+      <path d="M586 166 C608 150 650 150 672 166"/>
+      <path d="M620 196 v-18 h18 v18"/>
+    </g>
+    <g stroke="var(--shop)" stroke-width="2.2" fill="none">
+      <path d="M866 196 v-24 h20 v24z"/><path d="M872 172 a4 4 0 018 0"/>
+      <path d="M890 196 v-18 h16 v18z"/><path d="M895 178 a3 3 0 016 0"/>
+    </g>
+    <g stroke="var(--accent3)" stroke-width="2" fill="none">
+      <path d="M960 196 v-12"/><path d="M960 184 l7 9h-14z"/>
+      <path d="M700 196 v-10"/><path d="M700 186 l6 8h-12z"/>
+    </g>
+    <text x="800" y="238" fill="var(--seoul)" font-size="15" font-weight="700" font-family="inherit" text-anchor="middle" letter-spacing="6">SEOUL 首爾</text>
+  </svg>
   </div>
-</nav>
+</header>
 
-<main id="main"></main>
-<div class="empty" id="empty">這個篩選條件下沒有結果 — 試著關掉「只看符合預算」。</div>
+<!-- ============ 總覽 ============ -->
+<h2 id="ov"><span class="num">01</span>八天總覽</h2>
+<p class="sec-sub">住宿、城市、釜山PASS 有效期與購物日一次看完。</p>
+<div class="ovbox">
+<svg viewBox="0 0 1000 232" role="img" aria-label="八天行程總覽圖">
+  <g font-family="inherit" font-size="12">
+  <g fill="var(--ink)" font-weight="700" font-size="13" text-anchor="middle">
+    <text x="105" y="20">10/08</text><text x="215" y="20">10/09</text><text x="325" y="20">10/10</text>
+    <text x="435" y="20">10/11</text><text x="545" y="20">10/12</text><text x="655" y="20">10/13</text>
+    <text x="765" y="20">10/14</text><text x="875" y="20">10/15</text>
+  </g>
+  <g fill="var(--sub)" font-size="10.5" text-anchor="middle">
+    <text x="105" y="34">四</text><text x="215" y="34">五 · 公休</text><text x="325" y="34">六</text>
+    <text x="435" y="34">日</text><text x="545" y="34">一</text><text x="655" y="34">二</text>
+    <text x="765" y="34">三</text><text x="875" y="34">四</text>
+  </g>
+  <g fill="var(--sub)" font-size="11" text-anchor="end">
+    <text x="42" y="60">城市</text><text x="42" y="98">住宿</text>
+    <text x="42" y="136">釜山PASS</text><text x="42" y="174">重點</text>
+    <text x="42" y="212">購物</text>
+  </g>
+  <rect x="52" y="46" width="440" height="20" rx="5" fill="var(--busan)" opacity=".22"/>
+  <text x="272" y="60" fill="var(--busan)" font-weight="700" font-size="11.5" text-anchor="middle">釜山 BUSAN</text>
+  <rect x="496" y="46" width="432" height="20" rx="5" fill="var(--seoul)" opacity=".22"/>
+  <text x="712" y="60" fill="var(--seoul)" font-weight="700" font-size="11.5" text-anchor="middle">首爾 SEOUL</text>
+  <rect x="52" y="84" width="216" height="20" rx="5" fill="var(--busan)" opacity=".14"/>
+  <text x="160" y="98" fill="var(--ink)" font-size="11" text-anchor="middle">西面 ×2</text>
+  <rect x="272" y="84" width="106" height="20" rx="5" fill="var(--busan)" opacity=".14"/>
+  <text x="325" y="98" fill="var(--ink)" font-size="11" text-anchor="middle">松島 ×1</text>
+  <rect x="382" y="84" width="546" height="20" rx="5" fill="var(--seoul)" opacity=".14"/>
+  <text x="655" y="98" fill="var(--ink)" font-size="11" text-anchor="middle">明洞 ×4</text>
+  <rect x="52" y="122" width="110" height="20" rx="5" fill="var(--line)"/>
+  <text x="107" y="136" fill="var(--sub)" font-size="10.5" text-anchor="middle">不啟用</text>
+  <rect x="166" y="122" width="216" height="20" rx="5" fill="var(--busan)"/>
+  <text x="274" y="136" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">48 小時有效（10/09 10:00 → 10/11 10:00）</text>
+  <g font-size="10.5" fill="var(--ink)" text-anchor="middle">
+    <rect x="56" y="160" width="98" height="20" rx="5" fill="var(--tile)" stroke="var(--line)"/><text x="105" y="174">豚笑・廣安里街</text>
+    <rect x="166" y="160" width="98" height="20" rx="5" fill="var(--tile)" stroke="var(--line)"/><text x="215" y="174">膠囊・Miffy・遊艇</text>
+    <rect x="276" y="160" width="98" height="20" rx="5" fill="var(--tile)" stroke="var(--line)"/><text x="325" y="174">SpaLand・纜車</text>
+    <rect x="386" y="160" width="98" height="20" rx="5" fill="var(--tile)" stroke="var(--line)"/><text x="435" y="174">甘川洞・似顏繪</text>
+    <rect x="496" y="160" width="98" height="20" rx="5" fill="var(--tile)" stroke="var(--line)"/><text x="545" y="174">景福宮・北村</text>
+    <rect x="606" y="160" width="98" height="20" rx="5" fill="var(--tile)" stroke="var(--line)"/><text x="655" y="174">聖水洞</text>
+    <rect x="716" y="160" width="98" height="20" rx="5" fill="var(--tile)" stroke="var(--line)"/><text x="765" y="174">南怡島</text>
+    <rect x="826" y="160" width="98" height="20" rx="5" fill="var(--tile)" stroke="var(--line)"/><text x="875" y="174">金浦・返台</text>
+  </g>
+  <rect x="276" y="198" width="98" height="20" rx="5" fill="var(--shop)" opacity=".85"/>
+  <text x="325" y="212" fill="#fff" font-size="10.5" font-weight="700" text-anchor="middle">半天 Centum</text>
+  <rect x="606" y="198" width="98" height="20" rx="5" fill="var(--shop)"/>
+  <text x="655" y="212" fill="#fff" font-size="10.5" font-weight="700" text-anchor="middle">整天 聖水＋東大門</text>
+  <rect x="56" y="198" width="98" height="20" rx="5" fill="var(--shop)" opacity=".3"/>
+  <text x="105" y="212" fill="var(--ink)" font-size="10" text-anchor="middle">夜・西面地下街</text>
+  <rect x="386" y="198" width="98" height="20" rx="5" fill="var(--shop)" opacity=".3"/>
+  <text x="435" y="212" fill="var(--ink)" font-size="10" text-anchor="middle">南浦・光復路</text>
+  </g>
+</svg>
+</div>
+
+<!-- ============ 基本資訊 ============ -->
+<h2 id="basic"><span class="num">02</span>基本資訊</h2>
+<p class="sec-sub">兩段航班在不同機場、不同城市端點，請特別留意。</p>
+
+<div class="grid g2">
+  <div class="card">
+    <svg class="ic" style="width:26px;height:26px;color:var(--busan)"><use href="#i-plane"/></svg>
+    <div class="lbl">去程 · 10/08 (四)</div>
+    <div class="big">LJ762　台北 → 釜山</div>
+    <div class="fine">真航空 Jin Air ｜ 桃園 TPE → <b>金海 PUS</b><br>
+    預計清晨約 06:00–06:30 抵達（<b>紅眼班機，請以電子機票為準</b>）<br>
+    廉航：托運 15kg／手提 10kg</div>
+  </div>
+  <div class="card">
+    <svg class="ic" style="width:26px;height:26px;color:var(--seoul)"><use href="#i-plane"/></svg>
+    <div class="lbl">回程 · 10/15 (四)</div>
+    <div class="big">CI261　首爾 → 台北</div>
+    <div class="fine">中華航空 ｜ <span class="hl">金浦 GMP 13:55 → 松山 TSA 15:35</span><br>
+    飛行 2h40m</div>
+  </div>
+</div>
+
+<div class="note">
+  <b>⚠ 回程是金浦機場（GMP），不是仁川！</b> 而且降落在<b>松山機場</b>不是桃園。明洞 → 金浦國際線約 40–50 分鐘。國際線建議 <b>11:00 前抵達機場</b>，即 10:15 前離開明洞飯店。
+</div>
+
+<!-- ============ PASS ============ -->
+<h2 id="pass"><span class="num">03</span>釜山PASS：買 48 小時版</h2>
+<p class="sec-sub">你列的 6 個景點（含鑽石灣遊艇）都在釜山PASS內，48 小時版比「Big5＋遊艇另購」更便宜。<b>天空膠囊列車不含在 PASS，需另訂。</b></p>
+
+<div class="rows">
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">Skyline Luge 釜山斜坡滑車</span></div>
+  <div class="f"><span class="k">PASS 分區</span><span class="v">紫色／A 區</span></div>
+  <div class="f amt"><span class="k">原價</span><span class="v">33,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">PASS 含 2 趟，現場兌票免預約</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">景點</span><span class="v">釜山鑽石灣遊艇</span></div>
+  <div class="f"><span class="k">PASS 分區</span><span class="v">紫色／A 區</span></div>
+  <div class="f amt"><span class="k">原價</span><span class="v">31,500</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v"><b>PASS 包含</b>，但<b>必須事先線上預約</b></span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">松島海上纜車 (Air Cruise)</span></div>
+  <div class="f"><span class="k">PASS 分區</span><span class="v">藍色／B 區</span></div>
+  <div class="f amt"><span class="k">原價</span><span class="v">20,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">含一般艙來回；<b>水晶艙需補差價</b></span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">Spa Land Centum City</span></div>
+  <div class="f"><span class="k">PASS 分區</span><span class="v">紫色／A 區</span></div>
+  <div class="f amt"><span class="k">原價</span><span class="v">19,500</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">限時 4 小時；未滿 13 歲不可入場；刺青可能被拒</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">Arte Museum 釜山</span></div>
+  <div class="f"><span class="k">PASS 分區</span><span class="v">藍色／B 區</span></div>
+  <div class="f amt"><span class="k">原價</span><span class="v">11,500</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">海雲台中洞，雨天備案首選</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">景點</span><span class="v">海雲台藍線公園 · 海岸列車</span></div>
+  <div class="f"><span class="k">PASS 分區</span><span class="v">藍色／B 區</span></div>
+  <div class="f amt"><span class="k">原價</span><span class="v">12,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v"><b>2025 年起 PASS 換的是「當日自由乘車券」</b>，7 個停靠站可自由上下車（<b>同一站不可上車兩次</b>），免預約。<b>天空膠囊列車不含。</b></span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">單買合計</span></div>
+  <div class="f amt"><span class="k">原價</span><span class="v">約 127,500</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">48 小時 PASS ₩85,000 → <b>省約 ₩42,500</b></span></div>
+</div>
+</div>
+
+<div class="grid g2" style="margin-top:14px">
+  <div class="card" style="border-color:var(--busan);border-width:2px">
+    <div class="lbl" style="color:var(--busan)">★ 建議方案</div>
+    <div class="big">48 小時 PASS　₩85,000</div>
+    <div class="fine"><b>6 個景點全包，省約 ₩42,500</b>，還能順手加釜山塔、Busan X the Sky、松島龍宮雲橋。<br>行程排 <b>10/09 10:00 啟用 → 10/11 10:00 到期</b>，最後一次使用在 10/10 傍晚，還有 15 小時緩衝。</div>
+  </div>
+  <div class="card">
+    <div class="lbl">你原本的想法</div>
+    <div class="big">Big5 ₩65,000 ＋遊艇另購</div>
+    <div class="fine">你的 5 個景點剛好是 <b>2 紫（Luge、Spa Land）＋ 3 藍</b>，180 天有效無時間壓力。<br>但 65,000＋遊艇 31,500 = <b>約 ₩96,500</b>，<b>貴約 ₩11,500</b>。</div>
+  </div>
+</div>
+
+<div class="note info">
+  建議買<b>手機版 Mobile Pass</b>（KKday／Klook），綁定官方 App 出示 QR，免去機場排隊兌換實體卡——金海機場觀光案內所通常 09:00 才開，你 06:30 就落地。
+</div>
+
+<!-- ============ 購物指南 ============ -->
+<h2 id="shop"><span class="num">04</span>購物指南</h2>
+<p class="sec-sub">首爾整天（10/13 · 聖水洞為核心）＋ 釜山半天（10/10 · Centum City），另有兩個順路的加碼時段。</p>
+
+<div class="grid g2">
+  <div class="card" style="border-color:var(--shop)">
+    <svg class="ic" style="width:28px;height:28px;color:var(--shop)"><use href="#i-loft"/></svg>
+    <div class="lbl" style="color:var(--shop)">首爾整天 · 10/13（二）</div>
+    <div class="big">聖水洞 성수동</div>
+    <div class="fine">首爾現在最熱的區域，紅磚倉庫改造成選物店與咖啡廳，<b>快閃店（팝업스토어）密度全首爾第一</b>。原本是手工皮鞋產業區，現在是設計師品牌與獨立選物的大本營。</div>
+  </div>
+  <div class="card" style="border-color:var(--busan)">
+    <svg class="ic" style="width:28px;height:28px;color:var(--busan)"><use href="#i-bag"/></svg>
+    <div class="lbl" style="color:var(--busan)">釜山半天 · 10/10（六）</div>
+    <div class="big">Centum City 센텀시티</div>
+    <div class="fine">Spa Land 就在<b>新世界百貨 Centum City</b> 裡（金氏世界紀錄認證全球最大百貨），泡完汗蒸幕直接原地逛。免稅店在 8F，退稅一次處理完。</div>
+  </div>
+</div>
+
+<h3>🛍 聖水洞必逛（10/13）</h3>
+<div class="grid g2">
+<div class="card">
+<h4 style="color:var(--shop)">選物・複合空間</h4>
+<ul class="shoplist">
+<li><svg class="ic"><use href="#i-loft"/></svg><span><b>LCDC SEOUL</b>兩棟樓的複合選物大樓，一層一個品牌／概念，頂樓咖啡廳。聖水必去第一站。</span></li>
+<li><svg class="ic"><use href="#i-cup"/></svg><span><b>大林倉庫 대림창고</b>紅磚倉庫改建的咖啡廳＋展覽空間，聖水地標，本身就是拍照點。</span></li>
+<li><svg class="ic"><use href="#i-gift"/></svg><span><b>聖水聯邦 성수연방</b>老工廠改建，一樓小店、二樓餐廳、頂樓露臺。文具與生活雜貨很好逛。</span></li>
+<li><svg class="ic"><use href="#i-shirt"/></svg><span><b>快閃店區（팝업스토어）</b>聖水站 2、3 號出口一帶每週都有新品牌快閃。出發前用 Instagram 搜「성수 팝업」看當週有什麼。</span></li>
+</ul>
+</div>
+<div class="card">
+<h4 style="color:var(--shop)">咖啡・手工鞋・吃</h4>
+<ul class="shoplist">
+<li><svg class="ic"><use href="#i-cup"/></svg><span><b>Onion 어니언 성수</b>廢棄工廠原貌保留的名店，麵包好吃。人多，早去。</span></li>
+<li><svg class="ic"><use href="#i-cup"/></svg><span><b>Center Coffee / Mesh Coffee</b>精品咖啡，聖水的咖啡密度很誇張，隨便挑一間都不錯。</span></li>
+<li><svg class="ic"><use href="#i-shoe"/></svg><span><b>手工鞋街（수제화 거리）</b>首爾手工皮鞋發源地。訂製需時間，看與買現貨比較實際。</span></li>
+<li><svg class="ic"><use href="#i-katsu"/></svg><span><b>成水馬鈴薯排骨湯 / 聖水豬腳</b>當地老店，逛累了的實在午餐。</span></li>
+</ul>
+</div>
+</div>
+
+<h3>🛍 其他購物點</h3>
+<div class="rows">
+<div class="row">
+  <div class="f main"><span class="k">地點</span><span class="v"><b>Common Ground</b> 커먼그라운드<br><span style="color:var(--sub);font-size:12.5px">建大入口站</span></span></div>
+  <div class="f"><span class="k">時段</span><span class="v">10/13 下午</span></div>
+  <div class="f wide"><span class="k">買什麼</span><span class="v">藍色貨櫃搭成的商場，200＋ 小型設計師品牌與二手選物。聖水搭 2 號線 2 站就到，順路。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">地點</span><span class="v"><b>東大門</b> 동대문<br><span style="color:var(--sub);font-size:12.5px">Hello apM／Migliore／樂天FITIN</span></span></div>
+  <div class="f"><span class="k">時段</span><span class="v">10/13 傍晚起</span></div>
+  <div class="f wide"><span class="k">買什麼</span><span class="v">平價服飾、鞋包、配件。批發樓層很多是<b>晚上 20:00 開到凌晨 05:00</b>，觀光客樓層則正常時間。DDP 夜間打卡順路。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">地點</span><span class="v"><b>明洞</b> 명동</span></div>
+  <div class="f"><span class="k">時段</span><span class="v">10/11、10/13 晚、10/15 早</span></div>
+  <div class="f wide"><span class="k">買什麼</span><span class="v">藥妝（Olive Young 明洞旗艦最大）、樂天百貨與免稅店、即時退稅。最後一天早上補貨最方便。</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">地點</span><span class="v"><b>廣安里小店街</b> 광안리<br><span style="color:var(--sub);font-size:12.5px">釜山 · 海岸後方巷弄</span></span></div>
+  <div class="f"><span class="k">時段</span><span class="v">10/08 中午（豚笑之後）</span></div>
+  <div class="f wide"><span class="k">買什麼</span><span class="v">雜貨、飾品、選物、玩具周邊、文具。一家一家挖的類型，很容易失控。<b>多數小店 11:00–12:00 才開門</b>，你 12:10 開始逛剛好。</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">地點</span><span class="v"><b>miffy store BUSAN</b> 미피스토어<br><span style="color:var(--sub);font-size:12.5px">釜山 · 해운대구 달맞이길62번길 3</span></span></div>
+  <div class="f"><span class="k">時段</span><span class="v">10/09 15:45（10:00–20:00）</span></div>
+  <div class="f wide"><span class="k">買什麼</span><span class="v"><b>釜山限定「列車員 Miffy」</b>、娃娃、鑰匙圈、文具、餐具。就在膠囊列車尾浦站步行 5 分鐘，和 Arte Museum 同一條달맞이길。<br>※ 影島另有一家 Miffy Cafe，是不同店、不順路。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">地點</span><span class="v"><b>西面地下街</b> 서면지하상가<br><span style="color:var(--sub);font-size:12.5px">釜山</span></span></div>
+  <div class="f"><span class="k">時段</span><span class="v">10/08 晚上</span></div>
+  <div class="f wide"><span class="k">買什麼</span><span class="v">便宜衣服、飾品、襪子。就在你住的西面樓下，晚餐後散步就能逛。Olive Young 西面店也在附近。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">地點</span><span class="v"><b>南浦洞 光復路</b> 광복로<br><span style="color:var(--sub);font-size:12.5px">釜山</span></span></div>
+  <div class="f"><span class="k">時段</span><span class="v">10/11 上午</span></div>
+  <div class="f wide"><span class="k">買什麼</span><span class="v">釜山最熱鬧的商店街，藥妝、服飾、樂天百貨光復店（有空中花園）。順路在甘川洞之後。</span></div>
+</div>
+</div>
+
+<div class="note shop">
+<b>退稅小提醒：</b>單筆 ₩15,000 以上可退。明洞、百貨、Olive Young 多為<b>即時退稅</b>（現場折抵，需護照）。紙本退稅單記得在<b>金浦國際線 3F</b> 的 Kiosk 處理。
+</div>
+
+<!-- ============ 預約時程 ============ -->
+<h2 id="booking"><span class="num">05</span>預約時程表（今天 8/25，這張最重要）</h2>
+<p class="sec-sub">10/09 是韓國「한글날 韓文節」公休日，10/09–10/11 是<b>三天連假</b>，票券與 KTX 都會搶。</p>
+
+<div class="rows">
+<div class="row hi">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">現在（8 月底）</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v"><b>釜山鑽石灣遊艇</b></span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">用 PASS 需在官網專用表單預約：<code>diamondbay-tw.imweb.me/vbp-tw</code>。10/09 是連假第一天＋夜景場最搶手，<b>越早越好</b>。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">現在</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v">釜山PASS 48 小時（手機版）</span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">KKday／Klook 比價後下單。有效期從「啟用」算，提前買不浪費。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">現在</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v">eSIM 或 WiFi 蛋</span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">建議 eSIM（8 天無限量），落地開通不用排隊。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">現在</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v">景福宮韓服租借（10/12）</span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">三清洞／光化門店家，線上預約時段。穿韓服可免費入宮。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">已完成 ✔</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v">豚笑 <b>廣安里店</b>（10/08 <b>10:50</b>）</span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">已訂位。<b>10:50 前務必抵達</b>，遲到通常不保留。西面搭地鐵 2 號線到광안站約 20 分鐘，建議 09:45 出門。</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">什麼時候</span><span class="v"><b>9/08（二）台灣時間 06:00</b></span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v"><b>天空膠囊列車（10/09）</b></span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">官網 <code>bluelinepark.com</code> 在<b>韓國時間「四週前的星期二 07:00」</b>開賣一整週的票。10/05–10/11 那一週 → <b>9/08 星期二台灣時間 06:00 開賣</b>。<br><b>10/09 是連假第一天，開賣幾分鐘內就會被掃光，務必設鬧鐘準時搶。</b>官網已有中文介面。訂「<b>尾浦 → 青沙浦</b>」單程 14:00 前後場次。</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">什麼時候</span><span class="v"><b>9/11（五）韓國時間 07:00</b></span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v"><b>KTX 釜山 → 首爾（10/11）</b></span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">Korail 開放<b>一個月前</b>訂票。連假最後一天北上人潮最兇，<b>開賣當天就訂</b>。行程排 14:00 出發，₩59,800／人。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">9 月中</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v">10/14 一日遊（選配）</span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">南怡島＋小法國村，或 DMZ（須提前 1–2 週且要護照）。</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">10/08 上午 10:00（韓國）</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v"><b>昌德宮後苑 10/14</b></span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">只開放<b>參觀日前 6 天</b>線上預約，幾分鐘售完。若走方案 B，那時你正在前往廣安里的路上，記得設鬧鐘。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">10/05 之後</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v"><b>e-Arrival Card 電子入境卡</b></span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">2026 起紙本入境卡取消，須在<b>入境前 72 小時內</b>線上填（官方免費）。建議 10/06–10/07 填完截圖。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">10/07</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v">LJ762 線上報到</span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">真航空 48 小時前開放，順便確認行李額度。</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">什麼時候</span><span class="v">10/13 13:55 後</span></div>
+  <div class="f"><span class="k">要訂什麼</span><span class="v">CI261 線上報到</span></div>
+  <div class="f wide"><span class="k">怎麼訂／為什麼</span><span class="v">華航 48 小時前開放。</span></div>
+</div>
+</div>
+
+<div class="note ok">
+<b>台灣護照免申請 K-ETA</b>（暫免至 2026/12/31），但 <b>e-Arrival Card 一定要填</b>。已辦 SeS 自動通關則兩者皆免。
+</div>
+
+<!-- ============ 每日行程 ============ -->
+<h2 id="itin"><span class="num">06</span>每日行程 ＋ 互動地圖</h2>
+<p class="sec-sub">
+  <span class="chip c-pass">PASS</span><span class="chip c-book">需預約</span><span class="chip c-food">吃</span>
+  <span class="chip c-shop">購物</span><span class="chip c-move">移動</span>
+  　·　點地圖上的編號圖釘可直接開 Google Maps／Apple 地圖／Naver 導航。
+</p>
+
+<!-- ===== 10/8 ===== -->
+<div class="day busan">
+  <div class="dh"><span class="date">10/08</span><span class="dow">四 · 抵達日 · 廣安里 → 冬柏島</span><span class="stay">🏨 西面</span></div>
+  <div class="hilite">
+    <div class="hchip"><svg class="ic"><use href="#i-plane"/></svg><span>金海機場<br>06:15</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-subway"/></svg><span>西面<br>寄行李</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-bridge"/></svg><span>廣安里<br>廣安大橋</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-katsu"/></svg><span>豚笑 廣安里<br>10:50</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-gift"/></svg><span>廣安里<br>小店街</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-island"/></svg><span>冬柏島<br>海岸步道</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-wave"/></svg><span>The Bay 101<br>海雲台</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-bag"/></svg><span>西面<br>地下街</span></div>
+  </div>
+  <div class="lmapwrap"><div class="lmap" data-day="d08"></div></div>
+  <div class="maplinks">
+    <a href="https://www.google.com/maps/dir/?api=1&origin=35.1795,128.9382&destination=35.1547,129.1444&waypoints=35.1578,129.0594%7C35.1531,129.1187%7C35.1533,129.1497&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps 整日路線</a>
+    <a href="https://maps.apple.com/?saddr=35.1578,129.0594&daddr=35.1537,129.1180&dirflg=r" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Apple 地圖：西面→豚笑</a>
+    <a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%A6%AC%20%EB%8F%88%EC%87%BC" target="_blank" rel="noopener">📍 Naver：廣安里 豚笑</a>
+  </div>
+  <ul class="tl">
+    <li><span class="t">06:15</span><span><span class="a">抵達金海國際機場 (PUS)</span><span class="d">入境（e-Arrival Card 已填）→ 領行李。機場先換少量現金應急，大額留給西面／南浦洞換錢所。</span></span></li>
+    <li><span class="t">07:00</span><span><span class="a">買 T-money／Cashbee 交通卡<span class="chip c-move">移動</span></span><span class="d">便利店即可買＋加值（先加 ₩30,000）。eSIM 開通、確認釜山PASS App 已綁定。</span></span></li>
+    <li><span class="t">07:30</span><span><span class="a">金海輕軌 → 沙上 → 地鐵2號線 → 西面</span><span class="d">約 45 分、₩1,800 上下。行李多的話 Kakao T 約 ₩25,000／35 分。</span></span></li>
+    <li><span class="t">08:30</span><span><span class="a">西面飯店寄放行李</span><span class="d">Check-in 通常 15:00。<b>今天不啟用釜山PASS</b>，讓紅眼班機當天輕鬆走。</span></span></li>
+    <li><span class="t">09:00</span><span><span class="a">西面咖啡 · 別吃飽<span class="chip c-food">吃</span></span><span class="d"><b>10:50 就要吃炸豬排，早餐只喝咖啡或一小份就好。</b>如要搶昌德宮後苑票（10/14），10:00 設鬧鐘，在地鐵上也能搶。</span></span></li>
+    <li><span class="t">09:45</span><span><span class="a">西面 → 廣安里<span class="chip c-move">移動</span></span><span class="d">地鐵 2 號線 서면 →（금련산／광안站）約 20 分鐘，不用換車。出站步行到海邊約 5–8 分。</span></span></li>
+    <li><span class="t">10:15</span><span><span class="a">廣安里海水浴場 · 白天的廣安大橋</span><span class="d">先到海邊走一段。白天的廣安大橋與夜晚完全不同氣氛，先拍白天版，夜景版留給明天的遊艇。</span></span></li>
+    <li><span class="t">10:50</span><span><span class="a">🍽 豚笑 廣安里店（已訂位）<span class="chip c-book">已預約</span></span><span class="d"><b>務必準時，遲到通常不保留座位。</b>釜山破萬則好評的炸豬排名店，本地人也排隊，有訂位是最大優勢。<br>建議點法：厚切里肌（등심）＋腰內（안심）各一，先沾岩鹽吃原味，再配醬與現磨芥末。</span></span></li>
+    <li><span class="t">12:10</span><span><span class="a">🛍 廣安里小店街 逛街<span class="chip c-shop">購物</span></span><span class="d"><b>你想去的那一區。</b>廣安里除了海邊，海岸後方巷子裡藏了一整片小店——雜貨、飾品、選物、玩具周邊、文具、二手選物，一家一家挖很容易失控。<br>路線：從豚笑往<b>廣安里海邊後方巷弄</b>（광안리 카페거리方向）走，邊逛邊往民樂洞方向；累了就進海景咖啡廳坐一下。約 1 小時 20 分。<br><b>小提醒：</b>很多小店 11:00–12:00 才開門，你 12:10 出發剛好都開了。</span></span></li>
+    <li><span class="t">13:30</span><span><span class="a">廣安里 → 冬柏島<span class="chip c-move">移動</span></span><span class="d">地鐵 2 號線往海雲台方向到 <b>동백站</b>，約 15 分鐘。</span></span></li>
+    <li><span class="t">13:50</span><span><span class="a">冬柏島 동백섬 海岸步道 · APEC 世峰樓</span><span class="d">環島木棧道約 1 小時，可看廣安大橋全景與 Marine City 大樓群。<b>吃飽散步剛好</b>，是這趟唯一安排的海岸步道。</span></span></li>
+    <li><span class="t">15:00</span><span><span class="a">The Bay 101 · 海雲台海水浴場<span class="chip c-food">吃</span></span><span class="d">冬柏島旁，白天看 Marine City 海景。想的話走去海雲台海灘踩水。</span></span></li>
+    <li><span class="t">16:00</span><span><span class="a">回西面 Check-in ＋ 補眠<span class="chip c-move">移動</span></span><span class="d">地鐵 2 號線直達。紅眼班機第一天，<b>睡 1–2 小時再出門</b>，不要硬撐。</span></span></li>
+    <li><span class="t">18:30</span><span><span class="a">西面晚餐 ＋ 西面地下街<span class="chip c-food">吃</span><span class="chip c-shop">購物</span></span><span class="d">中午吃重，晚餐建議清爽：豬肉湯飯（松亭3代／密陽血腸，24 小時）、冷麵或湯類。<br><b>西面地下街</b>就在地鐵站下方：便宜衣服、飾品、襪子；Olive Young 西面店補藥妝；田浦咖啡街有小型選物店。<br><b>今天早睡</b>——明天是全程最硬的一天。</span></span></li>
+  </ul>
+</div>
+
+<!-- ===== 10/9 ===== -->
+<div class="day busan">
+  <div class="dh"><span class="date">10/09</span><span class="dow">五 · 韓文節公休 · 東海岸線（PASS 啟用＋膠囊列車）</span><span class="stay">🏨 西面</span></div>
+  <div class="hilite">
+    <div class="hchip"><svg class="ic"><use href="#i-luge"/></svg><span>Skyline<br>Luge 10:00</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-train"/></svg><span>海岸列車<br>自由乘車券</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-capsule"/></svg><span>天空膠囊<br>14:00</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-cam"/></svg><span>青沙浦<br>月光石</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-rabbit"/></svg><span>Miffy Store<br>尾浦</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-art"/></svg><span>Arte<br>Museum</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-yacht"/></svg><span>鑽石灣<br>遊艇 19:00</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-fish"/></svg><span>民樂<br>水邊公園</span></div>
+  </div>
+  <div class="lmapwrap"><div class="lmap" data-day="d09"></div></div>
+  <div class="maplinks">
+    <a href="https://www.google.com/maps/dir/?api=1&origin=35.2029,129.2287&destination=35.1543,129.1265&waypoints=35.1786,129.1996%7C35.1595,129.1719%7C35.1568,129.1965%7C35.1568,129.1745&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps 整日路線</a>
+    <a href="https://maps.apple.com/?saddr=35.1578,129.0594&daddr=35.2029,129.2287&dirflg=r" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Apple 地圖：西面→Luge</a>
+    <a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%20%EB%B8%94%EB%A3%A8%EB%9D%BC%EC%9D%B8%ED%8C%8C%EC%8A%A4" target="_blank" rel="noopener">📍 Naver：藍線公園</a>
+  </div>
+  <ul class="tl">
+    <li><span class="t">08:15</span><span><span class="a">出發前往機張<span class="chip c-move">移動</span></span><span class="d">西面 → 2 號線 → 벡스코／센텀 轉東海線 → <b>오시리아 Osiria 站</b>，約 60–70 分。</span></span></li>
+    <li><span class="t">09:50</span><span><span class="a">Skyline Luge 釜山斜坡滑車<span class="chip c-pass">PASS</span></span><span class="d"><b>★ PASS 啟用點（10:00 → 10/11 10:00 到期）</b><br>10:00 開門前先到兌票處排隊。<b>連假第一天，晚到可能等 1 小時以上。</b>PASS 含 2 趟，約 1.5 小時。Zipline 需另付。</span></span></li>
+    <li><span class="t">12:00</span><span><span class="a">午餐：松亭 송정<span class="chip c-food">吃</span></span><span class="d">東海線 오시리아 → <b>송정站</b>一站。松亭的海鮮麵、烤貝比機張帝王蟹划算。</span></span></li>
+    <li><span class="t">13:10</span><span><span class="a">松亭站兌換海岸列車「當日自由乘車券」<span class="chip c-pass">PASS</span></span><span class="d">2025 年起 PASS 換的是<b>當日自由乘車券</b>（不是單程票），7 個停靠站可自由上下車，<b>但同一站不可上車兩次</b>——所以今天的上車站安排成：<b>松亭上車 1 次、青沙浦上車 1 次</b>，剛好不衝突。免預約。</span></span></li>
+    <li><span class="t">13:15</span><span><span class="a">海岸列車 松亭 → 尾浦（全程）<span class="chip c-pass">PASS</span></span><span class="d">約 30 分鐘，全長 4.8km 貼著海岸線走。<b>提早 10 分排隊搶靠海側座位。</b>先一路坐到終點尾浦，等等再往回搭膠囊列車。</span></span></li>
+    <li><span class="t">14:00</span><span><span class="a">🚟 天空膠囊列車 尾浦 → 青沙浦<span class="chip c-book">需預約</span></span><span class="d"><b>今天的重點之一。不含在釜山PASS，必須 9/08 開賣時搶。</b><br>離地 7–10 公尺的復古單軌小車廂，全程 2km 約 30 分鐘，速度很慢，是整條海岸線最好拍的視角。一台車廂 2–4 人包廂制。<br>單程票價每台約 ₩39,000–44,000（2 人），以官網為準。<b>尾浦站售票處在藍線公園入口</b>，取票要帶護照與訂單。</span></span></li>
+    <li><span class="t">14:35</span><span><span class="a">青沙浦 · 月光石觀景台 다릿돌전망대</span><span class="d">膠囊列車終點下車即到。20 公尺長的海上玻璃觀景台，配上青沙浦紅白雙燈塔，是釜山最經典的畫面之一。附近有海景咖啡廳可休息。約 45 分鐘。</span></span></li>
+    <li><span class="t">15:25</span><span><span class="a">海岸列車 青沙浦 → 尾浦<span class="chip c-pass">PASS</span></span><span class="d">自由乘車券第二段（青沙浦上車，第一次），約 15 分鐘。</span></span></li>
+    <li><span class="t">15:45</span><span><span class="a">🐰 miffy store BUSAN<span class="chip c-shop">購物</span></span><span class="d"><b>你想去的那家 Miffy 店，就在膠囊列車尾浦站附近</b>，下車走過去約 5 分鐘。<br>地址：<b>해운대구 달맞이길62번길 3</b>（달맞이길）｜營業 <b>10:00–20:00</b><br>紅磚外觀很好認，店內有<b>釜山限定的「列車員 Miffy」</b>——正好呼應你今天剛搭完的膠囊列車，是這裡才買得到的。娃娃、鑰匙圈、文具、餐具都有。約 30 分鐘。<br>※ 영도（影島）另有一家 Miffy Cafe，不同店，不順路。</span></span></li>
+    <li><span class="t">16:20</span><span><span class="a">Arte Museum 釜山<span class="chip c-pass">PASS</span></span><span class="d"><b>和 Miffy Store 在同一條달맞이길上</b>（달맞이길 30），步行可到，不用再搭車。沉浸式媒體藝術約 1–1.5 小時，很好拍，也是今天的休息點。</span></span></li>
+    <li><span class="t">17:50</span><span><span class="a">前往水營灣 鑽石灣碼頭<span class="chip c-move">移動</span></span><span class="d">海雲台 → 水營灣約 20–25 分。<b>提早 30 分到報到。</b></span></span></li>
+    <li><span class="t">19:00</span><span><span class="a">釜山鑽石灣遊艇 · 夜景場<span class="chip c-pass">PASS</span><span class="chip c-book">需預約</span></span><span class="d">10 月釜山日落約 18:00，19:00 出海正好是廣安大橋燈光最漂亮的時候，約 1 小時。<br><b>海上風很大，務必帶外套。</b></span></span></li>
+    <li><span class="t">20:30</span><span><span class="a">民樂水邊公園 민락수변공원 晚餐<span class="chip c-food">吃</span></span><span class="d">就在鑽石灣碼頭旁邊。在民樂회센터（生魚片中心）買一盤生魚片，帶到水邊公園邊看廣安大橋邊吃，是釜山人的經典吃法。不想吃生的就在附近餐廳吃烤肉。</span></span></li>
+  </ul>
+  <div class="note" style="margin:0 18px 16px">
+  <b>今天是全程最硬的一天，兩個時間點不能遲：</b>10:00 Luge 開門（連假排隊）與 <b>14:00 膠囊列車的預約場次</b>（過號不退）。中間的午餐時間如果不夠，就在松亭買外帶上車吃。
+  </div>
+</div>
+
+<!-- ===== 10/10 ===== -->
+<div class="day shopd">
+  <div class="dh"><span class="date">10/10</span><span class="dow">六 · 汗蒸幕＋購物半天 → 松島</span><span class="stay">🏨 松島</span></div>
+  <div class="hilite">
+    <div class="hchip"><svg class="ic"><use href="#i-spa"/></svg><span>Spa Land<br>09:00</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-bag"/></svg><span>新世界<br>Centum City</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-gift"/></svg><span>免稅店<br>8F</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-bed"/></svg><span>移動<br>松島</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-bridge"/></svg><span>龍宮<br>雲橋</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-cable"/></svg><span>海上纜車<br>日落</span></div>
+  </div>
+  <div class="lmapwrap"><div class="lmap" data-day="d10"></div></div>
+  <div class="maplinks">
+    <a href="https://www.google.com/maps/dir/?api=1&origin=35.1691,129.1291&destination=35.0757,129.0179&waypoints=35.1578,129.0594%7C35.0975,129.0345%7C35.0776,129.0201&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps 整日路線</a>
+    <a href="https://maps.apple.com/?saddr=35.1578,129.0594&daddr=35.0757,129.0179&dirflg=r" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Apple 地圖：西面→松島纜車</a>
+    <a href="https://map.naver.com/p/search/%EC%8A%A4%ED%8C%8C%EB%9E%9C%EB%93%9C%20%EC%84%BC%ED%85%80%EC%8B%9C%ED%8B%B0" target="_blank" rel="noopener">📍 Naver：Spa Land</a>
+  </div>
+  <ul class="tl">
+    <li><span class="t">09:00</span><span><span class="a">Spa Land Centum City 汗蒸幕<span class="chip c-pass">PASS</span></span><span class="d">西面 → 2 號線 <b>Centum City 站</b>，僅 3 站約 8 分。新世界百貨 1F。<br><b>限時 4 小時</b>（超時加價）、<b>未滿 13 歲不可入場</b>、<b>明顯刺青可能被拒</b>。22 種湯池＋13 種汗蒸房，毛巾浴衣現場提供。</span></span></li>
+    <li><span class="t">11:30</span><span><span class="a">新世界百貨 Centum City 購物半天<span class="chip c-shop">購物</span></span><span class="d"><b>金氏世界紀錄認證全球最大百貨</b>，泡完汗蒸幕原地上樓就是。<br>· <b>8F 免稅店</b>（護照必帶，退稅一次處理）<br>· 中低樓層：Zara／Uniqlo／韓系品牌<br>· <b>B1 食品館＋美食街</b>：午餐與伴手禮（海苔、零食、泡麵）一起買<br>· 走 5 分鐘還有<b>樂天百貨 Centum 店</b>可比價</span></span></li>
+    <li><span class="t">13:00</span><span><span class="a">午餐：B1 美食街或 5F 餐廳<span class="chip c-food">吃</span></span><span class="d">逛街中間吃，省移動時間。</span></span></li>
+    <li><span class="t">14:30</span><span><span class="a">回西面退房 → 移動松島<span class="chip c-move">移動</span></span><span class="d">西面 → 1 號線 → <b>남포 南浦站</b>（約 15 分）→ 公車 6／30／71／96 到松島（約 15 分）。<br><b>行李多請直接從南浦叫 Kakao T</b>，約 ₩7,000。</span></span></li>
+    <li><span class="t">16:00</span><span><span class="a">松島飯店 Check-in</span><span class="d">放行李、換輕便裝。購物戰利品先放好。</span></span></li>
+    <li><span class="t">16:40</span><span><span class="a">松島龍宮雲橋 · 天空步道<span class="chip c-pass">PASS</span></span><span class="d">走一圈約 30 分，海蝕地形壯觀。PASS 含（原價僅約 ₩1,000，順手用掉）。</span></span></li>
+    <li><span class="t">17:20</span><span><span class="a">松島海上纜車 Air Cruise<span class="chip c-pass">PASS</span></span><span class="d"><b>★ PASS 最後一個行程</b>（距 10/11 10:00 到期還有 16 小時緩衝）。<br>松島海水浴場站 ↔ 岩南公園站，全長 1.62km。<b>PASS 含一般艙來回；透明地板「水晶艙」需現場補差價</b>（約 ₩6,000／人，很推薦）。<br>抓 <b>日落前後 17:30–18:15</b> 最美。岩南公園端有咖啡廳與觀景台。</span></span></li>
+    <li><span class="t">18:50</span><span><span class="a">松島海邊晚餐 ＋ 夜景散步<span class="chip c-food">吃</span></span><span class="d">松島海邊烤貝、海鮮鍋。纜車與雲橋夜間都有燈光。<br><b>今晚先打包行李</b>，明天要拉去首爾。</span></span></li>
+  </ul>
+</div>
+
+<!-- ===== 10/11 ===== -->
+<div class="day busan">
+  <div class="dh"><span class="date">10/11</span><span class="dow">日 · 釜山老城 → KTX 首爾</span><span class="stay">🏨 明洞</span></div>
+  <div class="hilite">
+    <div class="hchip"><svg class="ic"><use href="#i-village"/></svg><span>甘川洞<br>文化村</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-draw"/></svg><span>동화<br>似顏繪</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-market"/></svg><span>札嘎其<br>市場</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-bag"/></svg><span>光復路<br>商店街</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-ktx"/></svg><span>KTX<br>14:00</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-bed"/></svg><span>明洞<br>Check-in</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-tower"/></svg><span>南山<br>首爾塔</span></div>
+  </div>
+  <div class="lmapwrap"><div class="lmap" data-day="d11"></div></div>
+  <div class="maplinks">
+    <a href="https://www.google.com/maps/dir/?api=1&origin=35.0776,129.0201&destination=35.1152,129.0403&waypoints=35.0975,129.0106%7C35.0966,129.0304&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps：釜山段</a>
+    <a href="https://www.google.com/maps/dir/?api=1&origin=37.5547,126.9707&destination=37.5512,126.9882&waypoints=37.5609,126.9860&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps：首爾段</a>
+    <a href="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noopener">📍 Naver：甘川洞</a>
+  </div>
+  <ul class="tl">
+    <li><span class="t">08:30</span><span><span class="a">松島退房 → 釜山站寄行李<span class="chip c-move">移動</span></span><span class="d">Kakao T 到釜山站約 20 分、₩12,000。<b>先把行李丟進投幣置物櫃</b>（連假建議早點去搶）。</span></span></li>
+    <li><span class="t">09:15</span><span><span class="a">釜山站 → 土城站<span class="chip c-move">移動</span></span><span class="d">1 號線 3 站約 6 分。土城站 6 號出口轉小巴 <b>2／2-2</b> 上甘川洞（約 10 分）。</span></span></li>
+    <li><span class="t">09:45</span><span><span class="a">甘川洞文化村 감천문화마을</span><span class="d">彩色山城、小王子與狐狸觀景台。<b>早上人少最好拍</b>。坡道階梯多，穿好走的鞋。約 1 小時。</span></span></li>
+    <li><span class="t">10:50</span><span><span class="a">✏️ 동화 caricature 似顏繪（村內）</span><span class="d"><b>你想去的那家松鼠招牌似顏繪店，就在甘川洞文化村裡。</b>木屋外觀＋松鼠立牌很好認，門口地上有 Waiting 號碼牌。<br><b>1 分鐘完成、₩7,000 起</b>（依張數與人數加價，帶現金比較方便）。實際約 2–3 分鐘一人，比明信片有趣的紀念品。<br>逛村子的路上就會經過，抓 30 分鐘畫完剛好接下一站。</span></span></li>
+    <li><span class="t">11:30</span><span><span class="a">南浦洞 · 札嘎其市場 · 光復路<span class="chip c-food">吃</span><span class="chip c-shop">購物</span></span><span class="d">札嘎其生魚片／烤魚、富平罐頭市場、BIFF 씨앗호떡 種子糖餅。<br><b>光復路商店街</b>是釜山最熱鬧的購物街：藥妝、服飾、樂天百貨光復店（頂樓空中花園）。</span></span></li>
+    <li><span class="t">12:45</span><span><span class="a">回釜山站取行李</span><span class="d">南浦 → 부산역 地鐵 2 站。預留 30 分緩衝。</span></span></li>
+    <li><span class="t">14:00</span><span><span class="a">KTX 釜山 → 首爾<span class="chip c-book">需預約</span></span><span class="d">約 2h40m，₩59,800／人。<b>連假最後一天，9/11 開賣就要訂。</b>選正向座位，行李放車廂端置物架。</span></span></li>
+    <li><span class="t">16:40</span><span><span class="a">抵達首爾站 → 明洞<span class="chip c-move">移動</span></span><span class="d">首爾站 4 號線 → 明洞站，2 站。或計程車約 ₩6,000。</span></span></li>
+    <li><span class="t">17:20</span><span><span class="a">明洞 Check-in ＋ 換錢</span><span class="d">明洞換錢所（大明／一品）匯率是全首爾最好的之一，帶護照。</span></span></li>
+    <li><span class="t">18:30</span><span><span class="a">明洞街頭小吃 ＋ 逛街<span class="chip c-food">吃</span><span class="chip c-shop">購物</span></span><span class="d">龍蝦起司、雞蛋糕、烤扇貝。Olive Young 明洞旗艦、樂天百貨與免稅店。</span></span></li>
+    <li><span class="t">20:00</span><span><span class="a">南山首爾塔 N Seoul Tower 夜景</span><span class="d">明洞站 3 號出口附近搭南山循環巴士 02／05，或走首爾路7017。觀景台 ₩21,000（不上塔在廣場看也很美）。</span></span></li>
+  </ul>
+</div>
+
+<!-- ===== 10/12 ===== -->
+<div class="day seoul">
+  <div class="dh"><span class="date">10/12</span><span class="dow">一 · 古宮與韓屋</span><span class="stay">🏨 明洞</span></div>
+  <div class="hilite">
+    <div class="hchip"><svg class="ic"><use href="#i-hanok"/></svg><span>景福宮<br>09:30</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-cam"/></svg><span>守門將<br>10:00</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-village"/></svg><span>北村<br>韓屋村</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-cup"/></svg><span>三清洞<br>益善洞</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-market"/></svg><span>廣藏市場<br>17:30</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-sun"/></svg><span>清溪川<br>夜散步</span></div>
+  </div>
+  <div class="lmapwrap"><div class="lmap" data-day="d12"></div></div>
+  <div class="maplinks">
+    <a href="https://www.google.com/maps/dir/?api=1&origin=37.5796,126.9770&destination=37.5701,126.9997&waypoints=37.5826,126.9850%7C37.5740,126.9860%7C37.5730,126.9900&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps 整日路線</a>
+    <a href="https://maps.apple.com/?saddr=37.5609,126.9860&daddr=37.5796,126.9770&dirflg=r" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Apple 地圖：明洞→景福宮</a>
+    <a href="https://map.naver.com/p/search/%EA%B2%BD%EB%B3%B5%EA%B6%81" target="_blank" rel="noopener">📍 Naver：景福宮</a>
+  </div>
+  <ul class="tl">
+    <li><span class="t">08:30</span><span><span class="a">韓服租借<span class="chip c-book">需預約</span></span><span class="d">光化門／三清洞店家。<b>穿韓服可免費入宮</b>，省 ₩3,000 也更好拍。</span></span></li>
+    <li><span class="t">09:30</span><span><span class="a">景福宮 경복궁</span><span class="d">3 號線景福宮站 5 號出口。<b>週二休館 → 排在週一剛好。</b><br><b>10:00 守門將交接儀式</b>（光化門前）別錯過，另一場 14:00。旁邊國立古宮博物館免費。</span></span></li>
+    <li><span class="t">11:30</span><span><span class="a">北村韓屋村 · 三清洞</span><span class="d">北村八景步道。這是住宅區，<b>10:00–17:00 才開放參觀且需輕聲</b>。三清洞咖啡廳、藝廊。</span></span></li>
+    <li><span class="t">13:00</span><span><span class="a">午餐：土俗村蔘雞湯／三清洞摩西年糕鍋<span class="chip c-food">吃</span></span><span class="d">土俗村在景福宮西側，首爾蔘雞湯代表，人多但翻桌快。</span></span></li>
+    <li><span class="t">14:30</span><span><span class="a">仁寺洞 · 益善洞韓屋街</span><span class="d">仁寺洞 Ssamziegil 文創（傳統紀念品、韓紙、茶具），益善洞窄巷咖啡廳與復古酒吧。</span></span></li>
+    <li><span class="t">17:30</span><span><span class="a">廣藏市場 광장시장<span class="chip c-food">吃</span></span><span class="d">1 號線鐘路5街站。綠豆煎餅（순희네빈대떡）、生牛肉、麻藥飯捲。<b>現金為主，人非常多。</b></span></span></li>
+    <li><span class="t">19:30</span><span><span class="a">清溪川夜散步 → 回明洞</span><span class="d">秋天夜晚沿溪走很舒服。</span></span></li>
+  </ul>
+</div>
+
+<!-- ===== 10/13 ===== -->
+<div class="day shopd">
+  <div class="dh"><span class="date">10/13</span><span class="dow">二 · 首爾購物日 · 聖水洞</span><span class="stay">🏨 明洞</span></div>
+  <div class="hilite">
+    <div class="hchip"><svg class="ic"><use href="#i-loft"/></svg><span>聖水洞<br>10:00</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-shirt"/></svg><span>LCDC<br>SEOUL</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-cup"/></svg><span>大林倉庫<br>咖啡</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-tree"/></svg><span>首爾林<br>散步</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-gift"/></svg><span>Common<br>Ground</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-bag"/></svg><span>東大門<br>夜間</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-lip"/></svg><span>明洞<br>藥妝</span></div>
+  </div>
+  <div class="lmapwrap"><div class="lmap" data-day="d13"></div></div>
+  <div class="maplinks">
+    <a href="https://www.google.com/maps/dir/?api=1&origin=37.5445,127.0557&destination=37.5665,127.0092&waypoints=37.5444,127.0374%7C37.5410,127.0668&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps 整日路線</a>
+    <a href="https://maps.apple.com/?saddr=37.5609,126.9860&daddr=37.5445,127.0557&dirflg=r" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Apple 地圖：明洞→聖水</a>
+    <a href="https://map.naver.com/p/search/%EC%84%B1%EC%88%98%EB%8F%99%20%EC%B9%B4%ED%8E%98%EA%B1%B0%EB%A6%AC" target="_blank" rel="noopener">📍 Naver：聖水洞咖啡街</a>
+  </div>
+  <ul class="tl">
+    <li><span class="t">10:00</span><span><span class="a">聖水洞 성수동 · 咖啡街與選物店<span class="chip c-shop">購物</span></span><span class="d">2 號線<b>聖水站</b>（4 號出口一帶）。首爾的「布魯克林」——老工廠與紅磚倉庫改成咖啡廳、選物店、藝廊。<br>優先順序：<b>LCDC SEOUL</b> → <b>大林倉庫 대림창고</b> → <b>聖水聯邦 성수연방</b>。</span></span></li>
+    <li><span class="t">11:30</span><span><span class="a">快閃店巡禮 팝업스토어<span class="chip c-shop">購物</span></span><span class="d">聖水是全首爾<b>快閃店密度最高</b>的地方，每週都在換。<b>出發前用 Instagram 搜「성수 팝업」</b>看當週有什麼，很多只開一到兩週，常有限定商品。</span></span></li>
+    <li><span class="t">12:30</span><span><span class="a">午餐：聖水老店<span class="chip c-food">吃</span></span><span class="d">成水馬鈴薯排骨湯、聖水豬腳；想輕食就在 Onion 어니언 성수 吃麵包＋咖啡（廢工廠原貌保留，超好拍）。</span></span></li>
+    <li><span class="t">14:00</span><span><span class="a">手工鞋街 수제화거리（選配）<span class="chip c-shop">購物</span></span><span class="d">首爾手工皮鞋發源地，工作室與現貨店都有。</span></span></li>
+    <li><span class="t">14:45</span><span><span class="a">首爾林 Seoul Forest 散步</span><span class="d">10 月中銀杏與落葉正好，逛累了在這裡休息一小時。距聖水一站。</span></span></li>
+    <li><span class="t">16:00</span><span><span class="a">Common Ground 커먼그라운드<span class="chip c-shop">購物</span></span><span class="d">2 號線<b>建大入口站</b>（聖水搭 2 站）。藍色貨櫃堆成的商場，200＋ 小型設計師品牌與二手選物，很好拍也很好買。</span></span></li>
+    <li><span class="t">17:45</span><span><span class="a">東大門 동대문 · DDP<span class="chip c-shop">購物</span></span><span class="d">2／4／5 號線東大門歷史文化公園站。<b>Hello apM、Migliore、樂天FITIN</b>——平價服飾、鞋包、配件。<br>觀光客樓層正常時間營業；<b>批發樓層多為 20:00 開到凌晨 05:00</b>。DDP 夜間曲線建築很好拍。</span></span></li>
+    <li><span class="t">19:30</span><span><span class="a">東大門晚餐<span class="chip c-food">吃</span></span><span class="d">附近有 24 小時營業的刀削麵、烤肉店。</span></span></li>
+    <li><span class="t">20:45</span><span><span class="a">回明洞 · 藥妝與退稅收尾<span class="chip c-shop">購物</span></span><span class="d">Olive Young 明洞旗艦（營業到很晚）補齊面膜、保養品。<b>今晚把即時退稅與紙本退稅單整理好。</b></span></span></li>
+  </ul>
+  <div class="note shop" style="margin:0 18px 16px">
+  <b>今天是首爾的整天購物日。</b>路線一路往西：聖水（東）→ 建大 → 東大門 → 明洞（住），不走回頭路。今天<b>景福宮休館</b>（週二），宮殿行程都避開這天，剛好。
+  </div>
+</div>
+
+<!-- ===== 10/14 ===== -->
+<div class="day seoul">
+  <div class="dh"><span class="date">10/14</span><span class="dow">三 · 二選一</span><span class="stay">🏨 明洞</span></div>
+  <div class="hilite">
+    <div class="hchip"><svg class="ic"><use href="#i-tree"/></svg><span>A · 南怡島<br>銀杏</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-cam"/></svg><span>A · 小法國村<br>拍照</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-hanok"/></svg><span>B · 昌德宮<br>後苑</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-tower"/></svg><span>B · SEOUL<br>SKY</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-sun"/></svg><span>B · 石村湖<br>夕陽</span></div>
+  </div>
+  <div class="lmapwrap"><div class="lmap" data-day="d14"></div></div>
+  <div class="maplinks">
+    <a href="https://www.google.com/maps/dir/?api=1&origin=37.5609,126.9860&destination=37.7924,127.5257&waypoints=37.7813,127.5153&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps：方案A</a>
+    <a href="https://www.google.com/maps/dir/?api=1&origin=37.5794,126.9910&destination=37.5125,127.1025&waypoints=37.5730,126.9900&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps：方案B</a>
+    <a href="https://map.naver.com/p/search/%EB%82%A8%EC%9D%B4%EC%84%AC" target="_blank" rel="noopener">📍 Naver：南怡島</a>
+  </div>
+  <ul class="tl">
+    <li><span class="t">方案A</span><span><span class="a">近郊一日遊：南怡島 ＋ 小法國村<span class="chip c-book">需預約</span></span><span class="d">08:00 明洞出發（一日遊巴士約 ₩60,000–80,000），19:00 前回市區。<b>10 月中南怡島銀杏與水杉大道正美</b>，是這趟唯一的秋景近郊。</span></span></li>
+    <li><span class="t">方案B</span><span><span class="a">首爾市內深度日</span><span class="d">
+      09:30 <b>昌德宮 ＋ 後苑祕苑導覽</b><span class="chip c-book">需預約</span>（6 天前線上搶票，即 10/08 10:00 KST）<br>
+      11:30 昌慶宮 → 宗廟（週一休、週三開）<br>
+      13:00 益善洞／鐘路午餐<br>
+      15:00 <b>樂天世界塔 SEOUL SKY</b> 118 樓（₩29,000，日落前上去看晝夜交替）<br>
+      18:00 石村湖散步 → 蠶室樂天世界＋樂天百貨<span class="chip c-shop">購物</span><br>
+      20:00 回明洞
+    </span></span></li>
+    <li><span class="t">21:00</span><span><span class="a">回飯店打包行李</span><span class="d">明天中午班機，<b>今晚就整理好行李</b>。免稅店若在機場提貨，先確認金浦提貨櫃檯位置與營業時間。</span></span></li>
+  </ul>
+  <div class="note info" style="margin:0 18px 16px">
+    <b>建議選方案 A</b>：市區已逛 3 天（含一整天購物），10 月中的南怡島值得專程。若當天下雨就改方案 B（全室內＋高樓，還能在蠶室再逛一波）。
+  </div>
+</div>
+
+<!-- ===== 10/15 ===== -->
+<div class="day seoul">
+  <div class="dh"><span class="date">10/15</span><span class="dow">四 · 返台</span><span class="stay">✈ 金浦 → 松山</span></div>
+  <div class="hilite">
+    <div class="hchip"><svg class="ic"><use href="#i-lip"/></svg><span>明洞／南大門<br>最後採買</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-subway"/></svg><span>AREX<br>10:15</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-gift"/></svg><span>退稅<br>3F</span></div>
+    <div class="hchip"><svg class="ic"><use href="#i-plane"/></svg><span>CI261<br>13:55</span></div>
+  </div>
+  <div class="lmapwrap"><div class="lmap" data-day="d15"></div></div>
+  <div class="maplinks">
+    <a href="https://www.google.com/maps/dir/?api=1&origin=37.5609,126.9860&destination=37.5583,126.7906&waypoints=37.5547,126.9707&travelmode=transit" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Google Maps 前往金浦</a>
+    <a href="https://maps.apple.com/?saddr=37.5609,126.9860&daddr=37.5583,126.7906&dirflg=r" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Apple 地圖：明洞→金浦</a>
+    <a href="https://map.naver.com/p/search/%EA%B9%80%ED%8F%AC%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD%20%EA%B5%AD%EC%A0%9C%EC%84%A0" target="_blank" rel="noopener">📍 Naver：金浦國際線</a>
+  </div>
+  <ul class="tl">
+    <li><span class="t">07:30</span><span><span class="a">早餐 ＋ 最後採買<span class="chip c-food">吃</span><span class="chip c-shop">購物</span></span><span class="d">明洞藥妝／<b>南大門市場</b>（06:00 就開，伴手禮與雜貨最便宜）。<b>注意液體與行李重量。</b></span></span></li>
+    <li><span class="t">09:30</span><span><span class="a">退房、行李整理</span><span class="d">把退稅單、免稅店提貨單放在隨手可拿的地方。</span></span></li>
+    <li><span class="t">10:15</span><span><span class="a">前往金浦機場<span class="chip c-move">移動</span></span><span class="d">明洞站（4號線）→ 首爾站 → 機場鐵路 AREX <b>一般列車</b> → 金浦機場，約 40–50 分、₩1,700。<br>或 5／9 號線到 김포공항站，走「<b>國際線 International</b>」出口——金浦有國內線與國際線兩棟，<b>別走錯</b>。</span></span></li>
+    <li><span class="t">11:00</span><span><span class="a">抵達金浦國際線航廈</span><span class="d">華航櫃檯報到、託運、<b>退稅 Kiosk 在 3F</b>。免稅店提貨櫃檯先找到。</span></span></li>
+    <li><span class="t">13:55</span><span><span class="a">CI261 起飛</span><span class="d">金浦 GMP → 台北松山 TSA，飛行 2h40m。</span></span></li>
+    <li><span class="t">15:35</span><span><span class="a">抵達台北松山機場</span><span class="d">松山有捷運文湖線直達市區，比桃園方便很多 🎉</span></span></li>
+  </ul>
+</div>
+
+<!-- ============ 注意事項 ============ -->
+<h2 id="notes"><span class="num">07</span>注意事項</h2>
+
+<h3>① 連假與人潮（最需要注意）</h3>
+<ul class="bul">
+<li><b>10/09（五）是韓國「한글날 韓文節」公休日</b>，10/09–10/11 形成三天連假。</li>
+<li>影響最大：<b>Skyline Luge 排隊</b>（10:00 開門前到）、<b>天空膠囊列車票</b>（9/08 開賣秒殺）、<b>10/11 KTX 北上車票</b>（9/11 開賣就訂）。</li>
+<li>10/12（一）反而是首爾的好日子：景福宮開、觀光客較少。</li>
+</ul>
+
+<h3>② 藍線公園：海岸列車 vs 天空膠囊列車</h3>
+<div class="rows">
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">海岸列車 해안열차</span></div>
+  <div class="f"><span class="k">是否含在PASS</span><span class="v"><b>含</b>（當日自由乘車券）</span></div>
+  <div class="f wide"><span class="k">重點</span><span class="v">地面軌道、車廂大、速度正常。7 個停靠站可自由上下車，<b>同一站不可上車兩次</b>。<b>免預約</b>，現場兌換即可。全長 4.8km（尾浦–青沙浦–松亭）。</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">項目</span><span class="v">天空膠囊列車 스카이캡슐</span></div>
+  <div class="f"><span class="k">是否含在PASS</span><span class="v"><b>不含</b>，要另買</span></div>
+  <div class="f wide"><span class="k">重點</span><span class="v">離地 7–10m 的高架單軌，2–4 人包廂制，速度很慢很好拍。<b>只跑尾浦 ↔ 青沙浦（2km，約 30 分）</b>。<b>官網韓國時間「四週前的星期二 07:00」開賣一整週</b>，10/09 的票 → <b>9/08 台灣時間 06:00</b>。連假秒殺，務必設鬧鐘。</span></div>
+</div>
+</div>
+
+<h3>③ 各景點休館日</h3>
+<div class="rows">
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">景福宮</span></div>
+  <div class="f"><span class="k">休館</span><span class="v">週二</span></div>
+  <div class="f wide"><span class="k">對你的行程</span><span class="v">已排在 10/12（一）✔ 10/13 是購物日剛好避開</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">昌德宮／昌慶宮／德壽宮／宗廟</span></div>
+  <div class="f"><span class="k">休館</span><span class="v">週一</span></div>
+  <div class="f wide"><span class="k">對你的行程</span><span class="v">若走方案 B 排在 10/14（三）✔</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">國立中央博物館／MMCA</span></div>
+  <div class="f"><span class="k">休館</span><span class="v">多為週一休</span></div>
+  <div class="f wide"><span class="k">對你的行程</span><span class="v">10/12 避開，行前再查一次</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">百貨與免稅店</span></div>
+  <div class="f"><span class="k">休館</span><span class="v">每月 1–2 天不定期</span></div>
+  <div class="f wide"><span class="k">對你的行程</span><span class="v"><b>10/10 去 Centum City 前先查新世界百貨當月休館日</b></span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">景點</span><span class="v">釜山各 PASS 景點</span></div>
+  <div class="f"><span class="k">休館</span><span class="v">多為全年無休</span></div>
+  <div class="f wide"><span class="k">對你的行程</span><span class="v">Spa Land、纜車、膠囊列車有維修停駛可能，出發前查官網</span></div>
+</div>
+</div>
+
+<h3>④ 入境與證件</h3>
+<ul class="bul">
+<li><b>台灣護照免 K-ETA</b>（暫免至 2026/12/31），但<b>必須線上填 e-Arrival Card</b>，入境前 72 小時內、官方免費，填完截圖存手機。</li>
+<li>護照效期建議距回國日 6 個月以上。<b>膠囊列車取票、購物退稅、免稅店都要護照，隨身帶。</b></li>
+<li>兩張機票、住宿訂單、KTX 票、豚笑訂位、膠囊列車訂單、PASS QR 都存離線截圖。</li>
+</ul>
+
+<h3>⑤ 交通與 App</h3>
+<ul class="bul">
+<li><b>T-money 或 Cashbee</b>：釜山、首爾通用。地鐵、公車、計程車都能刷。</li>
+<li>導航用 <b>Naver Map</b> 或 <b>Kakao Map</b>（Google Map 在韓國步行／公車導航常不準）；叫車 <b>Kakao T</b>；翻譯 <b>Papago</b>。</li>
+<li>松島沒有地鐵，<b>拉行李務必用 Kakao T</b>。</li>
+<li>購物日建議帶<b>折疊購物袋或空行李箱</b>。</li>
+</ul>
+
+<h3>⑥ 天氣與穿著（10 月中）</h3>
+<ul class="bul">
+<li><b>釜山</b>約 16–25°C，<b>首爾</b>約 10–22°C。早晚溫差大，洋蔥式穿搭。</li>
+<li>必帶：<b>薄外套或風衣</b>（遊艇海上、膠囊列車、纜車山頂、漢江夜晚都冷）、好走的鞋（甘川洞、北村、冬柏島、聖水都要走很多）。</li>
+<li>雨天備案：Arte Museum、Spa Land、Centum City、Common Ground、SEOUL SKY。</li>
+</ul>
+
+<h3>⑦ 錢與其他</h3>
+<ul class="bul">
+<li>換錢：<b>明洞換錢所</b>（首爾）、<b>釜山南浦洞／西面</b>匯率最好。</li>
+<li>多數店家可刷卡，但<b>廣藏市場、東大門批發、民樂生魚片中心、甘川洞小巴需現金</b>，隨身留 ₩50,000–100,000。</li>
+<li>Spa Land 等汗蒸幕：<b>刺青明顯者可能被拒入場</b>。</li>
+<li>插座：韓國是<b>圓形雙孔 220V</b>，帶轉接頭。</li>
+<li>10 月釜山國際電影節（BIFF）與釜山煙火節日期每年變動，出發前查有沒有撞到。</li>
+</ul>
+
+<!-- ============ 費用 ============ -->
+<h2 id="cost"><span class="num">08</span>票券費用估算（每人，不含機票住宿餐飲購物）</h2>
+<div class="rows">
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">釜山PASS 48 小時</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">85,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">含 6 個景點，省約 42,500</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">項目</span><span class="v">天空膠囊列車（尾浦→青沙浦 單程）</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">約 22,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">一台車廂 2 人約 ₩39,000–44,000，以官網為準。<b>不含在 PASS。</b></span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">KTX 釜山 → 首爾</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">59,800</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">一般席</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">T-money 卡 ＋ 加值</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">55,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">卡 5,000 ＋ 8 天約 50,000</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">동화 caricature 似顏繪（甘川洞）</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">7,000 起</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">依張數與人數加價，帶現金</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">松島纜車水晶艙差價（選配）</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">6,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">很推薦</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">N 首爾塔觀景台（選配）</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">21,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">不上塔則 0</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">景福宮 ＋ 韓服租借</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">25,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">穿韓服免門票</span></div>
+</div>
+<div class="row">
+  <div class="f main"><span class="k">項目</span><span class="v">10/14 南怡島一日遊（選配）</span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">70,000</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">方案 B 約 30,000</span></div>
+</div>
+<div class="row hi">
+  <div class="f main"><span class="k">項目</span><span class="v"><b>合計</b></span></div>
+  <div class="f amt"><span class="k">金額</span><span class="v">約 350,800</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">約 NT$8,000（含所有選配，不含購物預算）</span></div>
+</div>
+</div>
+
+<!-- ============ 檢查表 ============ -->
+<h2 id="pack"><span class="num">09</span>行前檢查表</h2>
+<h3>現在就要做</h3>
+<ul class="ck">
+<li><input type="checkbox"> 預約鑽石灣遊艇（10/09 夜景場）</li>
+<li><input type="checkbox"> 買釜山PASS 48 小時手機版</li>
+<li><input type="checkbox"> 訂 eSIM／WiFi</li>
+<li><input type="checkbox"> 確認 LJ762 實際抵達時間</li>
+<li><input type="checkbox"> 訂景福宮韓服（10/12）</li>
+<li><input type="checkbox"> <b>設 9/08 06:00 鬧鐘搶天空膠囊列車</b></li>
+<li><input type="checkbox"> 設 9/11 鬧鐘搶 KTX</li>
+<li><input type="checkbox"> 設 10/08 10:00 鬧鐘搶昌德宮後苑（方案B）</li>
+</ul>
+
+<h3>出發前一週</h3>
+<ul class="ck">
+<li><input type="checkbox"> 填 e-Arrival Card（10/05 後）</li>
+<li><input type="checkbox"> LJ762 線上報到（10/07）</li>
+<li><input type="checkbox"> 訂 10/14 一日遊</li>
+<li><input type="checkbox"> 換韓元</li>
+<li><input type="checkbox"> 下載 Naver Map／Kakao T／Papago</li>
+<li><input type="checkbox"> IG 搜「성수 팝업」看當週快閃店</li>
+<li><input type="checkbox"> 查新世界百貨 Centum City 當月休館日</li>
+<li><input type="checkbox"> 列購物清單（藥妝、伴手禮、尺寸）</li>
+<li><input type="checkbox"> 查 miffy store BUSAN 當日營業（10:00–20:00）</li>
+<li><input type="checkbox"> 備現金給似顏繪與小店（₩50,000 以上）</li>
+</ul>
+
+<h3>行李</h3>
+<ul class="ck">
+<li><input type="checkbox"> 護照（效期 6 個月以上）</li>
+<li><input type="checkbox"> 圓形雙孔轉接頭（220V）</li>
+<li><input type="checkbox"> 行動電源（手提，不可託運）</li>
+<li><input type="checkbox"> 薄外套／風衣</li>
+<li><input type="checkbox"> 好走的鞋</li>
+<li><input type="checkbox"> 折傘</li>
+<li><input type="checkbox"> 常備藥、防曬</li>
+<li><input type="checkbox"> 空的折疊袋／購物袋</li>
+<li><input type="checkbox"> 行李秤（廉航去程 15kg）</li>
+</ul>
 
 <footer>
-  <h3>圖例 / 說明</h3>
-  <ul>
-    <li><b style="color:var(--ok)">✅ 符合預算</b>：一般情況雙人房 ≤ NT$3,000。<b style="color:var(--tight)">⚠️ 旺季可能略超</b>：影展/賞楓/週末可能超過一點。<b style="color:var(--over)">❌ 通常超過</b>：評價好但多半破預算,列出供參考。</li>
-    <li>「<b>照片・地圖</b>」按鈕會開啟 Google 地圖,可看該旅店真實照片、街景與評論(需連網)。「<b>即時房價</b>」會開啟 Booking.com 並帶入該城市的日期、2 人。</li>
-    <li>評分與評論數來自 <b>Google</b>;標「部落客推薦」者為台灣旅遊部落客／訂房網實住推薦,Google 分數請以按鈕確認。參考房價多為一般／淡季價,<b>非即時價</b>。</li>
-    <li><b>釜山</b>整體比首爾便宜。<b>10/6–10/15 為釜山影展 BIFF</b>(主場海雲台/Centum City),你的釜山日期在期間內,海雲台會較貴、較快滿房。<b>首爾 10 月為賞楓旺季</b>,弘大／明洞／聖水部分正規飯店仍可能超預算，看到喜歡的儘早訂。</li>
-    <li><b style="color:var(--saved)">⭐ 我的收藏</b>：你 Google 地圖收藏清單「釜山住宿名冊 · 溫亮」的住宿，已依城市放到各頁最上方（釜山／首爾）；其中屬青年旅館的收藏（OYO 明洞、ARA125 及其地址）已依你的新條件移除。</li>
-  </ul>
-  <div class="gen">離線檔 · 資料整理於 2026-07-08（預算 NT$3,000・雙人房雙人床版，已排除青年旅館）· 房價僅供參考，實際以訂房平台為準</div>
+<b>關於地圖</b>：本頁使用 Leaflet ＋ OpenStreetMap（CartoDB 圖磚）繪製真實座標地圖，<b>不需要 API 金鑰</b>。Google Maps JavaScript API 與 Apple MapKit JS 都需要註冊付費金鑰才能嵌入，所以改用「地圖顯示用 OSM、導航用深層連結」——點編號圖釘或每日按鈕會直接開啟 Google Maps／Apple 地圖／Naver Map 的實際路線。<b>地圖需連網才會載入。</b><br>
+<b>資料來源</b>：釜山PASS 分區與價格參考 JieJourneys 釜山Pass地圖、KKday／Funliday 攻略；海岸列車自由乘車券與膠囊列車開賣規則參考 Funliday／Liz 藍線公園攻略；CI261 時刻參考 Airpaz（金浦 13:55 → 松山 15:35）。<br>
+<b>待確認</b>：LJ762 在公開航班資料庫查詢結果不一致（部分顯示為峴港航線），<b>請以電子機票為準</b>。膠囊列車票價與開賣規則請於出發前再確認官網。地圖座標為概略定位，導航請以 Naver Map 為準。<br>
+更新日：2026/08/25。
 </footer>
 
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-/* ---------------- Area config (color / name / vibe) ---------------- */
-const AREAS = {
-  // Seoul
-  hongdae:   {cn:"弘大",   en:"Hongdae",    color:"var(--hongdae)",   vibe:"交通最強、好逛好吃，自由行首選"},
-  seongsu:   {cn:"聖水洞", en:"Seongsu",    color:"var(--seongsu)",   vibe:"文青潮流區，平價選擇少、房價偏高"},
-  myeongdong:{cn:"明洞",   en:"Myeongdong", color:"var(--myeongdong)",vibe:"購物天堂、中文最友善，飯店偏貴"},
-  dongdaemun:{cn:"東大門", en:"Dongdaemun", color:"var(--dongdaemun)",vibe:"24 小時購物，平價商務飯店最多"},
-  sinchon:   {cn:"新村",   en:"Sinchon",    color:"var(--sinchon)",   vibe:"離弘大一站、更安靜、房價更低"},
-  // Busan
-  haeundae:  {cn:"海雲台", en:"Haeundae",   color:"var(--haeundae)",  vibe:"釜山第一海灘、機能最好，影展期間較貴"},
-  songdo:    {cn:"松島",   en:"Songdo",     color:"var(--songdo)",    vibe:"安靜海灘、纜車，平價好選擇較少"},
-  gwangalli: {cn:"廣安里", en:"Gwangalli",  color:"var(--gwangalli)", vibe:"廣安大橋夜景、情侶最愛，海景平價多"},
-  busan_saved:{cn:"⭐ 我的收藏", en:"My List · 溫亮", color:"var(--saved)", vibe:"你 Google 地圖收藏的釜山住宿"},
-  seoul_saved:{cn:"⭐ 我的收藏", en:"My List · 溫亮", color:"var(--saved)", vibe:"你 Google 地圖收藏的首爾住宿"}
-};
-
-/* ---------------- City config ---------------- */
-const CITY = {
-  seoul: {
-    label:"首爾", en:"Seoul", order_no:"② 第 2 站", dates:"10/14 → 10/18",
-    facts:[["入住","10/14 → 退房 10/18"],["共","4 晚"],["2 人","雙人床"],["預算","≤ NT$3,000/晚"],["","≈ 138,000 韓元/晚"]],
-    title:"首爾住宿", subtitle:"弘大 · 聖水洞 · 明洞 · 東大門 · 新村　5 區高 CP 精選",
-    notice:'<b>10 月是首爾賞楓旺季，房價偏高。</b> 每晚預算約 <b>NT$3,000</b>，弘大／明洞／聖水的部分正規飯店＋民宿的獨立雙人房訂得到，最熱門的設計飯店旺季仍可能超過。<b>以下皆為雙人房・雙人床，已排除青年旅館／背包客床位。</b>下方「參考房價」是一般／淡季價，<b>不是 10/14–10/18 即時價</b>，請用各卡片「即時房價」確認。',
-    checkin:"2026-10-14", checkout:"2026-10-18",
-    order:["seoul_saved","hongdae","seongsu","myeongdong","dongdaemun","sinchon"]
-  },
-  busan: {
-    label:"釜山", en:"Busan", order_no:"① 第 1 站", dates:"10/10 → 10/14",
-    facts:[["入住","10/10 → 退房 10/14"],["共","4 晚"],["2 人","雙人床"],["預算","≤ NT$3,000/晚"],["","釜山比首爾便宜"]],
-    title:"釜山住宿", subtitle:"海雲台 · 松島 · 廣安里　3 區海景高 CP 精選",
-    notice:'<b>10/6–10/15 是釜山影展（BIFF），你的 10/10–14 正好在影展期間。</b> 主場在海雲台/Centum City → 海雲台房價會更高、更快滿房，建議早訂，或考慮<b>廣安里／松島</b>。釜山整體比首爾便宜。<b>以下皆為雙人房・雙人床，已排除青年旅館／背包客床位。</b>下方參考房價為一般價，<b>非即時價</b>，請用「即時房價」確認。',
-    checkin:"2026-10-10", checkout:"2026-10-14",
-    order:["busan_saved","haeundae","songdo","gwangalli"]
-  }
-};
-
-/* ---------------- Hotels ---------------- */
-/* r: Google rating|null (null => blog).  b: ok/tight/over. */
-const HOTELS = [
-  /* ===== SEOUL ===== */
-  {city:"seoul",a:"hongdae",cn:"Seoul Mansion 首爾大廈民宿",en:"Seoul Mansion GH",r:4.1,n:82,price:"~NT$1,800–2,400",b:"ok",t:"弘大站步行 5 分",hl:"高 CP、洗烘衣／廚房齊全，廁所小、無電梯",pid:"ChIJeXRHmOmYfDURJp4OXexhqHk"},
-  {city:"seoul",a:"hongdae",cn:"Baroato 2nd 巴羅阿托 2 館",en:"Baroato 2nd",r:4.5,n:99,price:"~NT$2,000–2,600",b:"ok",t:"弘大站附近",hl:"有中文櫃檯、房小巧乾淨（閣樓床、隔音普通）",pid:"ChIJUyDJdkSZfDURIymN0r49260"},
-  {city:"seoul",a:"hongdae",cn:"SH Seoul Guesthouse",en:"SH Seoul Guesthouse",r:4.3,n:46,price:"~NT$1,800–2,400",b:"ok",t:"弘大站步行",hl:"弘大廣場旁、房間大能攤行李、自助式",pid:"ChIJZwAyhsKYfDURAKOt5AAfWa0"},
-  {city:"seoul",a:"hongdae",cn:"Daol Guesthouse",en:"Daol Guesthouse",r:4.2,n:51,price:"~NT$1,800–2,400",b:"ok",t:"弘大站 3 號出口（電梯）3 分",hl:"超乾淨、全自助 QR 入住",pid:"ChIJqVFrRwmZfDURYFz550k4u8k"},
-  {city:"seoul",a:"hongdae",cn:"Holiday Inn Express 弘大",en:"Holiday Inn Express Hongdae",r:4.4,n:2049,price:"10 月常 NT$3,500+",b:"over",t:"弘大站 5 號出口共構",hl:"與 AK Plaza 共構、含免費早餐，正規飯店首選但旺季超預算",pid:"ChIJLw4y4-mYfDURxDEN4Ckb4wo"},
-
-  {city:"seoul",a:"seongsu",cn:"Seoul Forest Stay 首爾林 Stay",en:"Seoul Forest Stay",r:4.3,n:89,price:"~NT$1,800–2,400",b:"ok",t:"纛島站附近",hl:"Blue Bottle／Olive Young 旁、備品超齊，無電梯",pid:"ChIJ77KVUTalfDURbl2xX_02Gqk"},
-  {city:"seoul",a:"seongsu",cn:"H Avenue 建大聖水",en:"H Avenue Kondae Seongsu",r:4.0,n:271,price:"~NT$1,800–2,500",b:"ok",t:"近建大商圈",hl:"平價商務，注意 check-in 晚（11pm）、服務較陽春",pid:"ChIJ0dD5e8GkfDURLCqkhhLmT7c"},
-  {city:"seoul",a:"seongsu",cn:"Hotel Boutique 9 陵洞",en:"Hotel Boutique 9 Neungdong",r:4.1,n:160,price:"~NT$1,800–2,500",b:"ok",t:"近地鐵站",hl:"房大乾淨、可看樂天塔夜景，清潔頻率較低",pid:"ChIJz7sM1dSkfDURBBSpQ-RtuU0"},
-  {city:"seoul",a:"seongsu",cn:"건대 Lastay 建大",en:"Kondae Lastay",r:4.4,n:5,price:"~NT$1,800–2,300",b:"ok",t:"近建大",hl:"小而乾淨、CP 高（評論數少，建議看實照）",pid:"ChIJbRuTn6GlfDURXHwpI626sTc"},
-  {city:"seoul",a:"seongsu",cn:"Anyak Hotel & Spa 聖水建大",en:"Anyak Hotel & Spa",r:4.2,n:6,price:"~NT$2,000–2,500",b:"ok",t:"近聖水／建大",hl:"有 Spa、房乾淨，隔音較弱（評論數少）",pid:"ChIJ1TarbgClfDURfqxHfnKO_4o"},
-  {city:"seoul",a:"seongsu",cn:"HOTEL POCO 聖水",en:"Hotel Poco",r:4.4,n:407,price:"~NT$3,800",b:"over",t:"聖水站 3 號出口 2 分",hl:"潮流設計、聖水核心唯一話題飯店，超預算",pid:"ChIJrZUT5EalfDURXk9bliI6GAQ"},
-
-  {city:"seoul",a:"myeongdong",cn:"Ekonomy 明洞尊貴經濟",en:"Ekonomy Hotel Myeongdong Premier",r:4.0,n:225,price:"淡季 NT$1,800／旺季 NT$2,600 起",b:"ok",t:"明洞站步行 5 分",hl:"純睡覺型平價商務，旺季可能略超",pid:"ChIJfTY98PCifDURqs3Bxmc2Hpg"},
-  {city:"seoul",a:"myeongdong",cn:"Winwin Guesthouse",en:"Winwin Guesthouse",r:null,n:null,price:"雙人房最低一千多",b:"ok",t:"地鐵步行 1 分",hl:"對面機場巴士站、超搶手要早訂",pid:null},
-  {city:"seoul",a:"myeongdong",cn:"Philstay Myeongdong Station",en:"Philstay Myeongdong Station",r:null,n:null,price:"~NT$1,500–2,200",b:"ok",t:"明洞站步行 1 分",hl:"樓下就是明洞商圈，房小但地點價格讚",pid:null},
-  {city:"seoul",a:"myeongdong",cn:"Nine Tree by Parnas 明洞 I",en:"Nine Tree by Parnas Myeongdong I",r:4.3,n:1194,price:"10 月常 NT$3,500+",b:"over",t:"明洞站",hl:"評價好的正規飯店，旺季超預算",pid:"ChIJI3t3efCifDUR_Uu6nsEwcWY"},
-
-  {city:"seoul",a:"dongdaemun",cn:"Toyoko Inn 東大門 2 號店",en:"Toyoko Inn Dongdaemun No.2",r:4.3,n:754,price:"~NT$2,000–2,800",b:"ok",t:"東大門歷史文化公園站正上方",hl:"含早餐、日系連鎖乾淨，房間偏小",pid:"ChIJqcjrxwmjfDUR7Dh6ZbJfGbM"},
-  {city:"seoul",a:"dongdaemun",cn:"HOTEL DM 東大門",en:"Hotel DM Dongdaemun",r:4.3,n:205,price:"~NT$1,800–2,500",b:"ok",t:"近東廟站",hl:"有中文／英文櫃檯、台灣部落客實住推薦",pid:"ChIJ-UXvKXujfDUR9PbxXzRNmSg"},
-  {city:"seoul",a:"dongdaemun",cn:"Recenz Hotel",en:"Recenz Hotel",r:4.0,n:897,price:"~NT$1,800–2,500",b:"ok",t:"東大門區、近地鐵",hl:"樓下超市／星巴克／Olive Young、含早餐",pid:"ChIJGfx6nsqkfDURbe4kB1Agv7A"},
-  {city:"seoul",a:"dongdaemun",cn:"Toyoko Inn 東大門 1 號店",en:"Toyoko Inn Dongdaemun No.1",r:4.1,n:923,price:"~NT$2,000–2,800",b:"ok",t:"近 DDP＋機場巴士",hl:"含早餐，適合獨旅／血拼",pid:"ChIJ88_BXj2jfDURknG3i83DroY"},
-  {city:"seoul",a:"dongdaemun",cn:"Mangrove Dongdaemun",en:"Mangrove Dongdaemun",r:4.2,n:109,price:"~NT$2,000–2,600",b:"ok",t:"東大門站步行 2 分",hl:"設計型旅宿、頂樓景觀、免費洗衣",pid:"ChIJO_bLp72jfDURhWh1dVzEKUc"},
-
-  {city:"seoul",a:"sinchon",cn:"Ever8 新村公寓式酒店",en:"Ever8 Serviced Residence",r:null,n:null,price:"~NT$2,200–2,800",b:"ok",t:"近梨花女子大學",hl:"房內小廚房＋洗衣機、有中文服務，適合想要空間的兩人",pid:null},
-
-  /* ===== BUSAN ===== */
-  {city:"busan",a:"haeundae",cn:"海雲台 MS 飯店",en:"MS Hotel Haeundae",r:4.2,n:525,price:"海景 ~NT$2,000–2,600",b:"ok",t:"海雲台海邊第一排、門口公車站",hl:"8000+ 好評、走出門就是沙灘與夜市、海景房 CP 高",pid:"ChIJ17vASFyNaDURXXAc5t8QXiY"},
-  {city:"busan",a:"haeundae",cn:"Toyoko Inn 釜山海雲台 2",en:"Toyoko Inn Busan Haeundae 2",r:4.2,n:2174,price:"~NT$2,000–2,800",b:"ok",t:"近海雲台海邊、看日出方便",hl:"日系連鎖、含早餐、投幣洗衣，房間偏小",pid:"ChIJ_0E5KRKNaDURKSPthqrI1-I"},
-  {city:"busan",a:"haeundae",cn:"Sunset Business Hotel",en:"Sunset Business Hotel",r:4.1,n:758,price:"~NT$1,800–2,500",b:"ok",t:"近海雲台美食街＋公車站",hl:"房間寬敞乾淨、早餐好吃，部分插座老舊",pid:"ChIJEzYUTVyNaDURqSAK7TEUcWc"},
-  {city:"busan",a:"haeundae",cn:"Baymond Hotel",en:"Baymond Hotel",r:4.4,n:308,price:"~NT$2,000–2,800",b:"ok",t:"近海雲台海邊＋夜生活",hl:"頂樓泳池／三溫暖、房大、雙洗手台，超值",pid:"ChIJdfPs_5aNaDURwGTwqO0S7fY"},
-  {city:"busan",a:"haeundae",cn:"UH Suite The Haeundae",en:"UH Suite The Haeundae",r:4.2,n:273,price:"海景 ~NT$2,500–3,500",b:"tight",t:"過馬路到沙灘＋水族館、近夜市",hl:"大玻璃窗海景、部分房有情侶泡湯池、免費洗衣，單電梯要等",pid:"ChIJOXLPww6NaDURXziF7dhCuWs"},
-  {city:"busan",a:"haeundae",cn:"L7 海雲台 by Lotte",en:"L7 Haeundae by Lotte",r:null,n:null,price:"~NT$4,000+（訂房網 9.1）",b:"over",t:"近海雲台海邊",hl:"2024 新開、頂樓露天泳池、機能好，超預算的話當升級選項",pid:null},
-
-  {city:"busan",a:"songdo",cn:"Grab The Ocean 松島",en:"Grab The Ocean Songdo",r:4.3,n:975,price:"~NT$2,200–3,200",b:"tight",t:"松島海邊第一排、樓下星巴克＋CU",hl:"4 星、海景房、含早餐；尖峰等電梯久、團客多",pid:"ChIJfxahncfpaDURLRCQdXDDbxk"},
-  {city:"busan",a:"songdo",cn:"Hotel The May",en:"Hotel The May",r:4.4,n:12,price:"~NT$1,500–2,300",b:"ok",t:"近松島海邊",hl:"乾淨、地點好、平價（評論數少，建議看實照）；床偏硬",pid:"ChIJ5avFcEXoaDURYeA5IogEc1Q"},
-  {city:"busan",a:"songdo",cn:"Brown-Dot 松島海邊",en:"Brown-Dot Songdo Beach",r:3.8,n:135,price:"~NT$1,200–2,000",b:"ok",t:"松島海邊、離市區景點較遠",hl:"超平價、海景豪華房、每日打掃；部分房有菸味",pid:"ChIJUVZ2bUXoaDUR9KgFXJYpvCE"},
-  {city:"busan",a:"songdo",cn:"Songdo Beach Tourist Hotel",en:"Songdo Beach Tourist Hotel",r:3.6,n:54,price:"~NT$1,500–2,200",b:"ok",t:"松島海邊、近纜車／甘川／札嘎其",hl:"老但乾淨、位置中心、房大海景；設施較舊",pid:"ChIJ77sYXUToaDURmklYETIdDHc"},
-  {city:"busan",a:"songdo",cn:"Fairfield by Marriott 松島",en:"Fairfield by Marriott Songdo",r:4.4,n:876,price:"~NT$3,000–4,500",b:"over",t:"松島海邊第一排",hl:"Marriott 品牌、海景＋日出、含早餐／投幣洗衣／GS25，通常超預算",pid:"ChIJGRQ18nbpaDURQaqWuETakA4"},
-  {city:"busan",a:"songdo",cn:"Wyndham Grand Busan 梨珍",en:"Wyndham Grand Busan Ijin",r:4.6,n:325,price:"~NT$4,000+",b:"over",t:"近松島／梨珍、溫泉三溫暖",hl:"奢華、泡溫泉看海灣，超預算的話當升級選項",pid:"ChIJMzDY1XHpaDURMKD9x-ehPzk"},
-
-  {city:"busan",a:"gwangalli",cn:"廣安里 1 號飯店",en:"Gwanganli Hotel 1",r:4.7,n:2266,price:"from ~NT$1,000",b:"ok",t:"金蓮山站 1 號出口 8 分、海邊第一排",hl:"純白大理石設計、房內看廣安大橋＋週六無人機秀、附早餐與零食袋；房小、含膠囊房型（想要雙人床選「海景雙人房」）",pid:"ChIJ5S6_tyjtaDUR2A5jt3nQLCo"},
-  {city:"busan",a:"gwangalli",cn:"Gray 193 Hotel",en:"Gwangalli Gray 193 Hotel",r:4.3,n:112,price:"海景雙人房 ~NT$2,400–2,600",b:"ok",t:"海邊第一排（離地鐵較遠）",hl:"簡約乾淨、大橋海景、櫃檯親切、可早入住；部分房無窗",pid:"ChIJXaKLAWTtaDURC2SW6EZ5d4w"},
-  {city:"busan",a:"gwangalli",cn:"Homers Hotel",en:"Homers Hotel",r:4.1,n:783,price:"~NT$2,000–2,800",b:"ok",t:"廣安里海邊第一排",hl:"房大海景、正對廣安大橋、大廳可賞景；電梯少要等",pid:"ChIJq0wMNdTsaDURoW253EQKtbk"},
-  {city:"busan",a:"gwangalli",cn:"H Avenue 廣安里",en:"H Avenue Hotel Gwangalli",r:4.2,n:310,price:"~NT$1,800–2,500",b:"ok",t:"近海邊、看無人機秀方便",hl:"海景房、陽台大；房間偏小、榻榻米床",pid:"ChIJwxlIijHtaDURqfoUnJxFgyc"},
-  {city:"busan",a:"gwangalli",cn:"El Momento 廣安公寓",en:"El Momento Gwangan",r:3.8,n:41,price:"海景雙人房 ~NT$2,000+",b:"ok",t:"金蓮山站最近、步行到沙灘",hl:"公寓式：陽台＋小廚房＋洗衣機、正對大橋看煙火；浴室小",pid:"ChIJjec8W4rtaDURsGBj3XQoKHI"},
-  {city:"busan",a:"gwangalli",cn:"Kent Hotel 廣安里 by Kensington",en:"Kent Hotel Gwangalli",r:4.1,n:747,price:"~NT$2,700–4,000",b:"tight",t:"海邊第一排、透明電梯",hl:"含早餐、機能好、過馬路到沙灘；旺季偏貴",pid:"ChIJh5B-vy7taDURaIjEejC5nD0"},
-
-  /* ===== ⭐ SAVED · 來自你的 Google 地圖收藏「釜山住宿名冊 · 溫亮」 ===== */
-  {city:"busan",a:"busan_saved",saved:true,cn:"Haeundae Youngmu Parade 海雲台",en:"Haeundae Youngmu Parade",r:4.2,n:345,price:"~NT$2,200–2,600（曾 ₩92,000）",b:"ok",t:"海雲台 · 離沙灘 100m、海雲台站 6 號出口約 10 分",hl:"海景房大又乾淨、含早餐、有 LG Styler；入口在大樓內較難找",pid:"ChIJabOH6UuNaDURHzhjNt_OgN4"},
-  {city:"busan",a:"busan_saved",saved:true,cn:"Busan Business Hotel",en:"Busan Business Hotel",r:4.2,n:1367,price:"~NT$2,754（Google 估）",b:"ok",t:"西面 · Busanjin、可穿樂天百貨避雨",hl:"4 星、乾淨、櫃檯英文好、可購早餐券、有行李寄放；房間較樸素、部分時段限制冷氣",pid:"ChIJMQzXFHHraDURpSACiLg_S5Q"},
-  {city:"busan",a:"busan_saved",saved:true,cn:"Urbanstay 西面",en:"Urbanstay Seomyeon",r:4.1,n:340,price:"~NT$2,151（Google 估）",b:"ok",t:"西面站 12 號出口（有電梯）3 分",hl:"公寓式：廚房＋洗衣烘乾、自助入住、樓下 24 小時超商；臨路低樓層較吵（你清單存了兩筆 Urbanstay 西面，應為同一館）",pid:"ChIJZbOp8mjraDURI9RHwjwYNZw"},
-  {city:"busan",a:"busan_saved",saved:true,cn:"Fairfield by Marriott 松島",en:"Fairfield by Marriott Songdo",r:4.4,n:876,price:"~NT$4,860（Google 估）",b:"over",t:"松島海邊第一排",hl:"Marriott、海景＋日出、含早餐；通常超預算（也在下方「松島」推薦區）",pid:"ChIJGRQ18nbpaDURQaqWuETakA4"},
-
-  {city:"seoul",a:"seoul_saved",saved:true,cn:"HotelArrive Seoulful",en:"HotelArrive Seoulful",r:5.0,n:10,price:"查即時（設計旅店，約 NT$2,500–3,500）",b:"tight",t:"鐘路 · Jong-ro（近明洞、現代東大門）",hl:"2024 新開、乾淨有設計感、櫃檯英文好、近地鐵與咖啡；評論少但都好評",pid:"ChIJW0F3LSejfDURIs8slZ70eGs"},
-  {city:"seoul",a:"seoul_saved",saved:true,cn:"Ara Hotel",en:"Ara Hotel",r:4.2,n:52,price:"~NT$1,995（約 ₩80,000）",b:"ok",t:"鐘路 · Nangye-ro（近東大門／新堂）",hl:"房乾淨、每日打掃、近公車站；窗小採光差、隔音普通",pid:"ChIJ7VBdjUmjfDURpjjyv_98pkY"},
-  {city:"seoul",a:"seoul_saved",saved:true,cn:"乙支路 Co-op Residence",en:"Uljiro Co-Op Residence",r:4.1,n:915,price:"~NT$2,554（Google 估）",b:"ok",t:"乙支路 · 6001 機場巴士門口停、近多線地鐵",hl:"地點超好、周邊商場多、機場巴士就在門口；中央空調不可調溫、浴室小",pid:"ChIJpXLTCSKjfDURI6ReZQcN5Ic"},
-  {city:"seoul",a:"seoul_saved",saved:true,cn:"Sollago 明洞 Hotel & Residence",en:"Sollago Myeongdong Hotel & Residence",r:4.2,n:448,price:"~NT$4,082（顯示較平常便宜 24%）",b:"over",t:"明洞 · 忠武路、機場巴士上下車點",hl:"房新且較大、地點佳、樓下 Pascucci 咖啡；通常超預算、被單約 3 天換一次",pid:"ChIJk9YKD-OifDURfz34LOCmH7Y"},
-];
-
-/* ---------------- Render ---------------- */
-const mapUrl=h=> h.pid
-  ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.en)}&query_place_id=${h.pid}`
-  : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.cn+" "+(h.city==="busan"?"釜山":"首爾"))}`;
-const bookUrl=h=>{
-  const c=CITY[h.city];
-  return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.en+" "+c.en)}&checkin=${c.checkin}&checkout=${c.checkout}&group_adults=2&no_rooms=1&group_children=0`;
-};
-const bMap={ok:"符合預算",tight:"旺季略超",over:"通常超過"};
-
-let curCity="busan", curArea="all", onlyFit=false;
-
-/* city switcher */
-const csEl=document.getElementById("citySwitch");
-["busan","seoul"].forEach(key=>{
-  const c=CITY[key];
-  const el=document.createElement("button");
-  el.className="city-tab";el.dataset.city=key;
-  el.innerHTML=`<span class="ct-order">${c.order_no}</span><span class="ct-name">${c.label} <span style="font-weight:400;font-size:12px;opacity:.7">${c.en}</span></span><span class="ct-dates">${c.dates}</span>`;
-  el.onclick=()=>{curCity=key;curArea="all";render();window.scrollTo({top:0,behavior:"smooth"});};
-  csEl.appendChild(el);
-});
-
-document.getElementById("onlyFit").addEventListener("change",e=>{onlyFit=e.target.checked;render();});
-
-function card(h){
-  let rating;
-  if(h.addr){ rating = `<span class="blogtag" style="color:#8a6a1e;background:#f6edd6">📍 收藏地址</span>`; }
-  else if(h.r!=null){ rating = `<span class="rating"><span class="star">★</span> ${h.r.toFixed(1)} <span class="cnt">· ${h.n} 則</span></span>`; }
-  else { rating = `<span class="blogtag">部落客推薦</span>`; }
-  const badge = h.addr ? `<span class="badge" style="color:#8a6a1e;background:#f6edd6">收藏</span>` : `<span class="badge ${h.b}">${bMap[h.b]}</span>`;
-  const star = h.saved ? `<span title="你的收藏" style="color:var(--saved);margin-right:4px">⭐</span>` : "";
-  const priceHtml = h.addr ? "" : `<span class="price"><span class="lbl">參考房價 · 非即時</span>${h.price}</span>`;
-  const actions = h.addr
-    ? `<a class="btn btn-photo" href="${mapUrl(h)}" target="_blank" rel="noopener" style="flex:1">📷 在地圖查看此地址</a>`
-    : `<a class="btn btn-photo" href="${mapUrl(h)}" target="_blank" rel="noopener">📷 照片・地圖</a>
-        <a class="btn btn-book" href="${bookUrl(h)}" target="_blank" rel="noopener">🏨 即時房價</a>`;
-  return `<article class="card" style="--accent:${AREAS[h.a].color}">
-    <div class="card-body">
-      <div class="name-row">
-        <div><div class="cn">${star}${h.cn}</div><div class="en">${h.en}</div></div>
-        ${badge}
-      </div>
-      <div class="meta">
-        ${rating}
-        ${priceHtml}
-      </div>
-      <div class="transit"><span class="m">◉</span><span>${h.t}</span></div>
-      <div class="hl">${h.hl}</div>
-      <div class="actions">
-        ${actions}
-      </div>
-    </div>
-  </article>`;
-}
-
-function render(){
-  const c=CITY[curCity];
-  // city tabs
-  document.querySelectorAll(".city-tab").forEach(t=>t.dataset.active=(t.dataset.city===curCity));
-  // hero
-  document.getElementById("route").innerHTML = c.order.map(k=>`<span style="background:${AREAS[k].color}"></span>`).join("");
-  document.getElementById("heroTitle").innerHTML = `${c.title}<span class="sub">${c.subtitle}</span>`;
-  document.getElementById("heroFacts").innerHTML = c.facts.map(f=>`<span class="chip">${f[0]?`<b>${f[0]}</b> `:""}${f[1]}</span>`).join("");
-  document.getElementById("noticeText").innerHTML = c.notice;
-  // pills
-  const pillsEl=document.getElementById("pills");
-  pillsEl.innerHTML="";
-  const mkPill=(key,label,color)=>{
-    const el=document.createElement("button");
-    el.className="pill";el.dataset.area=key;el.dataset.active=(key===curArea);
-    el.innerHTML=(color?`<span class="dot" style="background:${color}"></span>`:"")+label;
-    el.onclick=()=>{curArea=key;render();};
-    return el;
+(function(){
+  var DAYS = {
+    d08:{c:'b',stops:[
+      {n:1,t:'金海國際機場',s:'06:15 抵達 · 領行李換錢',ll:[35.1795,128.9382],q:'김해국제공항'},
+      {n:2,t:'西面（住宿・寄行李）',s:'08:30 · 晚上逛西面地下街',ll:[35.1578,129.0594],q:'서면역'},
+      {n:3,t:'廣安里海水浴場',s:'10:15 白天的廣安大橋',ll:[35.1531,129.1187],q:'광안리해수욕장'},
+      {n:4,t:'豚笑 廣安里店 🍽',s:'10:50 已訂位（座標為概略位置，請用 Naver 核對）',ll:[35.1537,129.1180],q:'광안리 돈쇼'},
+      {n:5,t:'廣安里小店街 🛍',s:'12:10 海岸後方巷弄的雜貨・選物・周邊小店',ll:[35.1545,129.1165],q:'광안리 카페거리'},
+      {n:6,t:'冬柏島 · APEC 世峰樓',s:'13:50 環島海岸步道約 1 小時',ll:[35.1533,129.1497],q:'동백섬'},
+      {n:7,t:'The Bay 101 · 海雲台',s:'15:00 Marine City 海景',ll:[35.1547,129.1444],q:'더베이101'}
+    ]},
+    d09:{c:'b',stops:[
+      {n:1,t:'Skyline Luge 釜山',s:'10:00 ★ PASS 啟用點',ll:[35.2029,129.2287],q:'스카이라인 루지 부산'},
+      {n:2,t:'松亭站（午餐・海岸列車上車）',s:'12:00 午餐 → 13:15 上車',ll:[35.1786,129.1996],q:'송정해수욕장'},
+      {n:3,t:'尾浦站（膠囊列車搭乘處）',s:'13:50 抵達 → 14:00 天空膠囊列車',ll:[35.1595,129.1719],q:'미포정거장'},
+      {n:4,t:'青沙浦 · 月光石觀景台',s:'14:35 膠囊列車終點 · 玻璃觀景台',ll:[35.1568,129.1965],q:'청사포다릿돌전망대'},
+      {n:5,t:'miffy store BUSAN 🐰',s:'15:45 달맞이길62번길 3 · 10:00–20:00 · 釜山限定列車員 Miffy',ll:[35.1584,129.1740],q:'미피스토어 부산'},
+      {n:6,t:'Arte Museum 釜山（달맞이길 30）',s:'16:20 PASS · 與 Miffy 同一條街，步行可到',ll:[35.1568,129.1745],q:'아르떼뮤지엄 부산'},
+      {n:7,t:'釜山鑽石灣遊艇',s:'19:00 PASS · 需預約 · 帶外套',ll:[35.1543,129.1265],q:'부산 다이아몬드베이'},
+      {n:8,t:'民樂水邊公園（晚餐）',s:'20:30 生魚片＋廣安大橋夜景',ll:[35.1553,129.1305],q:'민락수변공원'}
+    ]},
+    d10:{c:'p',stops:[
+      {n:1,t:'Spa Land · 新世界 Centum City',s:'09:00 汗蒸幕 → 11:30 購物半天',ll:[35.1691,129.1291],q:'스파랜드 센텀시티'},
+      {n:2,t:'樂天百貨 Centum 店',s:'比價順路，步行 5 分',ll:[35.1738,129.1288],q:'롯데백화점 센텀시티점'},
+      {n:3,t:'西面（退房）',s:'14:30',ll:[35.1578,129.0594],q:'서면역'},
+      {n:4,t:'南浦站（轉公車／叫車）',s:'15:30 → 松島',ll:[35.0975,129.0345],q:'남포역'},
+      {n:5,t:'松島海水浴場（住宿）',s:'16:00 Check-in',ll:[35.0776,129.0201],q:'송도해수욕장'},
+      {n:6,t:'松島龍宮雲橋',s:'16:40 PASS',ll:[35.0733,129.0139],q:'송도용궁구름다리'},
+      {n:7,t:'松島海上纜車（乘車站）',s:'17:20 PASS ★ 最後一個行程',ll:[35.0757,129.0179],q:'부산에어크루즈'},
+      {n:8,t:'岩南公園站（纜車對岸）',s:'日落觀景台與咖啡廳',ll:[35.0715,129.0087],q:'암남공원'}
+    ]},
+    d11:{c:'b',stops:[
+      {n:1,t:'松島（退房）',s:'08:30 叫車去釜山站',ll:[35.0776,129.0201],q:'송도해수욕장'},
+      {n:2,t:'釜山站（寄行李 → 14:00 KTX）',s:'09:00 寄行李 / 13:15 取行李',ll:[35.1152,129.0403],q:'부산역'},
+      {n:3,t:'甘川洞文化村',s:'09:45 早上人少最好拍',ll:[35.0975,129.0106],q:'감천문화마을'},
+      {n:4,t:'동화 caricature 似顏繪 ✏️',s:'10:50 村內松鼠招牌 · 1 分鐘 ₩7,000 起',ll:[35.0978,129.0110],q:'감천문화마을 캐리커처'},
+      {n:5,t:'札嘎其市場 · 南浦洞光復路',s:'11:30 午餐＋購物街',ll:[35.0966,129.0304],q:'자갈치시장'},
+      {n:6,t:'首爾站（16:40 抵達）',s:'轉 4 號線到明洞',ll:[37.5547,126.9707],q:'서울역'},
+      {n:7,t:'明洞（住宿 4 晚）',s:'17:20 Check-in ＋ 換錢',ll:[37.5609,126.9860],q:'명동역'},
+      {n:8,t:'N 首爾塔',s:'20:00 夜景',ll:[37.5512,126.9882],q:'N서울타워'}
+    ]},
+    d12:{c:'s',stops:[
+      {n:1,t:'景福宮',s:'09:30 · 10:00 守門將交接',ll:[37.5796,126.9770],q:'경복궁'},
+      {n:2,t:'三清洞',s:'咖啡廳與藝廊',ll:[37.5838,126.9812],q:'삼청동'},
+      {n:3,t:'北村韓屋村',s:'11:30 · 10:00–17:00 開放',ll:[37.5826,126.9850],q:'북촌한옥마을'},
+      {n:4,t:'仁寺洞',s:'14:30 傳統文創',ll:[37.5740,126.9860],q:'인사동'},
+      {n:5,t:'益善洞韓屋街',s:'窄巷咖啡廳',ll:[37.5730,126.9900],q:'익선동'},
+      {n:6,t:'廣藏市場',s:'17:30 綠豆煎餅・生牛肉（現金）',ll:[37.5701,126.9997],q:'광장시장'},
+      {n:7,t:'清溪川',s:'19:30 夜散步回明洞',ll:[37.5690,126.9780],q:'청계천'}
+    ]},
+    d13:{c:'p',stops:[
+      {n:1,t:'聖水洞咖啡街 · 選物店',s:'10:00 🛍 購物日起點',ll:[37.5445,127.0557],q:'성수동 카페거리'},
+      {n:2,t:'LCDC SEOUL',s:'一層一品牌的複合大樓',ll:[37.5433,127.0576],q:'LCDC SEOUL'},
+      {n:3,t:'大林倉庫 대림창고',s:'紅磚倉庫咖啡廳＋展覽',ll:[37.5417,127.0552],q:'대림창고'},
+      {n:4,t:'聖水聯邦 성수연방',s:'文具・生活雜貨',ll:[37.5410,127.0538],q:'성수연방'},
+      {n:5,t:'首爾林 Seoul Forest',s:'14:45 銀杏散步休息',ll:[37.5444,127.0374],q:'서울숲'},
+      {n:6,t:'Common Ground',s:'16:00 🛍 貨櫃商場 200＋ 品牌',ll:[37.5410,127.0668],q:'커먼그라운드'},
+      {n:7,t:'東大門 · DDP',s:'17:45 🛍 批發樓層 20:00–05:00',ll:[37.5665,127.0092],q:'동대문디자인플라자'},
+      {n:8,t:'明洞（藥妝與退稅收尾）',s:'20:45',ll:[37.5609,126.9860],q:'명동'}
+    ]},
+    d14:{c:'s',stops:[
+      {n:1,t:'明洞（08:00 出發）',s:'方案A 一日遊集合點',ll:[37.5609,126.9860],q:'명동역'},
+      {n:2,t:'小法國村（方案A）',s:'加平 · 拍照點',ll:[37.7813,127.5153],q:'쁘띠프랑스'},
+      {n:3,t:'南怡島（方案A）',s:'10 月中銀杏與水杉大道',ll:[37.7924,127.5257],q:'남이섬'},
+      {n:4,t:'昌德宮 ＋ 後苑（方案B）',s:'09:30 · 後苑需 6 天前預約',ll:[37.5794,126.9910],q:'창덕궁'},
+      {n:5,t:'樂天世界塔 SEOUL SKY（方案B）',s:'15:00 · 118 樓日落',ll:[37.5125,127.1025],q:'롯데월드타워'}
+    ]},
+    d15:{c:'s',stops:[
+      {n:1,t:'明洞（退房 09:30）',s:'南大門市場 06:00 就開',ll:[37.5609,126.9860],q:'명동역'},
+      {n:2,t:'首爾站 → AREX 一般列車',s:'10:15 出發',ll:[37.5547,126.9707],q:'서울역'},
+      {n:3,t:'金浦機場 · 國際線',s:'11:00 抵達 · CI261 13:55',ll:[37.5583,126.7906],q:'김포국제공항 국제선'}
+    ]}
   };
-  pillsEl.appendChild(mkPill("all","全部",null));
-  c.order.forEach(k=>pillsEl.appendChild(mkPill(k,AREAS[k].cn,AREAS[k].color)));
-  // main
-  const main=document.getElementById("main");
-  main.innerHTML="";
-  let shown=0;
-  const order = curArea==="all" ? c.order : [curArea];
-  order.forEach(ak=>{
-    let list=HOTELS.filter(h=>h.city===curCity && h.a===ak);
-    if(onlyFit) list=list.filter(h=>h.b==="ok");
-    if(!list.length) return;
-    shown+=list.length;
-    const A=AREAS[ak];
-    const sec=document.createElement("section");
-    sec.className="area";sec.style.setProperty("--accent",A.color);
-    sec.innerHTML=`<div class="area-head">
-        <span class="kr" style="color:${A.color}">${A.cn}</span>
-        <span class="en">${A.en}</span>
-        <span class="vibe">${A.vibe}</span>
-      </div>
-      <div class="grid">${list.map(card).join("")}</div>`;
-    main.appendChild(sec);
-  });
-  document.getElementById("empty").style.display = shown? "none":"block";
-  document.getElementById("count").textContent = shown+" 間";
-}
-render();
+
+  var COL = {b:'#1f6f6b', s:'#c8503c', p:'#7a4a8c'};
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var TILE = dark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  var ATTR = '&copy; OpenStreetMap &copy; CARTO';
+
+  function links(s){
+    var ll = s.ll[0]+','+s.ll[1];
+    return '<div class="pl">'
+      + '<a href="https://www.google.com/maps/search/?api=1&query='+ll+'" target="_blank" rel="noopener">Google</a>'
+      + '<a href="https://maps.apple.com/?ll='+ll+'&q='+encodeURIComponent(s.t)+'" target="_blank" rel="noopener">Apple</a>'
+      + '<a href="https://map.naver.com/p/search/'+encodeURIComponent(s.q)+'" target="_blank" rel="noopener">Naver</a>'
+      + '</div>';
+  }
+
+  function build(el){
+    var d = DAYS[el.getAttribute('data-day')];
+    if(!d || typeof L === 'undefined'){
+      el.className = 'lmap err';
+      el.textContent = '地圖需要連網才能載入。你仍可使用下方的 Google Maps／Apple 地圖／Naver 連結。';
+      return;
+    }
+    var map = L.map(el,{scrollWheelZoom:false});
+    L.tileLayer(TILE,{attribution:ATTR, maxZoom:19, subdomains:'abcd'}).addTo(map);
+    var pts = [];
+    d.stops.forEach(function(s){
+      pts.push(s.ll);
+      L.marker(s.ll,{icon:L.divIcon({
+        className:'', html:'<div class="pinmk '+d.c+'">'+s.n+'</div>',
+        iconSize:[26,26], iconAnchor:[13,13], popupAnchor:[0,-14]
+      })}).addTo(map).bindPopup('<b>'+s.n+'. '+s.t+'</b><br>'+s.s+links(s));
+    });
+    L.polyline(pts,{color:COL[d.c], weight:3, opacity:.75, dashArray:'7 7'}).addTo(map);
+    map.fitBounds(L.latLngBounds(pts).pad(0.18));
+    map.on('click',function(){ map.scrollWheelZoom.enable(); });
+    map.on('mouseout',function(){ map.scrollWheelZoom.disable(); });
+  }
+
+  var nodes = document.querySelectorAll('.lmap');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){ io.unobserve(e.target); build(e.target); }
+      });
+    },{rootMargin:'250px'});
+    nodes.forEach(function(n){ io.observe(n); });
+  } else {
+    nodes.forEach(build);
+  }
+})();
 </script>
 </body>
 </html>
