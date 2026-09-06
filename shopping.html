@@ -6,6 +6,7 @@
 <title>購物與逛街 · 釜山 × 首爾 8日行程</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="maps.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="shopping">
@@ -46,12 +47,12 @@
 <div class="row hi">
   <div class="f main"><span class="k">日期</span><span class="v">10/10（六）</span></div>
   <div class="f"><span class="k">地點</span><span class="v">Centum City ＋ 廣安里小店街</span></div>
-  <div class="f wide"><span class="k">備註</span><span class="v">上午 Spa Land 出來原地逛，免稅店 8F；傍晚 17:50 到廣安里巷弄逛小店，19:00 接無人機表演。</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v">下午 14:20 Spa Land 出來原地逛（免稅店 8F）；17:55 搭 2 號線到廣安里巷弄逛小店，19:00 接無人機表演。</span></div>
 </div>
 <div class="row hi">
   <div class="f main"><span class="k">日期</span><span class="v">10/11（日）</span></div>
-  <div class="f"><span class="k">地點</span><span class="v">南浦洞 光復路（已從行程移除）</span></div>
-  <div class="f wide"><span class="k">備註</span><span class="v">10/11 早上改成松島纜車＋甘川洞似顏繪，時間排不下。想逛就改到 10/15 回程前在明洞補。</span></div>
+  <div class="f"><span class="k">地點</span><span class="v">札嘎其市場 ＋ 南浦洞 光復路</span></div>
+  <div class="f wide"><span class="k">備註</span><span class="v"><b>回到行程裡了</b>——纜車移到 10/10 之後，10/11 上午多出約 2 小時。11:50 札嘎其午餐、12:40 逛光復路，<b>13:20 一定要回釜山站取行李</b>。</span></div>
 </div>
 <div class="row">
   <div class="f main"><span class="k">日期</span><span class="v">10/11、10/13 晚、10/15 早</span></div>
@@ -338,8 +339,8 @@ const DATA = [
  {n:"p.palette",c:"shop",t:"居家生活用品、玩偶小物（小熊鑰匙圈 6,000₩）"},
  {n:"hetras.",c:"shop",t:"香氛洗護集合店，建築設計超吸睛，適合買伴手禮"}
 ]},
-{city:"busan",d:"廣安里",kr:"광안리",note:"海岸後方的巷弄小店街，一家一家挖的類型，很容易失控。行程排 10/10 傍晚，逛完剛好接 19:00 的無人機表演。",items:[
- {n:"廣安里小店街",kr:"광안리",c:"shop",t:"雜貨、飾品、選物、玩具周邊、文具。傍晚去要留意部分小店 20:00–21:00 打烊",p:"10/10 17:50"},
+{city:"busan",d:"廣安里",kr:"광안리",note:"海岸後方的巷弄小店街，一家一家挖的類型，很容易失控。行程排 10/10 傍晚 17:55（從 Centum City 搭 2 號線 3 站過來），逛完剛好接 19:00 的無人機表演。",items:[
+ {n:"廣安里小店街",kr:"광안리",c:"shop",t:"雜貨、飾品、選物、玩具周邊、文具。傍晚去要留意部分小店 20:00–21:00 打烊",p:"10/10 17:55"},
  {n:"THINGS OF NOTE 廣安里店",c:"shop",t:"人氣文創店，配飾包包香氛，品類豐富"}
 ]},
 {city:"busan",d:"尾浦 · 海雲台",kr:"미포 · 해운대",note:"搭藍線公園（海岸列車／天空膠囊列車）前後可以順路，全部集中在달맞이길這條路上。",items:[
@@ -348,9 +349,9 @@ const DATA = [
  {n:"Baker's Box",c:"food",t:"尾浦站，推薦法棍"},
  {n:"Keveren House",c:"food",t:"海雲台甜品伴手禮咖啡廳，歐式風格小店；奶油捲奶油味超濃郁，口味多，很適合帶回去送人"}
 ]},
-{city:"busan",d:"南浦洞 · 光復路",kr:"남포동 · 광복로",note:"釜山最熱鬧的商店街，順路排在甘川洞之後（10/11 上午）。",items:[
- {n:"光復路商店街",kr:"광복로",c:"shop",t:"藥妝、服飾、鞋包，整條逛下來很好殺時間",p:"10/11 上午"},
- {n:"樂天百貨 光復店",c:"shop",t:"有空中花園觀景台，可以上去看港口與影島大橋",p:"10/11 上午"}
+{city:"busan",d:"南浦洞 · 光復路",kr:"남포동 · 광복로",note:"釜山最熱鬧的商店街，順路排在甘川洞之後（10/11 11:50–13:20，含札嘎其市場午餐）。",items:[
+ {n:"光復路商店街",kr:"광복로",c:"shop",t:"藥妝、服飾、鞋包，整條逛下來很好殺時間",p:"10/11 12:40"},
+ {n:"樂天百貨 光復店",c:"shop",t:"有空中花園觀景台，可以上去看港口與影島大橋",p:"10/11 12:40"}
 ]}
 ];
 const CAT={shop:"逛街",food:"吃喝",photo:"拍照"};
@@ -480,27 +481,29 @@ function openDistrict(gi){
 }
 function buildShopMap(id,city){
   var el=document.getElementById(id); if(!el) return;
-  var map=L.map(el,{scrollWheelZoom:false});
-  L.tileLayer(SMTILE,{attribution:SMATTR,maxZoom:19,subdomains:'abc'}).addTo(map);
-  var pts=[];
+  var stops=[];
   DATA.forEach(function(g,gi){
     if(g.city!==city) return;
     var ll=GEO[g.d]; if(!ll) return;
-    pts.push(ll);
-    L.marker(ll,{icon:L.divIcon({className:'',html:'<div class="pinmk '+(city==='busan'?'b':'s')+'">'+g.items.length+'</div>',iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-14]})})
-     .addTo(map)
-     .bindPopup('<b>'+g.d+'</b> <span style="opacity:.6">'+g.kr+'</span><br>'+g.items.length+' 家<div class="pl"><a href="#" class="mgo" data-gi="'+gi+'">展開這一區</a><a target="_blank" rel="noopener" href="https://map.naver.com/p/search/'+encodeURIComponent(g.kr)+'">Naver</a></div>');
+    stops.push({n:g.items.length,label:g.items.length,t:g.d,ll:ll,gi:gi,kr:g.kr});
   });
-  if(pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.22));
-  map.on('click',function(){map.scrollWheelZoom.enable();});
-  map.on('mouseout',function(){map.scrollWheelZoom.disable();});
-  map.on('popupopen',function(e){
-    var a=e.popup.getElement().querySelector('.mgo');
-    if(a) a.addEventListener('click',function(ev){ev.preventDefault();map.closePopup();openDistrict(parseInt(a.getAttribute('data-gi'),10));});
+  GMAP.render(el,{
+    color: city==='busan' ? '#1f6f6b' : '#c8503c',
+    stops: stops, route:false, pad:0.22,
+    popup:function(s){
+      return '<b>'+s.t+'</b> <span style="opacity:.6">'+s.kr+'</span><br>'+s.n+' 家'
+        +'<div class="pl"><a href="#" class="mgo" data-gi="'+s.gi+'">展開這一區</a>'
+        +'<a target="_blank" rel="noopener" href="https://map.naver.com/p/search/'+encodeURIComponent(s.kr)+'">Naver</a></div>';
+    },
+    onPopup:function(root,close){
+      if(!root) return;
+      var a=root.querySelector('.mgo');
+      if(a) a.addEventListener('click',function(ev){ev.preventDefault();close();openDistrict(parseInt(a.getAttribute('data-gi'),10));});
+    }
   });
 }
 function initShopMaps(){
-  if(typeof L==='undefined'){
+  if(typeof GMAP==='undefined'||typeof L==='undefined'){
     ['smap-seoul','smap-busan'].forEach(function(id){
       var el=document.getElementById(id);
       if(el){ el.className='lmap err'; el.textContent='地圖需要連網才能載入。下方清單與每筆的 Naver 連結不受影響。'; }
@@ -515,7 +518,7 @@ if(typeof L!=='undefined') initShopMaps(); else window.addEventListener('load',i
 })();
 </script>
 <nav class="pager"><a class="prev" href="pass.html"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-arrow"/></svg><span><span class="dir">上一頁</span><span class="nm">釜山PASS</span></span></a><a class="next" href="booking.html"><svg class="ic"><use href="#i-arrow"/></svg><span><span class="dir">下一頁</span><span class="nm">預約清單</span></span></a></nav>
-<footer>釜山 × 首爾 8 日行程 · 2026/10/08–10/15　|　資料以官網為準，出發前再確認一次營業時間與票務。</footer>
+<footer>釜山 × 首爾 8 日行程 · 2026/10/08–10/15　|　資料以官網為準，出發前再確認一次營業時間與票務。<br>地圖目前是<b>免金鑰的 Google 風格版</b>（OpenStreetMap 圖磚）。在 <code>maps.js</code> 最上面的 <code>GMAPS_KEY</code> 填入 Google Maps API 金鑰，全站就會切換成<b>真正的 Google 地圖</b>。</footer>
 </div>
 <script src="app.js"></script>
 </body>
