@@ -3,15 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>購物指南 · 釜山 × 首爾 8日行程</title>
+<title>購物與逛街 · 釜山 × 首爾 8日行程</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="shopping">
 <div class="wrap">
-<nav class="sitenav"><a href="index.html" class="home"><svg class="ic"><use href="#i-sun"/></svg>總覽</a><a href="basic.html"><svg class="ic"><use href="#i-subway"/></svg>基本資訊</a><a href="pass.html"><svg class="ic"><use href="#i-luge"/></svg>釜山PASS</a><a href="shopping.html" aria-current="page"><svg class="ic"><use href="#i-bag"/></svg>購物指南</a><a href="shoplist.html"><svg class="ic"><use href="#i-gift"/></svg>逛街清單</a><a href="booking.html"><svg class="ic"><use href="#i-cal"/></svg>預約清單</a><a href="itinerary.html"><svg class="ic"><use href="#i-map"/></svg>每日行程</a><a href="notes.html"><svg class="ic"><use href="#i-warn"/></svg>注意事項</a><a href="cost.html"><svg class="ic"><use href="#i-won"/></svg>費用</a><a href="packing.html"><svg class="ic"><use href="#i-case"/></svg>檢查表</a></nav>
+<nav class="sitenav"><a href="index.html" class="home"><svg class="ic"><use href="#i-sun"/></svg>總覽</a><a href="basic.html"><svg class="ic"><use href="#i-subway"/></svg>基本資訊</a><a href="pass.html"><svg class="ic"><use href="#i-luge"/></svg>釜山PASS</a><a href="shopping.html" aria-current="page"><svg class="ic"><use href="#i-bag"/></svg>購物與逛街</a><a href="booking.html"><svg class="ic"><use href="#i-cal"/></svg>預約清單</a><a href="itinerary.html"><svg class="ic"><use href="#i-map"/></svg>每日行程</a><a href="notes.html"><svg class="ic"><use href="#i-warn"/></svg>注意事項</a><a href="cost.html"><svg class="ic"><use href="#i-won"/></svg>費用</a><a href="packing.html"><svg class="ic"><use href="#i-case"/></svg>檢查表</a></nav>
 <header class="pagehead">
   <p class="kicker">Korea · 8 Days 7 Nights</p>
-  <h1><svg class="ic"><use href="#i-bag"/></svg>購物指南</h1>
+  <h1><svg class="ic"><use href="#i-bag"/></svg>購物與逛街</h1>
   <p class="lede">兩個購物主場：首爾整天（10/13 · 聖水洞為核心）＋ 釜山半天（10/10 · Centum City）。<b>個別店家全部收在下面的「05 逛街地圖清單」</b>，依區域分開收合。</p>
 </header>
 <div class="grid g2">
@@ -66,9 +67,447 @@
 <div class="note shop">
 <b>退稅小提醒：</b>單筆 ₩15,000 以上可退。明洞、百貨、Olive Young 多為<b>即時退稅</b>（現場折抵，需護照）。紙本退稅單記得在<b>金浦國際線 3F</b> 的 Kiosk 處理。
 </div>
-<nav class="pager"><a class="prev" href="pass.html"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-arrow"/></svg><span><span class="dir">上一頁</span><span class="nm">釜山PASS</span></span></a><a class="next" href="shoplist.html"><svg class="ic"><use href="#i-arrow"/></svg><span><span class="dir">下一頁</span><span class="nm">逛街地圖清單</span></span></a></nav>
+
+<h2 id="shoplist" style="margin-top:52px"><svg class="ic" style="width:20px;height:20px;color:var(--sub);margin-right:8px;vertical-align:-4px"><use href="#i-gift"/></svg>逛街地圖清單</h2>
+<p class="sec-sub">153 家店，<b>依區域收合</b>——點區域標題展開該區清單。搜尋或切換分類時會自動展開。點「複製」把韓文名或地址貼進 Naver Map 就能直接導航。</p>
+<div class="shopmaps">
+  <div class="smbox"><div class="smh"><svg class="ic"><use href="#i-pin"/></svg>首爾 Seoul</div><div class="lmap" id="smap-seoul"></div></div>
+  <div class="smbox"><div class="smh"><svg class="ic"><use href="#i-pin"/></svg>釜山 Busan</div><div class="lmap" id="smap-busan"></div></div>
+</div>
+<p class="ckhint">針標的是<b>區域的大致位置</b>，不是單一店家座標——點針會顯示該區店數並直接展開下面的清單。要精準走到某一家店，請用每筆右邊的「Naver 地圖」。</p>
+<style>
+.slwrap{margin-top:14px}
+.sltally{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px}
+.sltally div{flex:1 1 120px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:11px 14px;box-shadow:var(--shadow)}
+.sltally b{display:block;font-size:22px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.sltally span{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--sub);font-weight:700}
+.slctl{position:sticky;top:0;z-index:8;background:var(--bg);padding:10px 0 11px;margin-bottom:8px;
+  border-bottom:1px solid var(--line)}
+#slq{width:100%;padding:9px 13px;border-radius:10px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font:inherit;font-size:14px}
+#slq::placeholder{color:var(--sub)}
+.slf{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;align-items:center}
+.slf button{font:inherit;font-size:12.5px;cursor:pointer;padding:5px 12px;border-radius:99px;
+  border:1px solid var(--line);background:var(--card);color:var(--sub)}
+.slf button:hover{border-color:var(--accent)}
+.slf button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.slf .sep{flex:1 1 auto}
+#slexp{font:inherit;font-size:12px;cursor:pointer;padding:5px 12px;border-radius:99px;
+  border:1px dashed var(--line);background:transparent;color:var(--sub)}
+#slexp:hover{border-color:var(--shop);color:var(--shop)}
+.slcity{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  margin:26px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--ink)}
+details.sldist{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);margin-bottom:9px;overflow:hidden}
+details.sldist>summary{list-style:none;cursor:pointer;padding:13px 16px;
+  display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+details.sldist>summary::-webkit-details-marker{display:none}
+details.sldist>summary:hover{background:var(--tile)}
+.sldist .car{flex:none;align-self:center;width:9px;height:9px;border-right:1.8px solid var(--sub);
+  border-bottom:1.8px solid var(--sub);transform:rotate(-45deg);transition:transform .18s;margin-right:2px}
+details.sldist[open] .car{transform:rotate(45deg)}
+.sldist .dn{font-size:15.5px;font-weight:700}
+.sldist .kr{color:var(--sub);font-size:12.5px}
+.sldist .n{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--sub);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.sldnote{margin:0;padding:0 16px 12px;color:var(--sub);font-size:12.5px;line-height:1.6}
+.sllist{display:grid;gap:1px;background:var(--line);border-top:1px solid var(--line)}
+@media(min-width:720px){.sllist{grid-template-columns:1fr 1fr}}
+.slit{background:var(--card);padding:12px 15px;display:flex;gap:10px;align-items:flex-start}
+.sldot{width:7px;height:7px;border-radius:50%;margin-top:8px;flex:none}
+.sldot.shop{background:var(--shop)}.sldot.food{background:var(--accent)}.sldot.photo{background:var(--busan)}
+.slb{min-width:0;flex:1}
+.slnm{font-weight:600;font-size:14.5px;line-height:1.4}
+.slnm .kr{font-weight:400;color:var(--sub);font-size:12px;margin-left:6px}
+.sldesc{color:var(--sub);font-size:12.5px;margin-top:1px;line-height:1.55}
+.slmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.sladdr{font-size:11.5px;background:var(--tile);border:1px solid var(--line);
+  padding:2px 8px;border-radius:6px;overflow-wrap:anywhere}
+.slhrs{font-size:11.5px;color:var(--sub)}
+.slplan{font-size:11px;font-weight:700;color:var(--accent2);background:rgba(31,111,107,.1);
+  border:1px solid rgba(31,111,107,.3);padding:2px 8px;border-radius:6px;white-space:nowrap}
+.slcp{font:inherit;font-size:10.5px;font-weight:700;letter-spacing:.04em;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--sub);padding:2px 9px;border-radius:6px}
+.slcp:hover{border-color:var(--shop);color:var(--shop)}
+.slcp.done{border-color:var(--ok);color:var(--ok)}
+.slempty{padding:44px 0;text-align:center;color:var(--sub);font-size:14px}
+</style>
+
+<div class="slwrap">
+  <div class="sltally">
+    <div><b id="sl-all">0</b><span>總計</span></div>
+    <div><b id="sl-shop">0</b><span>逛街</span></div>
+    <div><b id="sl-food">0</b><span>吃喝</span></div>
+    <div><b id="sl-photo">0</b><span>拍照景點</span></div>
+  </div>
+  <div class="slctl">
+    <input id="slq" type="search" placeholder="搜尋店名、區域或關鍵字（米菲、香水、麵包…）" aria-label="搜尋店家">
+    <div class="slf" id="slfilters">
+      <button data-f="all" aria-pressed="true">全部</button>
+      <button data-f="shop" aria-pressed="false">逛街</button>
+      <button data-f="food" aria-pressed="false">吃喝</button>
+      <button data-f="photo" aria-pressed="false">拍照景點</button>
+      <button data-f="seoul" aria-pressed="false">首爾</button>
+      <button data-f="busan" aria-pressed="false">釜山</button>
+      <span class="sep"></span>
+      <button id="slexp" type="button" aria-pressed="false">全部展開</button>
+    </div>
+  </div>
+  <div id="slout"></div>
+</div>
+
+<div class="note shop">
+<b>資料來源：</b>小紅書筆記截圖整理（哒哒旅行物语、够钟、只只、呼呼小姐旅游日志等）＋原本購物指南的店家已合併進來，重複的只留一筆。營業時間與地址以現場／Naver Map 為準，快閃店與限定活動可能已結束。標<span class="slplan" style="margin:0 2px">日期</span>的表示行程裡已經排到。
+</div>
+
+<script>
+(function(){
+const DATA = [
+{city:"seoul",d:"聖水洞",kr:"성수동",note:"店最密的一區，值得單獨排一整天（行程排在 10/13）。從 2 號線聖水站 3 號出口沿主街往纛島站方向逛，以 rockfish 當定位點。",items:[
+ {n:"LCDC SEOUL",c:"shop",t:"兩棟樓的複合選物大樓，一層一個品牌／概念，頂樓咖啡廳。聖水必去第一站",p:"10/13"},
+ {n:"聖水聯邦",kr:"성수연방",c:"shop",t:"老工廠改建，一樓小店、二樓餐廳、頂樓露臺。文具與生活雜貨很好逛",p:"10/13"},
+ {n:"快閃店區",kr:"팝업스토어",c:"shop",t:"聖水站 2、3 號出口一帶每週都有新品牌快閃。出發前用 Instagram 搜「성수 팝업」看當週有什麼",p:"10/13"},
+ {n:"手工鞋街",kr:"수제화 거리",c:"shop",t:"首爾手工皮鞋發源地。訂製需時間，看與買現貨比較實際",p:"10/13"},
+ {n:"Matin Kim 聖水旗艦店",kr:"마틴킴 성수",c:"shop",t:"服飾包袋帽子，聖水／漢南／明洞都有分店",a:"아차산로5길 24-33"},
+ {n:"rockfish weatherwear",c:"shop",t:"芭蕾舞鞋，可以說是韓國土特產，冬款也很百搭"},
+ {n:"sienne",kr:"시엔느",c:"shop",t:"很法式的小店，門頭漂亮，衣服適合秋冬"},
+ {n:"POINT OF VIEW",kr:"포인트오브뷰",c:"shop",t:"文具控朝聖地，三層紅磚建築，設計偏小眾",a:"연무장길 18"},
+ {n:"29CM HOME",c:"shop",t:"2025 新開超大家居選物：杯盤、地毯燈具、造型鏡、香氛",a:"연무장길 57"},
+ {n:"CASETiFY 聖水",c:"shop",t:"韓國第 11 家實體店，有聖水限定＋韓文字串飾，2F 是 Travel 展區",a:"연무장길 49"},
+ {n:"NYU NYU 聖水店",kr:"뉴뉴",c:"shop",t:"耳環手鏈髮飾超實惠，3F 還有禮品店",a:"성수동2가 271-2"},
+ {n:"Milky Shop",c:"shop",t:"聖水必買伴手禮：焦糖奶油夾心餅、甜甜圈",a:"성수동2가 301-52"},
+ {n:"miffy store SEOUL",c:"shop",t:"首爾限定米菲，聖水站 3 號出口步行 8 分",a:"연무장13길 5",h:"10:30–19:30"},
+ {n:"大林倉庫 대림창고 · musinsa store",kr:"무신사 스토어 성수",c:"shop",t:"紅磚倉庫改建的咖啡廳＋展覽空間，聖水地標，本身就是拍照點；同棟的 musinsa store 是超大線下集合店，韓國小眾品牌一次逛完",p:"10/13"},
+ {n:"tamburins 聖水",kr:"탬버린즈",c:"shop",t:"香氛香水，自用送禮都合適"},
+ {n:"postes",c:"shop",t:"小眾復古香水店，包裝漂亮"},
+ {n:"Muut",c:"shop",t:"墨鏡眼鏡，石材店裝超好拍"},
+ {n:"blue elephant",c:"shop",t:"平價眼鏡，被稱作 GM 平替"},
+ {n:"same dust",c:"shop",t:"很有意思的獨立藝術書店，在聖水主街盡頭"},
+ {n:"repertory_seongsu",c:"shop",t:"藏在巷角的文創選物，簡約設計感"},
+ {n:"stand oil",c:"shop",t:"包袋"},
+ {n:"Ader error",c:"shop",t:"設計師潮牌"},
+ {n:"Depound",c:"shop"},
+ {n:"Fogsy",c:"shop"},
+ {n:"Peromon Seongsu",c:"shop"},
+ {n:"velvet trunk",c:"shop"},
+ {n:"ego 文創店",c:"shop"},
+ {n:"VICXXO 文創店",c:"shop"},
+ {n:"FWEE",c:"shop",t:"美妝"},
+ {n:"Dior 聖水",c:"shop",t:"概念店，建築本身就是打卡點"},
+ {n:"Olive Young 聖水",c:"shop"},
+ {n:"ACORN CARICATURE",c:"shop",t:"現場手繪 Q 版肖像，畫框 15,000₩"},
+ {n:"ldangClub 粉色販賣機",c:"photo",t:"偏日系 y2k 的拍照點",a:"연무장길 37-7"},
+ {n:"聖水閣樓",c:"photo"},
+ {n:"Maison de Magaretteu",c:"food",t:"蝴蝶結麵包店，門口粉色蝴蝶結超好拍",a:"연무장3길 14",h:"09:00–18:00"},
+ {n:"Darimmak 小熊麵包",kr:"달임막",c:"food",t:"Dalim Bread，只能刷 Visa",a:"연무장길 38-1"},
+ {n:"StandardBread",c:"food",t:"吐司造型招牌，早午餐"},
+ {n:"Maman Gelato 聖水店",kr:"마망젤라또",c:"food",t:"經典開心果 ₩11,000／抹茶草莓 ₩13,000，聖水站 3 號出口",a:"연무장9길 8 1층",h:"11:30–21:00"},
+ {n:"聖水土豆脊骨湯（馬鈴薯排骨湯）",c:"food",t:"聖水洞聞名的人氣王，常常門口排隊。逛累了的實在午餐",a:"연무장길 45",p:"10/13"},
+ {n:"onion 聖水",kr:"어니언 성수",c:"food",t:"廢棄工廠原貌保留的名店，廢土風甜品，店裡像上個世紀的油畫，麵包好吃。人多，早去",p:"10/13"},
+ {n:"irang 麵店",c:"food"},
+ {n:"Center Coffee / Mesh Coffee",c:"food",t:"精品咖啡。聖水的咖啡密度很誇張，隨便挑一間都不錯",p:"10/13"},
+ {n:"vetiver 咖啡",c:"food"},
+ {n:"opu 咖啡",c:"food"},
+ {n:"威風凜凜豬蹄",c:"food",t:"聖水豬腳老店，另一個午餐選擇"}
+]},
+{city:"seoul",d:"首爾林",kr:"서울숲",items:[
+ {n:"KWANGYA @ SEOUL",kr:"광야@서울",c:"shop",t:"SM 曠野小賣部，大樓 B1，專輯／應援棒／與愛豆合影"},
+ {n:"Juuneedu 首爾林店",kr:"주니듀",c:"shop",t:"睡衣店，面料舒服價格不貴"}
+]},
+{city:"seoul",d:"明洞",kr:"명동",note:"從 2 號線乙支路入口站 7 號出口開始走，一路到新世界免稅店，熱門店基本都能掃到。行程排在 10/11 晚、10/13 晚與 10/15 早——最後一天早上補貨最方便，多為即時退稅（帶護照）。",items:[
+ {n:"Hello Kitty Apple Cafe",c:"food",t:"整棟三層，1–2F 咖啡廳、3F 周邊文創；明洞站 6 號出口",a:"15 Myeongdong 6-gil"},
+ {n:"明洞漫畫街",c:"photo",t:"明洞站 3 號出口往左，看到 7-Eleven 轉進巷子，朝首爾塔方向走",a:"명동 재미로"},
+ {n:"nyunyu 明洞",c:"shop",t:"家居雜貨鋪在 4 樓：包包／香氛蠟燭／明信片／掛件"},
+ {n:"Matin Kim 明洞",c:"shop"},
+ {n:"Daiso 明洞",c:"shop",t:"共 12 層，建議搭電梯上頂樓再一層層逛下來"},
+ {n:"emis 明洞",c:"shop",t:"很火的棒球帽，按顏色分區陳列"},
+ {n:"8 seconds 八秒",c:"shop",t:"CP 值高的簡約基本款"},
+ {n:"Olive Young 明洞總店",c:"shop"},
+ {n:"樂天免稅店",c:"shop",t:"1F Holibanum 香水，桃子和草莓味都好聞"},
+ {n:"新世界免稅店",c:"shop"},
+ {n:"musinsa 明洞",c:"shop"},
+ {n:"lululemon 明洞",c:"shop"},
+ {n:"LINE FRIENDS",c:"shop"},
+ {n:"blue elephant 明洞",c:"shop"},
+ {n:"covernat",c:"shop"},
+ {n:"ABC MART 明洞",c:"shop"},
+ {n:"Calvin Klein 明洞",c:"shop"},
+ {n:"ept 明洞",c:"shop",t:"德訓鞋"},
+ {n:"Marithe 明洞",c:"shop",t:"簡約風服裝"},
+ {n:"adidas 明洞",c:"shop",t:"亞洲最大門店，Kpop 校服款 #5763、iw3174"},
+ {n:"tense tens",c:"shop"},
+ {n:"sappun",c:"shop",t:"鞋"},
+ {n:"Aland 明洞",c:"shop"},
+ {n:"3CE 明洞",c:"shop"},
+ {n:"3CE 旗艦店",c:"shop"},
+ {n:"wiggle wiggle",c:"shop"},
+ {n:"BHC 炸雞 明洞",c:"food",t:"甜辣裹醬＋起司撒粉雙拼，再加起司球"},
+ {n:"明朗熱狗棒",kr:"명랑핫도그",c:"food",t:"連鎖店，就近吃就可以"}
+]},
+{city:"seoul",d:"東大門",kr:"동대문",note:"平價服飾、鞋包、配件。批發樓層很多是晚上 20:00 開到凌晨 05:00，觀光客樓層則正常時間；行程排 10/13 傍晚起，DDP 夜間打卡順路。",items:[
+ {n:"Hello apM",c:"shop",t:"觀光客取向的服飾大樓，正常營業時間",p:"10/13 傍晚"},
+ {n:"Migliore 東大門",c:"shop",t:"平價服飾鞋包，夜間營業",p:"10/13 傍晚"},
+ {n:"樂天 FITIN",c:"shop",t:"比較新、動線舒服的購物中心",p:"10/13 傍晚"},
+ {n:"DDP 東大門設計廣場",kr:"동대문디자인플라자",c:"photo",t:"Zaha Hadid 的銀色曲面建築，夜間打光很好拍"}
+]},
+{city:"seoul",d:"建大入口",kr:"건대입구",items:[
+ {n:"Common Ground",kr:"커먼그라운드",c:"shop",t:"藍色貨櫃搭成的商場，200＋ 小型設計師品牌與二手選物。從聖水搭 2 號線 2 站就到，順路",p:"10/13 下午"}
+]},
+{city:"seoul",d:"弘大 · 延南洞",kr:"홍대 · 연남동",items:[
+ {n:"ARTIWAVE",c:"shop",t:"手帳控必逛：貼紙／明信片／膠帶／裝飾畫"},
+ {n:"Juuneedu 延南洞",c:"shop",t:"睡衣"},
+ {n:"UNILAND",c:"shop",t:"玩具禮品店，Sanrio／拉拉熊等多種 IP"},
+ {n:"GRANHAND 弘大",kr:"그랑핸드",c:"shop",t:"香水，首選 nube／cococay，可 DIY 名字；弘大 6 號出口步行 162m",a:"와우산로37길 9"},
+ {n:"Olive Young 弘大旗艦店",c:"shop",a:"홍익로6길 57",h:"10:30–23:00"},
+ {n:"ABC MART 弘大",c:"shop",a:"양화로 152",h:"11:00–23:30"},
+ {n:"adidas 弘大",c:"shop",t:"弘大 9 號出口，1–3 樓",a:"양화로 148",h:"10:30–22:00"},
+ {n:"Gentle Monster 合井",c:"shop",t:"合井站 3 號口",a:"서교동 404-5",h:"12:00–22:00"},
+ {n:"도토리 공방 橡子漫畫",c:"photo",t:"人生四格漫畫，弘大 3 號出口",a:"동교로38길 20 1층",h:"到 21:00"},
+ {n:"Mono Mansion 弘大",c:"photo",t:"人生四宮格 24 小時；弘大 3 號出口，房間選 103"},
+ {n:"50pages",c:"photo",t:"自助拍照",h:"到 23:00"},
+ {n:"BHC 炸雞 弘大",c:"food",t:"弘大 9 號出口步行 2 分鐘"},
+ {n:"경양카츠 연남점",c:"food",t:"Ojunine Gamjatatng：脊骨湯、炸豬排",a:"동교로 238-1"},
+ {n:"弘大辣炒章魚鍋",c:"food",t:"推薦辣章魚五花肉＋飛魚籽炒飯；弘大站 7 號出口"}
+]},
+{city:"seoul",d:"清潭洞",kr:"청담동",note:"整區以拍照打卡為主，白牆、木質門面一條街。",items:[
+ {n:"Matin Kim 清潭",c:"shop",t:"白牆黑字集合店",a:"언주로164길 14"},
+ {n:"haus",c:"shop",t:"米色牆黑字衣服店，nudake 可頌在裡面"},
+ {n:"atelier nain",c:"shop",t:"白牆衣服店"},
+ {n:"random walk",c:"shop",t:"卡其色牆"},
+ {n:"elborn",c:"shop",t:"卡其色牆"},
+ {n:"Chrome Hearts",c:"shop",a:"청담동 82-6"},
+ {n:"mooni",c:"food",t:"白樓黑蝴蝶結 cafe"},
+ {n:"sonnet",c:"food",t:"咖啡色木質建築"},
+ {n:"tulear",c:"food",t:"仙氣 cafe"}
+]},
+{city:"seoul",d:"狎鷗亭",kr:"압구정",note:"不想去人擠人的聖水，就來狎鷗亭；水仁盆唐線狎鷗亭羅德奧站 5 號口。",items:[
+ {n:"狎鷗亭羅德奧一帶",c:"photo",t:"matin kim／glowny／atelier nain／mono mansion／cafe mooni／not bad coffee 都在附近",a:"도산대로63길 15"},
+ {n:"VIVAIA 狎鷗亭",c:"shop"},
+ {n:"not bad coffee",c:"food"}
+]},
+{city:"seoul",d:"新沙洞 林蔭道",kr:"신사동 가로수길",items:[
+ {n:"林蔭道主路斑馬線",c:"photo",t:"站在斑馬線上，兩旁高大樹木當背景，很復古首爾街頭"},
+ {n:"Tamburins 新沙",c:"shop",t:"Jennie 海報牆；3 號線新沙站 8 號出口",a:"신사동 520-9"}
+]},
+{city:"seoul",d:"漢南洞",kr:"한남동",note:"超出片的 Citywalk 路線：mardi 門口交叉路上坡、必打卡的下坡、milestone 門口電線杆、rockfish 門口馬路。",items:[
+ {n:"Mardi Mercredi",c:"shop",t:"小雛菊衛衣"},
+ {n:"Marithe 漢南",c:"shop",t:"簡約風服裝"},
+ {n:"Rest&Reaction",c:"shop",t:"辣妹風服裝"},
+ {n:"Grove",c:"shop",t:"很火的服裝店"},
+ {n:"Glowny",c:"shop",t:"韓國本土版簡約 BM 風"},
+ {n:"Alavague",c:"shop",t:"美式復古風包款帽子"},
+ {n:"awesome needs",c:"shop",t:"帽子"},
+ {n:"Blue Elephant 漢南",c:"shop",t:"GM 平替眼鏡"},
+ {n:"Ept 漢南",c:"shop",t:"德訓鞋"},
+ {n:"Emis 漢南",c:"shop",t:"很火的棒球帽"},
+ {n:"rockfish 漢南",c:"shop",t:"在必打卡下坡的坡上，很好找"},
+ {n:"Tamburins 漢南",c:"shop",t:"Jennie 代言的香水"},
+ {n:"milestone 維也納咖啡",c:"food",t:"門口電線杆是知名機位"},
+ {n:"솥솥 Solsot 釜飯",c:"food",t:"招牌牛肉飯，需提前預約／取號",a:"이태원로54가길 26 지1층",h:"11:30–21:00"}
+]},
+{city:"seoul",d:"梨泰院 · 南山 · 漢江",kr:"이태원 · 남산",items:[
+ {n:"Urban cliff",c:"photo",t:"旁邊樓梯＋對面欄杆都是機位；藍色招牌熱狗店頂樓窗戶",a:"신흥로20길 43"},
+ {n:"南山首爾塔",c:"photo",t:"國忠武路站 2 號口搭 01A／01B 到南山首爾塔站，愛情鎖平台不用門票；用氣候卡搭公車上下"},
+ {n:"汝矣島漢江公園",c:"photo",t:"首爾塔看完傍晚接這裡；5 號線汝矣渡口站（Yeouinaru）"},
+ {n:"Seoul My Soul 熱氣球",c:"photo",t:"汝矣島熱氣球，夜拍很出片",a:"영등포구 여의공원로 68"},
+ {n:"漢江秋千",c:"photo",t:"傍晚到晚上都好拍，地鐵站步行約 15 分鐘；凌晨五點看朝霞也有人推"},
+ {n:"漢江公園 CU 便利店",c:"food",t:"汝矣渡口站 2 號出口右轉，看到星巴克走到底，旁邊就是 CU；買完泡麵出門右轉有免費泡麵機"}
+]},
+{city:"seoul",d:"景福宮 · 北村 · 三清洞",kr:"경복궁 · 북촌 · 삼청동",items:[
+ {n:"景福宮",c:"photo",t:"韓服體驗建議提前一天預約"},
+ {n:"北村韓屋村",c:"photo",t:"韓劇感很強，很好拍"},
+ {n:"OSULLOC 北村",c:"shop",t:"抹茶餅乾、茶包"},
+ {n:"三清洞 에그롤",c:"food",t:"有機蛋卷、SO SAND 禮盒，伴手禮首選"}
+]},
+{city:"seoul",d:"其他 · 伴手禮品牌",kr:"기타",note:"這幾個是「韓國本地買划算」的品牌，多家分店或超市即可入手。",items:[
+ {n:"Anthracite Coffee Roasters",c:"shop",t:"咖啡豆，包裝辨識度高"},
+ {n:"GENTLE MONSTER",c:"shop",t:"墨鏡，韓國本地價差很大"},
+ {n:"CROW CANYON 陶瓷杯盤",c:"shop",t:"商品不是店，家居選物店（如 29CM HOME）可找到"},
+ {n:"YOZM 希臘優格",c:"food",t:"超市／便利商店，藍莓 compote 口味"},
+ {n:"lookast",c:"shop",t:"聖水設計師品牌，截圖沒拍到店面"}
+]},
+{city:"busan",d:"田浦洞 · 西面",kr:"전포동",note:"田浦咖啡街的選物店密度很高；西面就在你前兩晚的住處樓下。",items:[
+ {n:"西面地下街",kr:"서면지하상가",c:"shop",t:"便宜衣服、飾品、襪子。就在住處樓下，晚餐後散步就能逛；Olive Young 西面店也在附近",p:"10/08 晚"},
+ {n:"panier",c:"shop",t:"卡片、配飾、包包、玩偶、器皿、香氛"},
+ {n:"Ma belle Mignon",c:"shop",t:"彩色襪子、包包配飾、器皿"},
+ {n:"THINGS OF NOTE 田浦洞店",c:"shop",t:"卡片、掛件小物、玩偶、器皿；跟廣安里店佈置風格略不同"},
+ {n:"COSY MOSY",c:"shop",t:"貓貓元素集合店，店裡真的有貓，器皿選品佳"},
+ {n:"소도시 Sodosi",c:"shop",t:"手機周邊、手帳小物、配飾器皿，選品特別"},
+ {n:"p.palette",c:"shop",t:"居家生活用品、玩偶小物（小熊鑰匙圈 6,000₩）"},
+ {n:"hetras.",c:"shop",t:"香氛洗護集合店，建築設計超吸睛，適合買伴手禮"}
+]},
+{city:"busan",d:"廣安里",kr:"광안리",note:"海岸後方的巷弄小店街，一家一家挖的類型，很容易失控。行程排 10/08 中午（豚笑之後）。",items:[
+ {n:"廣安里小店街",kr:"광안리",c:"shop",t:"雜貨、飾品、選物、玩具周邊、文具。多數小店 11:00–12:00 才開門，12:10 開始逛剛好",p:"10/08 中午"},
+ {n:"THINGS OF NOTE 廣安里店",c:"shop",t:"人氣文創店，配飾包包香氛，品類豐富"}
+]},
+{city:"busan",d:"尾浦 · 海雲台",kr:"미포 · 해운대",note:"搭藍線公園（海岸列車／天空膠囊列車）前後可以順路，全部集中在달맞이길這條路上。",items:[
+ {n:"miffy store BUSAN",kr:"미피스토어",c:"shop",t:"釜山限定「列車員 Miffy」、娃娃、鑰匙圈、文具、餐具。膠囊列車尾浦站步行 5 分，和 Arte Museum 同一條달맞이길。※ 影島另有一家 Miffy Cafe，是不同店、不順路",a:"해운대구 달맞이길62번길 3",h:"10:00–20:00",p:"10/09 15:45"},
+ {n:"RIPPLE TOWN COFFEE",c:"food",t:"尾浦站附近，質感咖啡店，奶泡綿密"},
+ {n:"Baker's Box",c:"food",t:"尾浦站，推薦法棍"},
+ {n:"Keveren House",c:"food",t:"海雲台甜品伴手禮咖啡廳，歐式風格小店；奶油捲奶油味超濃郁，口味多，很適合帶回去送人"}
+]},
+{city:"busan",d:"南浦洞 · 光復路",kr:"남포동 · 광복로",note:"釜山最熱鬧的商店街，順路排在甘川洞之後（10/11 上午）。",items:[
+ {n:"光復路商店街",kr:"광복로",c:"shop",t:"藥妝、服飾、鞋包，整條逛下來很好殺時間",p:"10/11 上午"},
+ {n:"樂天百貨 光復店",c:"shop",t:"有空中花園觀景台，可以上去看港口與影島大橋",p:"10/11 上午"}
+]}
+];
+const CAT={shop:"逛街",food:"吃喝",photo:"拍照"};
+const out=document.getElementById("slout");
+let filter="all", query="", forceOpen=false;
+const openState={};
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function counts(){
+  let a=0,s=0,f=0,p=0;
+  DATA.forEach(g=>g.items.forEach(i=>{a++;if(i.c==="shop")s++;if(i.c==="food")f++;if(i.c==="photo")p++;}));
+  document.getElementById("sl-all").textContent=a;
+  document.getElementById("sl-shop").textContent=s;
+  document.getElementById("sl-food").textContent=f;
+  document.getElementById("sl-photo").textContent=p;
+}
+function match(g,i){
+  if(filter==="seoul"||filter==="busan"){ if(g.city!==filter) return false; }
+  else if(filter!=="all"){ if(i.c!==filter) return false; }
+  if(!query) return true;
+  return [i.n,i.kr||"",i.t||"",i.a||"",i.p||"",g.d,g.kr].join(" ").toLowerCase().includes(query);
+}
+function render(){
+  const frag=document.createDocumentFragment();
+  let shown=0,lastCity=null;
+  const auto = !!query || filter!=="all";
+  DATA.forEach((g,gi)=>{
+    const items=g.items.filter(i=>match(g,i));
+    if(!items.length) return;
+    if(g.city!==lastCity){
+      lastCity=g.city;
+      const c=document.createElement("div");
+      c.className="slcity";
+      c.textContent=g.city==="seoul"?"Seoul · 首爾":"Busan · 釜山";
+      frag.appendChild(c);
+    }
+    shown+=items.length;
+    const sec=document.createElement("details");
+    sec.className="sldist";
+    sec.dataset.gi=gi;
+    if(forceOpen||auto||openState[gi]) sec.open=true;
+    const sum=document.createElement("summary");
+    sum.innerHTML='<span class="car"></span><span class="dn">'+esc(g.d)+'</span><span class="kr">'+esc(g.kr)+'</span><span class="n">'+items.length+' 家</span>';
+    sec.appendChild(sum);
+    if(g.note){
+      const p=document.createElement("p");
+      p.className="sldnote";
+      p.textContent=g.note;
+      sec.appendChild(p);
+    }
+    const list=document.createElement("div");
+    list.className="sllist";
+    items.forEach(i=>{
+      const row=document.createElement("div");
+      row.className="slit";
+      const target=i.a||i.kr||i.n;
+      row.innerHTML='<span class="sldot '+i.c+'" title="'+CAT[i.c]+'"></span>'+
+        '<div class="slb"><div class="slnm">'+esc(i.n)+(i.kr?'<span class="kr">'+esc(i.kr)+'</span>':'')+'</div>'+
+        (i.t?'<div class="sldesc">'+esc(i.t)+'</div>':'')+
+        '<div class="slmeta">'+
+        (i.p?'<span class="slplan">'+esc(i.p)+'</span>':'')+
+        (i.a?'<span class="sladdr">'+esc(i.a)+'</span>':'')+
+        (i.h?'<span class="slhrs">'+esc(i.h)+'</span>':'')+
+        '<button class="slcp" type="button" data-copy="'+esc(target)+'">複製</button>'+'<a class="slcp slnav" target="_blank" rel="noopener" href="https://map.naver.com/p/search/'+encodeURIComponent(i.kr||i.a||i.n)+'">Naver 地圖</a>'+
+        '</div></div>';
+      list.appendChild(row);
+    });
+    sec.appendChild(list);
+    frag.appendChild(sec);
+  });
+  out.innerHTML="";
+  if(!shown){
+    const e=document.createElement("p");
+    e.className="slempty";
+    e.textContent="沒有符合的店家，換個關鍵字試試。";
+    out.appendChild(e);
+  } else out.appendChild(frag);
+}
+out.addEventListener("toggle",e=>{
+  const d=e.target.closest("details.sldist"); if(!d) return;
+  openState[d.dataset.gi]=d.open;
+},true);
+out.addEventListener("click",e=>{
+  const b=e.target.closest(".slcp"); if(!b) return;
+  e.preventDefault();
+  const text=b.dataset.copy;
+  const done=()=>{b.textContent="已複製";b.classList.add("done");setTimeout(()=>{b.textContent="複製";b.classList.remove("done");},1400);};
+  const fb=()=>{const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(err){}document.body.removeChild(ta);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(fb);}else fb();
+});
+document.getElementById("slfilters").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-f]"); if(!b) return;
+  filter=b.dataset.f;
+  [...e.currentTarget.querySelectorAll("button[data-f]")].forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  render();
+});
+const expBtn=document.getElementById("slexp");
+expBtn.addEventListener("click",()=>{
+  forceOpen=!forceOpen;
+  expBtn.textContent=forceOpen?"全部收合":"全部展開";
+  expBtn.setAttribute("aria-pressed",String(forceOpen));
+  if(!forceOpen) for(const k in openState) delete openState[k];
+  render();
+});
+document.getElementById("slq").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();render();});
+counts(); render();
+
+/* ---------- district maps ---------- */
+var GEO = {
+ '聖水洞':[37.5445,127.0557],'首爾林':[37.5444,127.0374],'明洞':[37.5636,126.9827],
+ '東大門':[37.5665,127.0092],'建大入口':[37.5403,127.0695],'弘大 · 延南洞':[37.5563,126.9236],
+ '清潭洞':[37.5250,127.0530],'狎鷗亭':[37.5273,127.0400],'新沙洞 林蔭道':[37.5205,127.0230],
+ '漢南洞':[37.5345,127.0000],'梨泰院 · 南山 · 漢江':[37.5345,126.9946],
+ '景福宮 · 北村 · 三清洞':[37.5796,126.9770],
+ '田浦洞 · 西面':[35.1560,129.0600],'廣安里':[35.1531,129.1186],
+ '尾浦 · 海雲台':[35.1595,129.1730],'南浦洞 · 光復路':[35.0980,129.0300]
+};
+var SMTILE='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+var SMATTR='&copy; OpenStreetMap &copy; CARTO';
+function openDistrict(gi){
+  filter='all'; query='';
+  var qi=document.getElementById('slq'); if(qi) qi.value='';
+  [].forEach.call(document.querySelectorAll('#slfilters button[data-f]'),function(x){x.setAttribute('aria-pressed',String(x.dataset.f==='all'));});
+  openState[gi]=true; render();
+  var el=out.querySelector('details.sldist[data-gi="'+gi+'"]');
+  if(el){ el.open=true; el.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+function buildShopMap(id,city){
+  var el=document.getElementById(id); if(!el) return;
+  if(typeof L==='undefined'){ el.className='lmap err'; el.textContent='地圖需要連網才能載入。下方清單與 Naver 連結不受影響。'; return; }
+  var map=L.map(el,{scrollWheelZoom:false});
+  L.tileLayer(SMTILE,{attribution:SMATTR,maxZoom:19,subdomains:'abcd'}).addTo(map);
+  var pts=[];
+  DATA.forEach(function(g,gi){
+    if(g.city!==city) return;
+    var ll=GEO[g.d]; if(!ll) return;
+    pts.push(ll);
+    L.marker(ll,{icon:L.divIcon({className:'',html:'<div class="pinmk '+(city==='busan'?'b':'s')+'">'+g.items.length+'</div>',iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-14]})})
+     .addTo(map)
+     .bindPopup('<b>'+g.d+'</b> <span style="opacity:.6">'+g.kr+'</span><br>'+g.items.length+' 家<div class="pl"><a href="#" class="mgo" data-gi="'+gi+'">展開這一區</a><a target="_blank" rel="noopener" href="https://map.naver.com/p/search/'+encodeURIComponent(g.kr)+'">Naver</a></div>');
+  });
+  if(pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.22));
+  map.on('click',function(){map.scrollWheelZoom.enable();});
+  map.on('mouseout',function(){map.scrollWheelZoom.disable();});
+  map.on('popupopen',function(e){
+    var a=e.popup.getElement().querySelector('.mgo');
+    if(a) a.addEventListener('click',function(ev){ev.preventDefault();map.closePopup();openDistrict(parseInt(a.getAttribute('data-gi'),10));});
+  });
+}
+buildShopMap('smap-seoul','seoul');
+buildShopMap('smap-busan','busan');
+
+})();
+</script>
+<nav class="pager"><a class="prev" href="pass.html"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-arrow"/></svg><span><span class="dir">上一頁</span><span class="nm">釜山PASS</span></span></a><a class="next" href="booking.html"><svg class="ic"><use href="#i-arrow"/></svg><span><span class="dir">下一頁</span><span class="nm">預約清單</span></span></a></nav>
 <footer>釜山 × 首爾 8 日行程 · 2026/10/08–10/15　|　資料以官網為準，出發前再確認一次營業時間與票務。</footer>
 </div>
 <script src="app.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>

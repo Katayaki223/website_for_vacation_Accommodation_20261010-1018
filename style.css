@@ -229,7 +229,9 @@ a.hub:hover .hgo{color:var(--accent)}
 .ckbar button.ok{border-color:var(--ok);color:var(--ok)}
 .ckhint{font-size:12px;color:var(--sub);margin:-6px 0 16px;line-height:1.6}
 
-.row .f.ck{flex:0 0 auto;padding-top:2px}
+.row .f.ck{flex:0 0 22px;align-self:center;padding-top:0}
+.row.ck{align-items:center}
+@media(max-width:640px){.row.ck{align-items:flex-start}.row .f.ck{align-self:flex-start;padding-top:1px}}
 label.ckb{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
 label.ckb input{position:absolute;opacity:0;width:0;height:0}
 label.ckb .bx{width:22px;height:22px;border-radius:7px;border:1.8px solid var(--line);background:var(--card);
@@ -249,5 +251,18 @@ ul.ck li label.ckb .bx{width:19px;height:19px;border-radius:6px;margin-top:1px}
 ul.ck li label.ckb .bx svg{width:12px;height:12px}
 ul.ck li input:checked ~ .tx{opacity:.55;text-decoration:line-through;text-decoration-color:var(--sub)}
 
+
+/* ================= shop district maps ================= */
+.shopmaps{display:grid;gap:12px;grid-template-columns:1fr;margin:14px 0 10px}
+@media(min-width:820px){.shopmaps{grid-template-columns:1fr 1fr}}
+.smbox{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
+.smh{display:flex;align-items:center;gap:8px;padding:11px 15px;font-size:13px;font-weight:700;
+  border-bottom:1px solid var(--line);letter-spacing:.04em}
+.smh svg{width:16px;height:16px;color:var(--sub)}
+.shopmaps .lmap{height:300px}
+@media(max-width:640px){.shopmaps .lmap{height:240px}}
+a.slcp.slnav{text-decoration:none}
+a.slcp.slnav:hover{border-color:var(--accent2);color:var(--accent2)}
+.leaflet-popup-content .mgo{cursor:pointer}
 h3 .ic,h4 .ic{width:17px;height:17px;color:var(--sub);margin-right:7px;vertical-align:-3px}
 h3{display:flex;align-items:center;gap:0}
