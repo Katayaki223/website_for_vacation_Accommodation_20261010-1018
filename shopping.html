@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>購物與逛街 · 釜山 × 首爾 8日行程</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="shopping">
@@ -479,7 +480,6 @@ function openDistrict(gi){
 }
 function buildShopMap(id,city){
   var el=document.getElementById(id); if(!el) return;
-  if(typeof L==='undefined'){ el.className='lmap err'; el.textContent='地圖需要連網才能載入。下方清單與 Naver 連結不受影響。'; return; }
   var map=L.map(el,{scrollWheelZoom:false});
   L.tileLayer(SMTILE,{attribution:SMATTR,maxZoom:19,subdomains:'abcd'}).addTo(map);
   var pts=[];
@@ -499,8 +499,18 @@ function buildShopMap(id,city){
     if(a) a.addEventListener('click',function(ev){ev.preventDefault();map.closePopup();openDistrict(parseInt(a.getAttribute('data-gi'),10));});
   });
 }
-buildShopMap('smap-seoul','seoul');
-buildShopMap('smap-busan','busan');
+function initShopMaps(){
+  if(typeof L==='undefined'){
+    ['smap-seoul','smap-busan'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el){ el.className='lmap err'; el.textContent='地圖需要連網才能載入。下方清單與每筆的 Naver 連結不受影響。'; }
+    });
+    return;
+  }
+  buildShopMap('smap-seoul','seoul');
+  buildShopMap('smap-busan','busan');
+}
+if(typeof L!=='undefined') initShopMaps(); else window.addEventListener('load',initShopMaps);
 
 })();
 </script>
@@ -508,6 +518,5 @@ buildShopMap('smap-busan','busan');
 <footer>釜山 × 首爾 8 日行程 · 2026/10/08–10/15　|　資料以官網為準，出發前再確認一次營業時間與票務。</footer>
 </div>
 <script src="app.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>
