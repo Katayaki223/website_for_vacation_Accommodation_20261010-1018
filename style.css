@@ -229,9 +229,26 @@ a.hub:hover .hgo{color:var(--accent)}
 .ckbar button.ok{border-color:var(--ok);color:var(--ok)}
 .ckhint{font-size:12px;color:var(--sub);margin:-6px 0 16px;line-height:1.6}
 
-.row .f.ck{flex:0 0 22px;align-self:center;padding-top:0}
-.row.ck{align-items:center}
-@media(max-width:640px){.row.ck{align-items:flex-start}.row .f.ck{align-self:flex-start;padding-top:1px}}
+/* booking rows: [check] [when] [what]  /  [how & why, full width underneath] */
+.row.ck{
+  display:grid;
+  grid-template-columns:26px 210px minmax(0,1fr);
+  gap:10px 22px;align-items:start;padding:15px 18px}
+.row.ck > .f{flex:none;min-width:0}
+.row.ck > :nth-child(1){grid-area:1/1/3/2;padding-top:2px}
+.row.ck > :nth-child(2){grid-area:1/2/2/3}
+.row.ck > :nth-child(3){grid-area:1/3/2/4}
+.row.ck > :nth-child(4){grid-area:2/2/3/4}
+.row.ck > :nth-child(3) .v{font-weight:600}
+.row.ck > :nth-child(4) .v{font-size:13.5px;color:var(--sub)}
+.row.ck > :nth-child(4) .v b{color:var(--ink)}
+@media(max-width:760px){
+  .row.ck{grid-template-columns:24px minmax(0,1fr);gap:8px 13px;padding:14px 15px}
+  .row.ck > :nth-child(1){grid-area:1/1/4/2}
+  .row.ck > :nth-child(2){grid-area:1/2/2/3}
+  .row.ck > :nth-child(3){grid-area:2/2/3/3}
+  .row.ck > :nth-child(4){grid-area:3/2/4/3}
+}
 label.ckb{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
 label.ckb input{position:absolute;opacity:0;width:0;height:0}
 label.ckb .bx{width:22px;height:22px;border-radius:7px;border:1.8px solid var(--line);background:var(--card);
