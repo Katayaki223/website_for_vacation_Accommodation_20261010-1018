@@ -264,5 +264,9 @@ ul.ck li input:checked ~ .tx{opacity:.55;text-decoration:line-through;text-decor
 a.slcp.slnav{text-decoration:none}
 a.slcp.slnav:hover{border-color:var(--accent2);color:var(--accent2)}
 .leaflet-popup-content .mgo{cursor:pointer}
+@media (prefers-color-scheme:dark){
+  .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.93) contrast(.9)}
+  .leaflet-control-attribution{filter:invert(1) hue-rotate(180deg)}
+}
 h3 .ic,h4 .ic{width:17px;height:17px;color:var(--sub);margin-right:7px;vertical-align:-3px}
 h3{display:flex;align-items:center;gap:0}

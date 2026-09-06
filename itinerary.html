@@ -358,11 +358,8 @@
   };
 
   var COL = {b:'#1f6f6b', s:'#c8503c', p:'#7a4a8c'};
-  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  var TILE = dark
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-  var ATTR = '&copy; OpenStreetMap &copy; CARTO';
+  var TILE = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  var ATTR = '&copy; OpenStreetMap contributors';
 
   function links(s){
     var ll = s.ll[0]+','+s.ll[1];
@@ -381,7 +378,7 @@
       return;
     }
     var map = L.map(el,{scrollWheelZoom:false});
-    L.tileLayer(TILE,{attribution:ATTR, maxZoom:19, subdomains:'abcd'}).addTo(map);
+    L.tileLayer(TILE,{attribution:ATTR, maxZoom:19, subdomains:'abc'}).addTo(map);
     var pts = [];
     d.stops.forEach(function(s){
       pts.push(s.ll);

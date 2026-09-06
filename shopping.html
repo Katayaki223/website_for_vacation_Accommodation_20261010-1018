@@ -468,8 +468,8 @@ var GEO = {
  '田浦洞 · 西面':[35.1560,129.0600],'廣安里':[35.1531,129.1186],
  '尾浦 · 海雲台':[35.1595,129.1730],'南浦洞 · 光復路':[35.0980,129.0300]
 };
-var SMTILE='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-var SMATTR='&copy; OpenStreetMap &copy; CARTO';
+var SMTILE='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+var SMATTR='&copy; OpenStreetMap contributors';
 function openDistrict(gi){
   filter='all'; query='';
   var qi=document.getElementById('slq'); if(qi) qi.value='';
@@ -481,7 +481,7 @@ function openDistrict(gi){
 function buildShopMap(id,city){
   var el=document.getElementById(id); if(!el) return;
   var map=L.map(el,{scrollWheelZoom:false});
-  L.tileLayer(SMTILE,{attribution:SMATTR,maxZoom:19,subdomains:'abcd'}).addTo(map);
+  L.tileLayer(SMTILE,{attribution:SMATTR,maxZoom:19,subdomains:'abc'}).addTo(map);
   var pts=[];
   DATA.forEach(function(g,gi){
     if(g.city!==city) return;
