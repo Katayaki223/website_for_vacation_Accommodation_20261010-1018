@@ -193,7 +193,7 @@ header.pagehead .lede{font-size:14px}
 
 /* ================= hub cards ================= */
 .hubgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));margin-top:6px}
-a.hub{display:flex;gap:13px;align-items:flex-start;padding:17px 18px;border:1px solid var(--line);
+a.hub{display:flex;gap:13px;align-items:center;padding:17px 18px;border:1px solid var(--line);
   border-radius:16px;background:var(--card);box-shadow:var(--shadow);text-decoration:none;color:var(--ink);
   transition:border-color .15s,transform .15s}
 a.hub:hover{border-color:var(--accent);transform:translateY(-2px)}
