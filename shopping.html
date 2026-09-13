@@ -35,7 +35,7 @@
 <h3><svg class="ic"><use href="#i-cal"/></svg>🗓 哪天逛哪裡</h3>
 <div class="rows">
 <div class="row hi">
-  <div class="f main"><span class="k">日期</span><span class="v">10/08（三）</span></div>
+  <div class="f main"><span class="k">日期</span><span class="v">10/08（四）</span></div>
   <div class="f"><span class="k">地點</span><span class="v">西面地下街</span></div>
   <div class="f wide"><span class="k">備註</span><span class="v">今天廣安里只吃豚笑，逛街移到 10/10；晚餐後西面地下街就在住處樓下。</span></div>
 </div>
@@ -177,11 +177,14 @@ const DATA = [
  {n:"POINT OF VIEW",kr:"포인트오브뷰",c:"shop",t:"文具控朝聖地，三層紅磚建築，設計偏小眾",a:"연무장길 18"},
  {n:"29CM HOME",c:"shop",t:"2025 新開超大家居選物：杯盤、地毯燈具、造型鏡、香氛",a:"연무장길 57"},
  {n:"CASETiFY 聖水",c:"shop",t:"韓國第 11 家實體店，有聖水限定＋韓文字串飾，2F 是 Travel 展區",a:"연무장길 49"},
- {n:"NYU NYU 聖水店",kr:"뉴뉴",c:"shop",t:"耳環手鏈髮飾超實惠，3F 還有禮品店",a:"성수동2가 271-2"},
  {n:"Milky Shop",c:"shop",t:"聖水必買伴手禮：焦糖奶油夾心餅、甜甜圈",a:"성수동2가 301-52"},
  {n:"miffy store SEOUL",c:"shop",t:"首爾限定米菲，聖水站 3 號出口步行 8 分",a:"연무장13길 5",h:"10:30–19:30"},
  {n:"大林倉庫 대림창고 · musinsa store",kr:"무신사 스토어 성수",c:"shop",t:"紅磚倉庫改建的咖啡廳＋展覽空間，聖水地標，本身就是拍照點；同棟的 musinsa store 是超大線下集合店，韓國小眾品牌一次逛完",p:"10/13"},
  {n:"tamburins 聖水",kr:"탬버린즈",c:"shop",t:"香氛香水，自用送禮都合適"},
+ {n:"하우스 노웨어 서울 HAUS NOWHERE",kr:"하우스 노웨어",c:"shop",t:"★ 你要的 <b>gentle monster</b> 和 <b>ATiiSSU</b> 都在這一棟：젠틀몬스터＋탬버린즈＋<b>어티슈（帽子／頭飾）</b>＋누데이크＋누플랏，2025 年新開的複合空間，免費入場、本身就是展覽。GM 在首爾的分店我只留這一間，就是因為它最順路又最完整",a:"성동구 뚝섬로 433",h:"11:00–21:00 ☎1644-5704",p:"10/13"},
+ {n:"베리시 VERISH 성수 플래그십",kr:"베리시",c:"shop",t:"★ 你要加的。內衣／居家服，2 樓整層；全年無休、<b>可退稅</b>。就在연무장길上，和 감자탕（연무장길 45）同一條街",a:"연무장길 36, 2층",h:"11:00–20:00 ☎070-8219-0128",p:"10/13"},
+ {n:"뉴믹스커피 newmix",kr:"뉴믹스",c:"shop",t:"★ 你要加的。배달의민족 創辦人김봉진做的高級即溶咖啡，外帶型店面、包裝很適合當伴手禮。<b>⚠ 週一公休</b>——10/13 是週二剛好可以；北村也有一家（창덕궁1길 40），但 10/12 是週一，所以留聖水這間",a:"연무장3길 3, 1F",h:"11:00–20:00 · 週一公休",p:"10/13"},
+ {n:"KHIHO 키호",c:"shop",t:"★ 你要加的，但<b>⚠ 我查不到它的實體門市</b>——2022 年創立、主要在 Musinsa 線上賣的鞋包品牌。想現場看只能到同一天的 <b>musinsa store 성수</b>（大林倉庫同棟）或無新沙明洞店碰運氣，不保證有貨；買不到就線上下單",p:"10/13 順路碰運氣"},
  {n:"postes",c:"shop",t:"小眾復古香水店，包裝漂亮"},
  {n:"Muut",c:"shop",t:"墨鏡眼鏡，石材店裝超好拍"},
  {n:"blue elephant",c:"shop",t:"平價眼鏡，被稱作 GM 平替"},
@@ -197,8 +200,6 @@ const DATA = [
  {n:"VICXXO 文創店",c:"shop"},
  {n:"FWEE",c:"shop",t:"美妝"},
  {n:"Dior 聖水",c:"shop",t:"概念店，建築本身就是打卡點"},
- {n:"Olive Young 聖水",c:"shop"},
- {n:"ACORN CARICATURE",c:"shop",t:"現場手繪 Q 版肖像，畫框 15,000₩"},
  {n:"ldangClub 粉色販賣機",c:"photo",t:"偏日系 y2k 的拍照點",a:"연무장길 37-7"},
  {n:"聖水閣樓",c:"photo"},
  {n:"Maison de Magaretteu",c:"food",t:"蝴蝶結麵包店，門口粉色蝴蝶結超好拍",a:"연무장3길 14",h:"09:00–18:00"},
@@ -221,17 +222,14 @@ const DATA = [
  {n:"Hello Kitty Apple Cafe",c:"food",t:"整棟三層，1–2F 咖啡廳、3F 周邊文創；明洞站 6 號出口",a:"15 Myeongdong 6-gil"},
  {n:"明洞漫畫街",c:"photo",t:"明洞站 3 號出口往左，看到 7-Eleven 轉進巷子，朝首爾塔方向走",a:"명동 재미로"},
  {n:"nyunyu 明洞",c:"shop",t:"家居雜貨鋪在 4 樓：包包／香氛蠟燭／明信片／掛件"},
- {n:"Matin Kim 明洞",c:"shop"},
  {n:"Daiso 明洞",c:"shop",t:"共 12 層，建議搭電梯上頂樓再一層層逛下來"},
- {n:"emis 明洞",c:"shop",t:"很火的棒球帽，按顏色分區陳列"},
+ {n:"emis 明洞 플래그십",kr:"이미스",c:"shop",t:"★ 你要加的。很火的棒球帽與包，按顏色分區陳列。<b>明洞這間是最順路的</b>——10/11 晚、10/13 晚、10/15 早你會經過三次。釜山還有兩個更早的機會：<b>오시리아 롯데 프리미엄 아울렛 1F</b>（10/09 午餐就在那）、<b>신세계 센텀시티 B2</b>（10/10 汗蒸幕同一棟）",a:"중구 명동8길 17",h:"☎02-772-9870"},
  {n:"8 seconds 八秒",c:"shop",t:"CP 值高的簡約基本款"},
  {n:"Olive Young 明洞總店",c:"shop"},
  {n:"樂天免稅店",c:"shop",t:"1F Holibanum 香水，桃子和草莓味都好聞"},
  {n:"新世界免稅店",c:"shop"},
- {n:"musinsa 明洞",c:"shop"},
  {n:"lululemon 明洞",c:"shop"},
  {n:"LINE FRIENDS",c:"shop"},
- {n:"blue elephant 明洞",c:"shop"},
  {n:"covernat",c:"shop"},
  {n:"ABC MART 明洞",c:"shop"},
  {n:"Calvin Klein 明洞",c:"shop"},
@@ -242,7 +240,6 @@ const DATA = [
  {n:"sappun",c:"shop",t:"鞋"},
  {n:"Aland 明洞",c:"shop"},
  {n:"3CE 明洞",c:"shop"},
- {n:"3CE 旗艦店",c:"shop"},
  {n:"wiggle wiggle",c:"shop"},
  {n:"BHC 炸雞 明洞",c:"food",t:"甜辣裹醬＋起司撒粉雙拼，再加起司球"},
  {n:"明朗熱狗棒",kr:"명랑핫도그",c:"food",t:"連鎖店，就近吃就可以"}
@@ -258,23 +255,14 @@ const DATA = [
 ]},
 {city:"seoul",d:"弘大 · 延南洞",kr:"홍대 · 연남동",items:[
  {n:"ARTIWAVE",c:"shop",t:"手帳控必逛：貼紙／明信片／膠帶／裝飾畫"},
- {n:"Juuneedu 延南洞",c:"shop",t:"睡衣"},
  {n:"UNILAND",c:"shop",t:"玩具禮品店，Sanrio／拉拉熊等多種 IP"},
  {n:"GRANHAND 弘大",kr:"그랑핸드",c:"shop",t:"香水，首選 nube／cococay，可 DIY 名字；弘大 6 號出口步行 162m",a:"와우산로37길 9"},
- {n:"Olive Young 弘大旗艦店",c:"shop",a:"홍익로6길 57",h:"10:30–23:00"},
- {n:"ABC MART 弘大",c:"shop",a:"양화로 152",h:"11:00–23:30"},
- {n:"adidas 弘大",c:"shop",t:"弘大 9 號出口，1–3 樓",a:"양화로 148",h:"10:30–22:00"},
- {n:"Gentle Monster 合井",c:"shop",t:"合井站 3 號口",a:"서교동 404-5",h:"12:00–22:00"},
- {n:"도토리 공방 橡子漫畫",c:"photo",t:"人生四格漫畫，弘大 3 號出口",a:"동교로38길 20 1층",h:"到 21:00"},
- {n:"Mono Mansion 弘大",c:"photo",t:"人生四宮格 24 小時；弘大 3 號出口，房間選 103"},
- {n:"50pages",c:"photo",t:"自助拍照",h:"到 23:00"},
- {n:"BHC 炸雞 弘大",c:"food",t:"弘大 9 號出口步行 2 分鐘"},
+ {n:"모노맨션 홍대점 人生四格",c:"photo",t:"★ 已排進行程：自助拍貼攝影棚，進房自己拍、選 4 張現場印，約 15 分鐘。房間選 103（白色）。營業時間與價格出發前用 Naver 或 IG @mono.mansion 再確認",a:"동교동 163-4 1층（어울마당로 113-1）",p:"10/14 方案B 15:40"},
+ {n:"50pages",c:"photo",t:"另一家自助拍照，모노맨션 沒開就走這家",h:"到 23:00"},
  {n:"경양카츠 연남점",c:"food",t:"Ojunine Gamjatatng：脊骨湯、炸豬排",a:"동교로 238-1"},
  {n:"弘大辣炒章魚鍋",c:"food",t:"推薦辣章魚五花肉＋飛魚籽炒飯；弘大站 7 號出口"}
 ]},
 {city:"seoul",d:"清潭洞",kr:"청담동",note:"整區以拍照打卡為主，白牆、木質門面一條街。",items:[
- {n:"Matin Kim 清潭",c:"shop",t:"白牆黑字集合店",a:"언주로164길 14"},
- {n:"haus",c:"shop",t:"米色牆黑字衣服店，nudake 可頌在裡面"},
  {n:"atelier nain",c:"shop",t:"白牆衣服店"},
  {n:"random walk",c:"shop",t:"卡其色牆"},
  {n:"elborn",c:"shop",t:"卡其色牆"},
@@ -289,22 +277,15 @@ const DATA = [
  {n:"not bad coffee",c:"food"}
 ]},
 {city:"seoul",d:"新沙洞 林蔭道",kr:"신사동 가로수길",items:[
- {n:"林蔭道主路斑馬線",c:"photo",t:"站在斑馬線上，兩旁高大樹木當背景，很復古首爾街頭"},
- {n:"Tamburins 新沙",c:"shop",t:"Jennie 海報牆；3 號線新沙站 8 號出口",a:"신사동 520-9"}
+ {n:"林蔭道主路斑馬線",c:"photo",t:"站在斑馬線上，兩旁高大樹木當背景，很復古首爾街頭"}
 ]},
 {city:"seoul",d:"漢南洞",kr:"한남동",note:"超出片的 Citywalk 路線：mardi 門口交叉路上坡、必打卡的下坡、milestone 門口電線杆、rockfish 門口馬路。",items:[
  {n:"Mardi Mercredi",c:"shop",t:"小雛菊衛衣"},
- {n:"Marithe 漢南",c:"shop",t:"簡約風服裝"},
  {n:"Rest&Reaction",c:"shop",t:"辣妹風服裝"},
  {n:"Grove",c:"shop",t:"很火的服裝店"},
  {n:"Glowny",c:"shop",t:"韓國本土版簡約 BM 風"},
  {n:"Alavague",c:"shop",t:"美式復古風包款帽子"},
  {n:"awesome needs",c:"shop",t:"帽子"},
- {n:"Blue Elephant 漢南",c:"shop",t:"GM 平替眼鏡"},
- {n:"Ept 漢南",c:"shop",t:"德訓鞋"},
- {n:"Emis 漢南",c:"shop",t:"很火的棒球帽"},
- {n:"rockfish 漢南",c:"shop",t:"在必打卡下坡的坡上，很好找"},
- {n:"Tamburins 漢南",c:"shop",t:"Jennie 代言的香水"},
  {n:"milestone 維也納咖啡",c:"food",t:"門口電線杆是知名機位"},
  {n:"솥솥 Solsot 釜飯",c:"food",t:"招牌牛肉飯，需提前預約／取號",a:"이태원로54가길 26 지1층",h:"11:30–21:00"}
 ]},
@@ -324,7 +305,6 @@ const DATA = [
 ]},
 {city:"seoul",d:"其他 · 伴手禮品牌",kr:"기타",note:"這幾個是「韓國本地買划算」的品牌，多家分店或超市即可入手。",items:[
  {n:"Anthracite Coffee Roasters",c:"shop",t:"咖啡豆，包裝辨識度高"},
- {n:"GENTLE MONSTER",c:"shop",t:"墨鏡，韓國本地價差很大"},
  {n:"CROW CANYON 陶瓷杯盤",c:"shop",t:"商品不是店，家居選物店（如 29CM HOME）可找到"},
  {n:"YOZM 希臘優格",c:"food",t:"超市／便利商店，藍莓 compote 口味"},
  {n:"lookast",c:"shop",t:"聖水設計師品牌，截圖沒拍到店面"}
@@ -340,11 +320,11 @@ const DATA = [
  {n:"hetras.",c:"shop",t:"香氛洗護集合店，建築設計超吸睛，適合買伴手禮"}
 ]},
 {city:"busan",d:"廣安里",kr:"광안리",note:"海岸後方的巷弄小店街，一家一家挖的類型，很容易失控。行程排 10/10 傍晚 17:55（從 Centum City 搭 2 號線 3 站過來），逛完剛好接 19:00 的無人機表演。",items:[
- {n:"廣安里小店街",kr:"광안리",c:"shop",t:"雜貨、飾品、選物、玩具周邊、文具。傍晚去要留意部分小店 20:00–21:00 打烊",p:"10/10 17:55"},
- {n:"THINGS OF NOTE 廣安里店",c:"shop",t:"人氣文創店，配飾包包香氛，品類豐富"}
+ {n:"廣安里小店街",kr:"광안리",c:"shop",t:"雜貨、飾品、選物、玩具周邊、文具。傍晚去要留意部分小店 20:00–21:00 打烊",p:"10/10 17:55"}
 ]},
 {city:"busan",d:"尾浦 · 海雲台",kr:"미포 · 해운대",note:"搭藍線公園（海岸列車／天空膠囊列車）前後可以順路，全部集中在달맞이길這條路上。",items:[
  {n:"miffy store BUSAN",kr:"미피스토어",c:"shop",t:"釜山限定「列車員 Miffy」、娃娃、鑰匙圈、文具、餐具。膠囊列車尾浦站步行 5 分，和 Arte Museum 同一條달맞이길。※ 影島另有一家 Miffy Cafe，是不同店、不順路",a:"해운대구 달맞이길62번길 3",h:"10:00–20:00",p:"10/09 18:40"},
+ {n:"Snow Peak 스노우피크 · 신세계 센텀시티",kr:"스노우피크",c:"shop",t:"★ 你要加的。日系露營／outdoor 服飾。<b>最順路的一間就在신세계 센텀시티</b>——10/10 16:30 你泡的 Spa Land 就在同一棟，泡完原地逛。⚠ 首爾的直營店多在목동等外圍，反而不順路",a:"해운대구 센텀남대로 35（신세계 센텀시티 內）",p:"10/10 16:30"},
  {n:"RIPPLE TOWN COFFEE",c:"food",t:"尾浦站附近，質感咖啡店，奶泡綿密"},
  {n:"Baker's Box",c:"food",t:"尾浦站，推薦法棍"},
  {n:"Keveren House",c:"food",t:"海雲台甜品伴手禮咖啡廳，歐式風格小店；奶油捲奶油味超濃郁，口味多，很適合帶回去送人"}
